@@ -1,11 +1,381 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>E+Learn</title>
+        <link rel="stylesheet" href="css/index.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     </head>
     <body>
-        
-        <h1>Hello World</h1>
+
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="logo-section">
+                        <div class="logo-icon-box">
+                            <i class="fa-solid fa-book"></i>
+                            <div class="logo-accent"></div>
+                        </div>
+                        <div class="logo-text">
+                            <span class="text-blue-light-logo">E+</span>
+                            <span class="text-blue-light-logo">Learn</span>
+                        </div>
+                    </div>
     
-    </body>
+                    <div class="nav-links">
+                        <a href="#" class="nav-link active">Home</a>
+                        <a href="courses.html" class="nav-link">Courses</a>
+                        <a href="about.html" class="nav-link">About</a>
+                        <a href="contact.html" class="nav-link">Contact</a>
+                        <a href="faq.html" class="nav-link">FAQ</a>
+                    </div>
+    
+                    <div class="auth-buttons">
+                        <a href="#" class="nav-link" style="font-weight: 600;">
+                            <i class="fa-solid fa-arrow-right-to-bracket" style="margin-right: 8px;"></i> Log in
+                        </a>
+                        <a href="#" class="btn-signup">Sign up</a>
+                    </div>
+    
+                    <button class="mobile-toggle" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+                        <i class="fa-solid fa-bars" style="font-size: 1.5rem;"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-menu hidden" id="mobileMenu">
+                <a href="#" class="mobile-link">Home</a>
+                <a href="#" class="mobile-link">Courses</a>
+                <a href="#" class="mobile-link">About</a>
+                <a href="#" class="mobile-link">Contact</a>
+                <a href="#" class="mobile-link">Log in</a>
+                <a href="#" class="mobile-link" style="color: #3b82f6;">Sign up</a>
+            </div>
+        </nav>
+    
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-left">
+                        <h1 class="hero-logo"><span class="hero-logo">E+</span>Learn</h1>
+                        <h2 class="hero-title">Empowering Education <br><span style="color: black;">Through Technology</span> </h2>
+                        <p class="hero-description">
+                            Your educational journey starts here. Our interactive learning system helps you discover new skills, track your progress, and achieve success with expert educators.
+                        </p>
+                        <div class="hero-stats">
+                            <div class="stat-item"><h3>50k+</h3><p>Active students</p></div>
+                            <div class="stat-item"><h3>900+</h3><p>Expert Teachers</p></div>
+                            <div class="stat-item"><h3>3,000+</h3><p>Courses Available</p></div>
+                        </div>
+                        <div class="hero-buttons">
+                            <a href="#" class="btn-primary">Get started now <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></a>
+                            <a href="#" class="btn-secondary"><i class="fa-regular fa-circle-play" style="margin-right: 8px;"></i> Explore Courses</a>
+                        </div>
+                        <div class="hero-features">
+                            <div class="feature-item"><i class="fa-solid fa-check"></i> Free to Start</div>
+                            <div class="feature-item"><i class="fa-solid fa-check"></i> Certificate Included</div>
+                            <div class="feature-item"><i class="fa-solid fa-check"></i> 24/7 Support</div>
+                        </div>
+                    </div>
+                    <div class="hero-right">
+                        <div class="hero-image-container">
+                            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="E-Learning Dashboard" class="hero-image">
+                            <div class="floating-badge">A+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Features Section (Why Choose E+Learn) -->
+        <section class="section-padding">
+            <div class="container">
+                <h2 class="section-title text-center">Why Choose E+Learn?</h2>
+                <p class="section-subtitle text-center">
+                    Our cutting-edge educational ecosystem is crafted to empower both learners and instructors, fostering an environment of growth and success.
+                </p>
+    
+                <div class="features-grid">
+                    <!-- Feature Card 1 -->
+                    <div class="feature-card">
+                        <i class="fa-solid fa-book-open feature-icon"></i>
+                        <h3>Dynamic Learning Paths</h3>
+                        <p>Explore a rich library of multimedia courses, engaging exercises, and adaptive assessments that personalize your educational journey.</p>
+                    </div>
+                    <!-- Feature Card 2 -->
+                    <div class="feature-card">
+                        <i class="fa-solid fa-chalkboard-user feature-icon"></i>
+                        <h3>Expert Instructors</h3>
+                        <p>Learn from industry professionals and academic experts who bring real-world experience and deep knowledge to every lesson.</p>
+                    </div>
+                    <!-- Feature Card 3 -->
+                    <div class="feature-card">
+                        <i class="fa-solid fa-certificate feature-icon"></i>
+                        <h3>Recognized Certification</h3>
+                        <p>Earn certificates upon completion to showcase your skills to employers and enhance your professional portfolio.</p>
+                    </div>
+                    <!-- Feature Card 4 -->
+                    <div class="feature-card">
+                        <i class="fa-solid fa-users feature-icon"></i>
+                        <h3>Community Support</h3>
+                        <p>Join a vibrant community of learners to share ideas, collaborate on projects, and get help when you need it.</p>
+                    </div>
+                    <!-- Feature Card 5 -->
+                    <div class="feature-card">
+                        <i class="fa-solid fa-chart-line feature-icon"></i>
+                        <h3>Progress Tracking</h3>
+                        <p>Visualize your learning journey with detailed analytics that help you identify strengths and areas for improvement.</p>
+                    </div>
+                    <!-- Feature Card 6 -->
+                    <div class="feature-card">
+                        <i class="fa-solid fa-mobile-screen feature-icon"></i>
+                        <h3>Learn Anywhere</h3>
+                        <p>Access your courses on any device, anytime. Our responsive platform ensures a seamless learning experience on the go.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Popular Courses Section -->
+        <section id="courses" class="section-padding courses-section">
+            <div class="container">
+                <h2 class="section-title text-center">Popular Courses</h2>
+                <p class="section-subtitle text-center">
+                    Discover our most popular courses across various categories. Start learning today and advance your career with industry-recognized certifications.
+                </p>
+    
+                <div class="filters">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Tech</button>
+                    <button class="filter-btn">Business</button>
+                    <button class="filter-btn">Design</button>
+                    <button class="filter-btn">Language</button>
+                </div>
+    
+                <div class="courses-grid">
+                    <!-- Course Card 1 -->
+                    <div class="course-card">
+                        <div class="course-header">
+                            <span class="tag tag-category">Tech</span>
+                            <span class="tag tag-price">Free</span>
+                            <div class="course-icon-circle">T</div>
+                        </div>
+                        <div class="course-body">
+                            <span class="badge-level">Beginner</span>
+                            <h3 class="course-title">Full Stack Web Development</h3>
+                            <p class="course-desc">Learn React, Node.js, and modern web development from scratch.</p>
+                            <div class="course-meta">
+                                <div>
+                                    <div style="margin-bottom: 4px;">by Sarah Johnson</div>
+                                    <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                                </div>
+                                <div class="meta-stats">
+                                    <div class="meta-item"><i class="fa-regular fa-clock"></i> 12 weeks</div>
+                                    <div class="meta-item"><i class="fa-solid fa-user-group"></i> 2,579</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Course Card 2 -->
+                    <div class="course-card">
+                        <div class="course-header" style="background-color: #a5b4fc;">
+                            <span class="tag tag-category">Design</span>
+                            <span class="tag tag-price">Free</span>
+                            <div class="course-icon-circle" style="background-color: #4f46e5;">D</div>
+                        </div>
+                        <div class="course-body">
+                            <span class="badge-level">Intermediate</span>
+                            <h3 class="course-title">UI/UX Design Masterclass</h3>
+                            <p class="course-desc">Master the art of user interface and user experience design principles.</p>
+                            <div class="course-meta">
+                                <div>
+                                    <div style="margin-bottom: 4px;">by Mike Chen</div>
+                                    <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.8</div>
+                                </div>
+                                <div class="meta-stats">
+                                    <div class="meta-item"><i class="fa-regular fa-clock"></i> 8 weeks</div>
+                                    <div class="meta-item"><i class="fa-solid fa-user-group"></i> 1,840</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Course Card 3 -->
+                    <div class="course-card">
+                        <div class="course-header" style="background-color: #fca5a5;">
+                            <span class="tag tag-category">Business</span>
+                            <span class="tag tag-price">Free</span>
+                            <div class="course-icon-circle" style="background-color: #dc2626;">B</div>
+                        </div>
+                        <div class="course-body">
+                            <span class="badge-level">Beginner</span>
+                            <h3 class="course-title">Digital Marketing Strategy</h3>
+                            <p class="course-desc">Create effective digital marketing campaigns and grow your business.</p>
+                            <div class="course-meta">
+                                <div>
+                                    <div style="margin-bottom: 4px;">by Emma Wilson</div>
+                                    <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.7</div>
+                                </div>
+                                <div class="meta-stats">
+                                    <div class="meta-item"><i class="fa-regular fa-clock"></i> 6 weeks</div>
+                                    <div class="meta-item"><i class="fa-solid fa-user-group"></i> 3,100</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Course Card 4 -->
+                     <div class="course-card">
+                        <div class="course-header" style="background-color: #fdba74;">
+                            <span class="tag tag-category">Language</span>
+                            <span class="tag tag-price">Free</span>
+                            <div class="course-icon-circle" style="background-color: #ea580c;">S</div>
+                        </div>
+                        <div class="course-body">
+                            <span class="badge-level">Beginner</span>
+                            <h3 class="course-title">Spanish for Beginners</h3>
+                            <p class="course-desc">Start speaking Spanish with confidence from day one with immersive lessons.</p>
+                            <div class="course-meta">
+                                <div>
+                                    <div style="margin-bottom: 4px;">by Carlos Ruiz</div>
+                                    <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                                </div>
+                                <div class="meta-stats">
+                                    <div class="meta-item"><i class="fa-regular fa-clock"></i> 10 weeks</div>
+                                    <div class="meta-item"><i class="fa-solid fa-user-group"></i> 1,250</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Course Card 5 -->
+                     <div class="course-card">
+                        <div class="course-header" style="background-color: #86efac;">
+                            <span class="tag tag-category">Tech</span>
+                            <span class="tag tag-price">Free</span>
+                            <div class="course-icon-circle" style="background-color: #16a34a;">P</div>
+                        </div>
+                        <div class="course-body">
+                            <span class="badge-level">Advanced</span>
+                            <h3 class="course-title">Python Data Science</h3>
+                            <p class="course-desc">Analyze data and create visualizations using Python libraries like Pandas.</p>
+                            <div class="course-meta">
+                                <div>
+                                    <div style="margin-bottom: 4px;">by David Lee</div>
+                                    <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.8</div>
+                                </div>
+                                <div class="meta-stats">
+                                    <div class="meta-item"><i class="fa-regular fa-clock"></i> 14 weeks</div>
+                                    <div class="meta-item"><i class="fa-solid fa-user-group"></i> 4,500</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Course Card 6 -->
+                     <div class="course-card">
+                        <div class="course-header" style="background-color: #d8b4fe;">
+                            <span class="tag tag-category">Business</span>
+                            <span class="tag tag-price">Free</span>
+                            <div class="course-icon-circle" style="background-color: #9333ea;">M</div>
+                        </div>
+                        <div class="course-body">
+                            <span class="badge-level">Intermediate</span>
+                            <h3 class="course-title">Project Management</h3>
+                            <p class="course-desc">Learn the fundamentals of managing projects, teams, and timelines effectively.</p>
+                            <div class="course-meta">
+                                <div>
+                                    <div style="margin-bottom: 4px;">by Sarah Jones</div>
+                                    <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.6</div>
+                                </div>
+                                <div class="meta-stats">
+                                    <div class="meta-item"><i class="fa-regular fa-clock"></i> 8 weeks</div>
+                                    <div class="meta-item"><i class="fa-solid fa-user-group"></i> 980</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <a href="#" class="view-all-btn">View All Courses <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></a>
+            </div>
+        </section>
+    
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <!-- Col 1: Brand -->
+                    <div class="footer-col footer-about">
+                        <div class="logo-section">
+                            <div class="logo-icon-box">
+                                <i class="fa-solid fa-book"></i>
+                                <div class="logo-accent"></div>
+                            </div>
+                            <div class="logo-text">
+                                <span class="text-blue-light-logo ">E+</span>
+                                <span class="text-blue-light-logo ">Learn</span>
+                            </div>
+                        </div>
+                        <p>Empowering education through technology. Join thousands of learners in their journey to success.</p>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+    
+                    <!-- Col 2: Quick Links -->
+                    <div class="footer-col">
+                        <h4>Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Courses</a></li>
+                            <li><a href="#">Teachers</a></li>
+                            <li><a href="#">Pricing</a></li>
+                        </ul>
+                    </div>
+    
+                    <!-- Col 3: Support -->
+                    <div class="footer-col">
+                        <h4>Support</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+    
+                    <!-- Col 4: Contact Info -->
+                    <div class="footer-col">
+                        <h4>Contact Info</h4>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fa-regular fa-envelope"></i>
+                                <span>new@gmail.com</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <span>(+639)29-2009-502</span>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>123, new st, new city, new, 2011</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+    
+                <div class="footer-bottom">
+                    <div>&copy; 2024 E+Learn. All Rights Reserved</div>
+                    <div>Made With <i class="fa-solid fa-heart heart-icon"></i> For Learners Worldwide</div>
+                </div>
+            </div>
+        </footer>
+    
+    </html>
 </html>

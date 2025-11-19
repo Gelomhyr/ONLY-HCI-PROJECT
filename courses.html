@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Courses - E+Learn</title>
+    <link rel="stylesheet" href="css/coures.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo-section">
+                    <div class="logo-icon-box">
+                        <i class="fa-solid fa-book"></i>
+                        <div class="logo-accent"></div>
+                    </div>
+                    <div class="logo-text">
+                        <span class="text-blue-light">E+</span>
+                        <span class="text-blue-dark">Learn</span>
+                    </div>
+                </div>
+
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="#" class="nav-link active">Courses</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                    <a href="faq.html" class="nav-link">FAQ</a>
+                </div>
+
+                <div class="auth-buttons">
+                    <a href="#" class="nav-link" style="font-weight: 600;">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="margin-right: 8px;"></i> Log in
+                    </a>
+                    <a href="#" class="btn-signup">Sign up</a>
+                </div>
+
+                <div class="mobile-toggle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Header -->
+        <div class="page-header">
+            <h1 class="page-title">Explore Our Courses</h1>
+            <p class="page-subtitle">Discover thousands of courses across various categories. Learn from industry experts and advance your career with verified certifications.</p>
+            
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search courses, instructors, or topics">
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-wrapper">
+            <div class="filter-group">
+                <div class="filter-label"><i class="fa-solid fa-filter"></i> Filters:</div>
+                <span style="font-size: 0.9rem; font-weight: 600; margin-right: 0.5rem; color: #111827;">Category:</span>
+                <button class="filter-pill active">All</button>
+                <button class="filter-pill">Tech</button>
+                <button class="filter-pill">Business</button>
+                <button class="filter-pill">Design</button>
+                <button class="filter-pill">Language</button>
+                <button class="filter-pill">Science</button>
+                <button class="filter-pill">Arts</button>
+            </div>
+
+            <div class="filter-divider"></div>
+
+            <div class="filter-group">
+                <span style="font-size: 0.9rem; font-weight: 600; margin-right: 0.5rem; color: #111827;">Level:</span>
+                <button class="filter-pill active">All</button>
+                <button class="filter-pill">Beginner</button>
+                <button class="filter-pill">Intermediate</button>
+                <button class="filter-pill">Advanced</button>
+            </div>
+        </div>
+
+        <!-- Results Bar -->
+        <div class="results-toolbar">
+            <div class="results-count">9 Courses Found</div>
+            <select class="sort-dropdown">
+                <option>Sort by popularity</option>
+                <option>Newest First</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+            </select>
+        </div>
+
+        <!-- Course Grid -->
+        <div class="courses-grid">
+            <!-- Course 1 -->
+            <div class="course-card">
+                <div class="course-header" style="background-color: #93c5fd;">
+                    <span class="tag tag-category">Tech</span>
+                    <span class="tag tag-price">Free</span>
+                    <div class="course-icon-circle">T</div>
+                </div>
+                <div class="course-body">
+                    <span class="badge-level">Beginner</span>
+                    <h3 class="course-title">Full Stack Web Development</h3>
+                    <p class="course-desc">Learn React, Node.js, and modern web development from scratch.</p>
+                    <div class="course-meta">
+                        <div>
+                            <div style="margin-bottom: 4px;">by Sarah Johnson</div>
+                            <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                        </div>
+                        <div class="meta-stats">
+                            <div class="meta-item"><i class="fa-regular fa-clock"></i> 12 weeks</div>
+                            <div class="meta-item"><i class="fa-solid fa-user-group"></i> 2,579</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 2 -->
+            <div class="course-card">
+                <div class="course-header" style="background-color: #93c5fd;">
+                    <span class="tag tag-category">Tech</span>
+                    <span class="tag tag-price">Free</span>
+                    <div class="course-icon-circle">T</div>
+                </div>
+                <div class="course-body">
+                    <span class="badge-level">Beginner</span>
+                    <h3 class="course-title">Full Stack Web Development</h3>
+                    <p class="course-desc">Learn React, Node.js, and modern web development from scratch.</p>
+                    <div class="course-meta">
+                        <div>
+                            <div style="margin-bottom: 4px;">by Sarah Johnson</div>
+                            <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                        </div>
+                        <div class="meta-stats">
+                            <div class="meta-item"><i class="fa-regular fa-clock"></i> 12 weeks</div>
+                            <div class="meta-item"><i class="fa-solid fa-user-group"></i> 2,579</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 3 -->
+            <div class="course-card">
+                <div class="course-header" style="background-color: #93c5fd;">
+                    <span class="tag tag-category">Tech</span>
+                    <span class="tag tag-price">Free</span>
+                    <div class="course-icon-circle">T</div>
+                </div>
+                <div class="course-body">
+                    <span class="badge-level">Beginner</span>
+                    <h3 class="course-title">Full Stack Web Development</h3>
+                    <p class="course-desc">Learn React, Node.js, and modern web development from scratch.</p>
+                    <div class="course-meta">
+                        <div>
+                            <div style="margin-bottom: 4px;">by Sarah Johnson</div>
+                            <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                        </div>
+                        <div class="meta-stats">
+                            <div class="meta-item"><i class="fa-regular fa-clock"></i> 12 weeks</div>
+                            <div class="meta-item"><i class="fa-solid fa-user-group"></i> 2,579</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 4 (Duplicate for demo) -->
+            <div class="course-card">
+                <div class="course-header" style="background-color: #93c5fd;">
+                    <span class="tag tag-category">Tech</span>
+                    <span class="tag tag-price">Free</span>
+                    <div class="course-icon-circle">T</div>
+                </div>
+                <div class="course-body">
+                    <span class="badge-level">Beginner</span>
+                    <h3 class="course-title">Full Stack Web Development</h3>
+                    <p class="course-desc">Learn React, Node.js, and modern web development from scratch.</p>
+                    <div class="course-meta">
+                        <div>
+                            <div style="margin-bottom: 4px;">by Sarah Johnson</div>
+                            <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                        </div>
+                        <div class="meta-stats">
+                            <div class="meta-item"><i class="fa-regular fa-clock"></i> 12 weeks</div>
+                            <div class="meta-item"><i class="fa-solid fa-user-group"></i> 2,579</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 5 -->
+            <div class="course-card">
+                <div class="course-header" style="background-color: #93c5fd;">
+                    <span class="tag tag-category">Tech</span>
+                    <span class="tag tag-price">Free</span>
+                    <div class="course-icon-circle">T</div>
+                </div>
+                <div class="course-body">
+                    <span class="badge-level">Beginner</span>
+                    <h3 class="course-title">Full Stack Web Development</h3>
+                    <p class="course-desc">Learn React, Node.js, and modern web development from scratch.</p>
+                    <div class="course-meta">
+                        <div>
+                            <div style="margin-bottom: 4px;">by Sarah Johnson</div>
+                            <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                        </div>
+                        <div class="meta-stats">
+                            <div class="meta-item"><i class="fa-regular fa-clock"></i> 12 weeks</div>
+                            <div class="meta-item"><i class="fa-solid fa-user-group"></i> 2,579</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 6 -->
+            <div class="course-card">
+                <div class="course-header" style="background-color: #93c5fd;">
+                    <span class="tag tag-category">Tech</span>
+                    <span class="tag tag-price">Free</span>
+                    <div class="course-icon-circle">T</div>
+                </div>
+                <div class="course-body">
+                    <span class="badge-level">Beginner</span>
+                    <h3 class="course-title">Full Stack Web Development</h3>
+                    <p class="course-desc">Learn React, Node.js, and modern web development from scratch.</p>
+                    <div class="course-meta">
+                        <div>
+                            <div style="margin-bottom: 4px;">by Sarah Johnson</div>
+                            <div class="meta-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                        </div>
+                        <div class="meta-stats">
+                            <div class="meta-item"><i class="fa-regular fa-clock"></i> 12 weeks</div>
+                            <div class="meta-item"><i class="fa-solid fa-user-group"></i> 2,579</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Col 1: Brand -->
+                <div class="footer-col footer-about">
+                    <div class="logo-section">
+                        <div class="logo-icon-box">
+                            <i class="fa-solid fa-book"></i>
+                            <div class="logo-accent"></div>
+                        </div>
+                        <div class="logo-text">
+                            <span class="text-blue-light">E+</span>
+                            <span class="text-blue-dark">Learn</span>
+                        </div>
+                    </div>
+                    <p>Empowering education through technology. Join thousands of learners in their journey to success.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Quick Links -->
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About us</a></li>
+                        <li><a href="#">Courses</a></li>
+                        <li><a href="#">Teachers</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Support -->
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contact Info -->
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li>
+                            <i class="fa-regular fa-envelope"></i>
+                            <span>new@gmail.com</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-phone"></i>
+                            <span>(+639)29-2009-502</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>123, new st, new city, new, 2011</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2024 E+Learn. All Rights Reserved</div>
+                <div>Made With <i class="fa-solid fa-heart heart-icon"></i> For Learners Worldwide</div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
