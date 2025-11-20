@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics - E+Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/report.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-[#6384FF] text-white flex-shrink-0 hidden md:flex flex-col transition-all duration-300">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <i class="fa-solid fa-book text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">E+Learn</h1>
+                    <p class="text-xs text-blue-100">Admin Portal</p>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a href="admin.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    Dashboard
+                </a>
+                <a href="user.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    User Management
+                </a>
+                <a href="course.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    Course Management
+                </a>
+                <a href="announcement.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="megaphone" class="w-5 h-5"></i>
+                    Announcements
+                </a>
+                <!-- Active State -->
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-white font-medium">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                    Reports & Analytics
+                </a>
+                <a href="settings.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    System Settings
+                </a>
+                 <a href="notif.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    Notifications
+                </a>
+                 <a href="message.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                    Messaging
+                </a>
+            </nav>
+
+            <div class="p-4 mt-auto">
+                <div class="flex items-center gap-3 px-4 py-3 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold">AU</div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-medium truncate">Admin User</p>
+                        <p class="text-xs text-blue-200 truncate">admin@gmail.com</p>
+                    </div>
+                </div>
+                <a href="../login.html" class="flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 h-full overflow-y-auto overflow-x-hidden bg-white md:bg-gray-50">
+             <!-- Mobile Header -->
+             <div class="md:hidden bg-[#6384FF] text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-book text-lg"></i>
+                    <span class="font-bold">E+Learn</span>
+                </div>
+                <button class="p-1"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            </div>
+
+            <div class="p-6 max-w-[1600px] mx-auto space-y-6">
+                
+                <!-- Page Header -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Reports & Analytics</h2>
+                        <p class="text-gray-500 text-sm mt-1">Comprehensive platform insights and metrics</p>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <!-- Dropdown -->
+                        <div class="relative">
+                            <select class="appearance-none bg-white border border-gray-200 text-gray-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:border-blue-500 cursor-pointer hover:bg-gray-50 transition-colors">
+                                <option>Last Month</option>
+                                <option>Last Quarter</option>
+                                <option>Last Year</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+
+                        <button onclick="exportData('csv')" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Export CSV
+                        </button>
+                        <button onclick="exportData('pdf')" class="flex items-center gap-2 px-4 py-2 bg-[#819CFF] hover:bg-[#6384FF] text-white rounded-lg text-sm transition-colors">
+                            <i data-lucide="file-text" class="w-4 h-4"></i>
+                            Export PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                    <!-- Active Users -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500">Active Users</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">1,250</h3>
+                                <p class="text-xs font-medium text-blue-500 mt-2 flex items-center gap-1">
+                                    +12.5% from last period
+                                </p>
+                            </div>
+                            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Course Completions -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500">Course Completions</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">892</h3>
+                                <p class="text-xs font-medium text-yellow-500 mt-2 flex items-center gap-1">
+                                    +18% from last period
+                                </p>
+                            </div>
+                            <div class="p-2 bg-yellow-50 text-yellow-600 rounded-lg">
+                                <i data-lucide="award" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Total Courses -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500">Total Courses</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">156</h3>
+                                <p class="text-xs font-medium text-orange-500 mt-2 flex items-center gap-1">
+                                    +8% from last period
+                                </p>
+                            </div>
+                            <div class="p-2 bg-orange-50 text-orange-600 rounded-lg">
+                                <i data-lucide="book-open" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Avg Engagement -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500">Avg. Engagement</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">82%</h3>
+                                <p class="text-xs font-medium text-blue-500 mt-2 flex items-center gap-1">
+                                    +5% from last period
+                                </p>
+                            </div>
+                            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <i data-lucide="trending-up" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Chart -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 class="font-semibold text-gray-800 mb-4">Growth Trends</h3>
+                    <div class="h-80 w-full">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Secondary Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="font-semibold text-gray-800 mb-4">Weekly Engagement</h3>
+                        <div class="h-64 w-full">
+                            <canvas id="engagementChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="font-semibold text-gray-800 mb-4">Course Completion Rates</h3>
+                        <div class="h-64 w-full">
+                            <canvas id="completionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Log -->
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-gray-50">
+                        <h3 class="font-semibold text-gray-800">Recent Activity Log</h3>
+                    </div>
+                    <div class="divide-y divide-gray-50">
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Report generated</p>
+                                    <p class="text-xs text-gray-500">by Admin</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">2 minutes ago</span>
+                        </div>
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">User registered</p>
+                                    <p class="text-xs text-gray-500">by System</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">15 minutes ago</span>
+                        </div>
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-blue-300"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Data exported</p>
+                                    <p class="text-xs text-gray-500">by Admin</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">1 hour ago</span>
+                        </div>
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Course completed</p>
+                                    <p class="text-xs text-gray-500">by Student</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">2 hours ago</span>
+                        </div>
+                         <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-yellow-200"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Settings updated</p>
+                                    <p class="text-xs text-gray-500">by Admin</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">3 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-6"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- Mock Functions ---
+        function exportData(type) {
+            const btnText = type === 'csv' ? 'CSV' : 'PDF';
+            alert(`Preparing ${btnText} download... (This is a demo)`);
+        }
+
+        // --- Chart 1: Growth Trends (Area Chart) ---
+        const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+        
+        // Create Gradient
+        const gradientBlue = ctxGrowth.createLinearGradient(0, 0, 0, 400);
+        gradientBlue.addColorStop(0, 'rgba(99, 132, 255, 0.5)');
+        gradientBlue.addColorStop(1, 'rgba(99, 132, 255, 0)');
+
+        const gradientYellow = ctxGrowth.createLinearGradient(0, 0, 0, 400);
+        gradientYellow.addColorStop(0, 'rgba(251, 191, 36, 0.4)');
+        gradientYellow.addColorStop(1, 'rgba(251, 191, 36, 0)');
+
+        new Chart(ctxGrowth, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [
+                    {
+                        label: 'Users',
+                        data: [800, 950, 1100, 1250, 1350],
+                        borderColor: '#6384FF',
+                        backgroundColor: gradientBlue,
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 0, // Style from image (borderless area)
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    },
+                    {
+                        label: 'Courses',
+                        data: [150, 160, 170, 180, 190],
+                        borderColor: '#FBBF24',
+                        backgroundColor: gradientYellow,
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, color: '#9CA3AF' } }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 1500,
+                        grid: { display: true, borderDash: [4, 4], drawBorder: false },
+                        ticks: { stepSize: 350, color: '#9CA3AF' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#9CA3AF' }
+                    }
+                }
+            }
+        });
+
+        // --- Chart 2: Weekly Engagement (Line Chart) ---
+        const ctxEngagement = document.getElementById('engagementChart').getContext('2d');
+        new Chart(ctxEngagement, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    {
+                        label: 'Active',
+                        data: [850, 890, 920, 900, 800, 500, 450],
+                        borderColor: '#819CFF',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#819CFF'
+                    },
+                    {
+                        label: 'Logins',
+                        data: [950, 1000, 1080, 1050, 900, 600, 550],
+                        borderColor: '#FCD34D',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#FCD34D'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 1200,
+                        grid: { borderDash: [4, 4], drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    },
+                    x: { grid: { display: false }, ticks: { color: '#9CA3AF' } }
+                }
+            }
+        });
+
+        // --- Chart 3: Completion Rates (Bar Chart) ---
+        const ctxCompletion = document.getElementById('completionChart').getContext('2d');
+        new Chart(ctxCompletion, {
+            type: 'bar',
+            data: {
+                labels: ['Web Dev', 'Data Science', 'Design', 'Mobile', 'Cloud'],
+                datasets: [{
+                    label: 'Completion Rate (%)',
+                    data: [85, 78, 82, 75, 80],
+                    backgroundColor: '#819CFF',
+                    borderRadius: 4,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { borderDash: [4, 4], drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    },
+                    x: { grid: { display: false }, ticks: { color: '#9CA3AF', font: {size: 11} } }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

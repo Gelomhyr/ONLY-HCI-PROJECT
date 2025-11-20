@@ -1,0 +1,126 @@
+
+/* --- Reset & Base Styles --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: #f8f9fa; 
+    color: #1f2937; 
+    height: 100vh; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+a { text-decoration: none; color: inherit; transition: color 0.2s; }
+button { border: none; background: none; cursor: pointer; font-family: inherit; }
+
+/* --- Login Card --- */
+.login-card {
+    background: white;
+    padding: 3rem 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    border: 1px solid #f3f4f6;
+}
+
+/* --- Header Section --- */
+.icon-wrapper {
+    width: 64px;
+    height: 64px;
+    background-color: #6366f1; /* Indigo/Blue */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem auto;
+    color: white;
+    font-size: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+}
+
+.app-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.app-subtitle {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+}
+
+/* --- Form Styles --- */
+.login-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    color: #1f2937;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: #f9fafb;
+}
+
+.form-input:focus {
+    background-color: white;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: #6366f1;
+    color: white;
+    padding: 0.875rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-submit:hover {
+    background-color: #4f46e5;
+}
+
+.btn-submit:active {
+    transform: translateY(1px);
+}
+
+/* --- Footer Links --- */
+.auth-footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.link-signup {
+    color: #6366f1;
+    font-weight: 500;
+}
+
+.link-signup:hover {
+    text-decoration: underline;
+}
+

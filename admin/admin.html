@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learn Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/admin.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-[#6384FF] text-white flex-shrink-0 hidden md:flex flex-col overflow-y-auto transition-all duration-300">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <i class="fa-solid fa-book text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">E+Learn</h1>
+                    <p class="text-xs text-blue-100">Admin Portal</p>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-white font-medium">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    Dashboard
+                </a>
+                <a href="user.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    User Management
+                </a>
+                <a href="course.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    Course Management
+                </a>
+                <a href="announcement.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="megaphone" class="w-5 h-5"></i>
+                    Announcements
+                </a>
+                <a href="report.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                    Reports & Analytics
+                </a>
+                <a href="settings.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    System Settings
+                </a>
+                 <a href="notif.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    Notifications
+                </a>
+                 <a href="message.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                    Messaging
+                </a>
+            </nav>
+
+            <div class="p-4 mt-auto">
+                <div class="flex items-center gap-3 px-4 py-3 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold">AU</div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-medium truncate">Admin User</p>
+                        <p class="text-xs text-blue-200 truncate">admin@gmail.com</p>
+                    </div>
+                </div>
+                <a href="../login.html" class="flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 h-full overflow-y-auto overflow-x-hidden">
+            <!-- Mobile Header -->
+            <div class="md:hidden bg-[#6384FF] text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-book text-lg"></i>
+                    <span class="font-bold">E+Learn</span>
+                </div>
+                <button class="p-1"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            </div>
+
+            <div class="p-6 max-w-7xl mx-auto space-y-6">
+                
+                <!-- Header -->
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
+                    <p class="text-gray-500 text-sm mt-1">Welcome back! Here's what's happening with E+Learn today.</p>
+                </div>
+
+                <!-- Stats Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Students</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">1,284</h3>
+                                <p class="text-xs font-medium text-blue-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-blue-50 px-1.5 py-0.5 rounded">+12%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Teachers</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">87</h3>
+                                <p class="text-xs font-medium text-yellow-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-yellow-50 px-1.5 py-0.5 rounded">+6%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-yellow-50 text-yellow-600 rounded-lg">
+                                <i data-lucide="user-check" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Card 3 -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Courses</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">156</h3>
+                                <p class="text-xs font-medium text-orange-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-orange-50 px-1.5 py-0.5 rounded">+2%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-orange-50 text-orange-600 rounded-lg">
+                                <i data-lucide="book" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Card 4 -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active Enrollments</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">3,421</h3>
+                                <p class="text-xs font-medium text-blue-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-blue-50 px-1.5 py-0.5 rounded">+15%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <i data-lucide="trending-up" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Card 5 -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Certificates Issued</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">892</h3>
+                                <p class="text-xs font-medium text-yellow-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-yellow-50 px-1.5 py-0.5 rounded">+20%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-yellow-50 text-yellow-600 rounded-lg">
+                                <i data-lucide="award" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Card 6 -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Announcements</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">24</h3>
+                                <p class="text-xs font-medium text-orange-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-orange-50 px-1.5 py-0.5 rounded">+3%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-orange-50 text-orange-600 rounded-lg">
+                                <i data-lucide="mic" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Line Chart -->
+                    <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="font-semibold text-gray-800 mb-4">Weekly Active Users</h3>
+                        <div class="h-64 w-full">
+                            <canvas id="usersChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Pie Chart -->
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="font-semibold text-gray-800 mb-4">Student Completion Status</h3>
+                        <div class="h-64 w-full flex justify-center relative">
+                            <canvas id="completionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Performance -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 class="font-semibold text-gray-800 mb-4">Course Performance</h3>
+                    <div class="h-64 w-full">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-gray-50">
+                        <h3 class="font-semibold text-gray-800">Recent Activity</h3>
+                    </div>
+                    <div class="divide-y divide-gray-50">
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">New student registered</p>
+                                <p class="text-xs text-gray-500 mt-0.5">John Smith</p>
+                            </div>
+                            <span class="text-xs text-gray-400">2 minutes ago</span>
+                        </div>
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Course completed</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Sarah Johnson</p>
+                            </div>
+                            <span class="text-xs text-gray-400">15 minutes ago</span>
+                        </div>
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">New teacher enrolled</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Dr. Emily Brown</p>
+                            </div>
+                            <span class="text-xs text-gray-400">1 hour ago</span>
+                        </div>
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Certificate issued</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Michael Chen</p>
+                            </div>
+                            <span class="text-xs text-gray-400">2 hours ago</span>
+                        </div>
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Announcement posted</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Admin Team</p>
+                            </div>
+                            <span class="text-xs text-gray-400">3 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-6"></div> <!-- Spacer -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- Chart Configurations ---
+
+        // 1. Weekly Active Users (Line Chart)
+        const ctxUsers = document.getElementById('usersChart').getContext('2d');
+        new Chart(ctxUsers, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    {
+                        label: 'Students',
+                        data: [420, 450, 480, 510, 490, 350, 320],
+                        borderColor: '#6384FF',
+                        backgroundColor: 'rgba(99, 132, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3
+                    },
+                    {
+                        label: 'Teachers',
+                        data: [30, 35, 40, 42, 40, 25, 20],
+                        borderColor: '#FBBF24',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        borderDash: [5, 5],
+                        pointRadius: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { usePointStyle: true, boxWidth: 8 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [4, 4], drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    }
+                }
+            }
+        });
+
+        // 2. Student Completion Status (Pie Chart)
+        const ctxCompletion = document.getElementById('completionChart').getContext('2d');
+        new Chart(ctxCompletion, {
+            type: 'pie',
+            data: {
+                labels: ['Completed', 'In Progress', 'Not Started'],
+                datasets: [{
+                    data: [34, 47, 19],
+                    backgroundColor: ['#6384FF', '#FBBF24', '#FED7AA'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { usePointStyle: true, boxWidth: 10, font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // 3. Course Performance (Bar Chart)
+        const ctxPerformance = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctxPerformance, {
+            type: 'bar',
+            data: {
+                labels: ['Web Dev', 'Data Science', 'Design', 'Mobile Dev', 'Cloud'],
+                datasets: [
+                    {
+                        label: 'Completed',
+                        data: [85, 65, 75, 55, 45],
+                        backgroundColor: '#819CFF',
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8
+                    },
+                    {
+                        label: 'In Progress',
+                        data: [120, 95, 110, 80, 70],
+                        backgroundColor: '#FCD34D',
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { usePointStyle: true, boxWidth: 8 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [4, 4], drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

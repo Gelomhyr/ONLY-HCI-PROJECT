@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements - E+Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/announcement.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-[#6384FF] text-white flex-shrink-0 hidden md:flex flex-col transition-all duration-300">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <i class="fa-solid fa-book text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">E+Learn</h1>
+                    <p class="text-xs text-blue-100">Admin Portal</p>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a href="admin.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    Dashboard
+                </a>
+                <a href="user.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    User Management
+                </a>
+                <a href="course.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    Course Management
+                </a>
+                <!-- Active State for Announcements -->
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-white font-medium">
+                    <i data-lucide="megaphone" class="w-5 h-5"></i>
+                    Announcements
+                </a>
+                <a href="report.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                    Reports & Analytics
+                </a>
+                <a href="settings.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    System Settings
+                </a>
+                 <a href="notif.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    Notifications
+                </a>
+                 <a href="message.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                    Messaging
+                </a>
+            </nav>
+
+            <div class="p-4 mt-auto">
+                <div class="flex items-center gap-3 px-4 py-3 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold">AU</div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-medium truncate">Admin User</p>
+                        <p class="text-xs text-blue-200 truncate">admin@gmail.com</p>
+                    </div>
+                </div>
+                <a href="../login.html" class="flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 h-full overflow-y-auto overflow-x-hidden bg-white md:bg-gray-50">
+             <!-- Mobile Header -->
+             <div class="md:hidden bg-[#6384FF] text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-book text-lg"></i>
+                    <span class="font-bold">E+Learn</span>
+                </div>
+                <button class="p-1"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            </div>
+
+            <div class="p-6 max-w-5xl mx-auto space-y-6">
+                
+                <!-- Page Header -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Announcements</h2>
+                        <p class="text-gray-500 text-sm mt-1">Post and manage platform announcements</p>
+                    </div>
+                    <button onclick="openModal()" class="bg-[#819CFF] hover:bg-[#6384FF] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        New Announcement
+                    </button>
+                </div>
+
+                <!-- Announcements List -->
+                <div id="announcementsList" class="space-y-4">
+                    <!-- Items injected via JS -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Announcement Modal -->
+    <div id="announcementModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl mx-4 transform scale-95 transition-transform duration-300" id="modalContent">
+            <!-- Header -->
+            <div class="flex justify-between items-start p-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">Create Announcement</h3>
+                    <p class="text-sm text-gray-500 mt-1">Post a new announcement to the platform</p>
+                </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Form -->
+            <form id="announcementForm" class="p-6 pt-2 space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title</label>
+                    <input type="text" id="annTitle" placeholder="Announcement title" required 
+                        class="w-full px-3.5 py-2.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm text-gray-700">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Content</label>
+                    <textarea id="annContent" rows="4" placeholder="Announcement content" required
+                        class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm text-gray-700 resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Target Group</label>
+                        <select id="annTarget" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-sm text-gray-700">
+                            <option value="All Users">All Users</option>
+                            <option value="Student">Students</option>
+                            <option value="Teacher">Teachers</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Expiration Date</label>
+                        <div class="relative">
+                            <input type="date" id="annDate" required
+                                class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-gray-700">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-3 bg-[#819CFF] hover:bg-[#6384FF] text-white rounded-lg font-semibold text-sm transition-all shadow-sm hover:shadow-md">
+                        Post Announcement
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initial Data
+        let announcements = [
+            {
+                id: 1,
+                title: "Platform Maintenance Scheduled",
+                target: "All Users",
+                posted: "2024-10-10",
+                expires: "2024-10-15",
+                content: "The platform will be under maintenance on Saturday from 2 AM to 6 AM. Please save your work accordingly.",
+                badgeColor: "bg-blue-100 text-blue-700"
+            },
+            {
+                id: 2,
+                title: "New Courses Available",
+                target: "Student",
+                posted: "2024-10-08",
+                expires: "2024-10-22",
+                content: "Check out our latest course offerings in Web Development and Data Science!",
+                badgeColor: "bg-[#FCD34D] text-[#92400E]" // Yellow/Orange match
+            },
+            {
+                id: 3,
+                title: "Teacher Workshop Next Week",
+                target: "Teacher",
+                posted: "2024-10-09",
+                expires: "2024-10-16",
+                content: "Join us for a professional development workshop on innovative teaching methods.",
+                badgeColor: "bg-[#FEF08A] text-[#854D0E]" // Lighter yellow match
+            }
+        ];
+
+        const listContainer = document.getElementById('announcementsList');
+
+        function getBadgeColor(target) {
+            if (target === 'All Users') return 'bg-blue-100 text-blue-700';
+            if (target === 'Student') return 'bg-amber-200 text-amber-800';
+            if (target === 'Teacher') return 'bg-yellow-100 text-yellow-800';
+            return 'bg-gray-100 text-gray-700';
+        }
+
+        function renderAnnouncements() {
+            listContainer.innerHTML = '';
+            announcements.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow";
+                card.innerHTML = `
+                    <div class="flex items-start gap-5">
+                        <!-- Icon Box -->
+                        <div class="flex-shrink-0 w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
+                            <i data-lucide="megaphone" class="w-6 h-6"></i>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">${item.title}</h3>
+                                <div class="flex items-center gap-2">
+                                    <button class="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors" title="Edit">
+                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="deleteAnnouncement(${item.id})" class="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors" title="Delete">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+                                <span class="px-2.5 py-0.5 rounded-md font-semibold ${item.badgeColor}">${item.target}</span>
+                                <span class="text-gray-400 flex items-center gap-1">
+                                    <i class="fa-regular fa-calendar"></i> Posted: ${item.posted}
+                                </span>
+                                <span class="text-gray-400 flex items-center gap-1">
+                                    <i class="fa-regular fa-calendar-xmark"></i> Expires: ${item.expires}
+                                </span>
+                            </div>
+                            
+                            <p class="text-gray-600 text-sm leading-relaxed">${item.content}</p>
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('announcementModal');
+        const modalContent = document.getElementById('modalContent');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+            document.getElementById('announcementForm').reset();
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // --- Actions ---
+        window.deleteAnnouncement = (id) => {
+            if (confirm('Are you sure you want to delete this announcement?')) {
+                announcements = announcements.filter(a => a.id !== id);
+                renderAnnouncements();
+            }
+        };
+
+        document.getElementById('announcementForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('annTitle').value;
+            const content = document.getElementById('annContent').value;
+            const target = document.getElementById('annTarget').value;
+            const date = document.getElementById('annDate').value;
+            
+            const today = new Date().toISOString().split('T')[0];
+
+            const newAnn = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                target: target,
+                posted: today,
+                expires: date,
+                badgeColor: getBadgeColor(target)
+            };
+
+            announcements.unshift(newAnn);
+            renderAnnouncements();
+            closeModal();
+        });
+
+        // Initial Render
+        renderAnnouncements();
+
+    </script>
+</body>
+</html>

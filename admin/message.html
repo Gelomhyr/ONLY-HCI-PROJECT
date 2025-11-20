@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messaging - E+Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/message.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-[#6384FF] text-white flex-shrink-0 hidden md:flex flex-col transition-all duration-300">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <i class="fa-solid fa-book text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">E+Learn</h1>
+                    <p class="text-xs text-blue-100">Admin Portal</p>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a href="admin.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    Dashboard
+                </a>
+                <a href="user.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    User Management
+                </a>
+                <a href="course.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    Course Management
+                </a>
+                <a href="announcement.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="megaphone" class="w-5 h-5"></i>
+                    Announcements
+                </a>
+                <a href="report.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                    Reports & Analytics
+                </a>
+                <a href="settings.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    System Settings
+                </a>
+                 <a href="notif.html" class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    Notifications
+                </a>
+                <!-- Active State -->
+                 <a href="#" class="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-white font-medium">
+                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                    Messaging
+                </a>
+            </nav>
+
+            <div class="p-4 mt-auto">
+                <div class="flex items-center gap-3 px-4 py-3 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold">AU</div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-medium truncate">Admin User</p>
+                        <p class="text-xs text-blue-200 truncate">admin@gmail.com</p>
+                    </div>
+                </div>
+                <a href="../login.html" class="flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 h-full overflow-y-auto overflow-x-hidden bg-white md:bg-gray-50">
+             <!-- Mobile Header -->
+             <div class="md:hidden bg-[#6384FF] text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-book text-lg"></i>
+                    <span class="font-bold">E+Learn</span>
+                </div>
+                <button class="p-1"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            </div>
+
+            <div class="p-6 max-w-[1600px] mx-auto space-y-6">
+                
+                <!-- Page Header -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Messaging</h2>
+                        <p class="text-gray-500 text-sm mt-1">Send messages and announcements to users</p>
+                    </div>
+                    <button onclick="openModal()" class="bg-[#819CFF] hover:bg-[#6384FF] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-sm">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        Compose Message
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Total -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                                <i data-lucide="message-circle" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase">Total Messages</p>
+                                <h3 class="text-2xl font-bold text-gray-900" id="totalCount">3</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Broadcast -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-yellow-50 text-yellow-600 rounded-xl">
+                                <i data-lucide="users" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase">Broadcast Messages</p>
+                                <h3 class="text-2xl font-bold text-gray-900" id="broadcastCount">2</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Direct -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-orange-50 text-orange-600 rounded-xl">
+                                <i data-lucide="user" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase">Direct Messages</p>
+                                <h3 class="text-2xl font-bold text-gray-900" id="directCount">1</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search -->
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+                    <input type="text" id="searchInput" placeholder="Search messages..." 
+                        class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-white shadow-sm">
+                </div>
+
+                <!-- Message List -->
+                <div id="messageList" class="space-y-4">
+                    <!-- Items injected via JS -->
+                </div>
+
+                <div class="h-6"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Compose Modal -->
+    <div id="composeModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 transform scale-95 transition-transform duration-300" id="modalContent">
+            <div class="flex justify-between items-center p-6 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900">Compose Message</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="composeForm" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Recipient</label>
+                    <select id="msgRecipient" class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-sm text-gray-700">
+                        <option value="All Users">All Users (Broadcast)</option>
+                        <option value="All Teachers">All Teachers (Broadcast)</option>
+                        <option value="Student">Specific Student (Direct)</option>
+                    </select>
+                </div>
+                
+                <!-- Hidden input shown only for specific student -->
+                <div id="specificUserInput" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Student Name</label>
+                    <input type="text" id="msgSpecificName" placeholder="Enter student name" 
+                        class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Subject</label>
+                    <input type="text" id="msgSubject" placeholder="Message subject" required 
+                        class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Message</label>
+                    <textarea id="msgContent" rows="4" placeholder="Type your message here..." required
+                        class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm resize-none"></textarea>
+                </div>
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-3 bg-[#819CFF] hover:bg-[#6384FF] text-white rounded-lg font-semibold text-sm transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Data
+        let messages = [
+            {
+                id: 1,
+                subject: "Platform Update Notification",
+                recipient: "All Users",
+                type: "broadcast",
+                content: "We have released new features to improve your learning experience.",
+                date: "2024-10-10",
+                status: "sent"
+            },
+            {
+                id: 2,
+                subject: "Upcoming Workshop",
+                recipient: "All Teachers",
+                type: "broadcast",
+                content: "Join us for a professional development workshop next week.",
+                date: "2024-10-08",
+                status: "sent"
+            },
+            {
+                id: 3,
+                subject: "Course Completion Congratulations",
+                recipient: "John Smith",
+                type: "direct",
+                content: "Congratulations on completing the Web Development course!",
+                date: "2024-10-08",
+                status: "sent"
+            }
+        ];
+
+        const listContainer = document.getElementById('messageList');
+        const totalEl = document.getElementById('totalCount');
+        const broadcastEl = document.getElementById('broadcastCount');
+        const directEl = document.getElementById('directCount');
+        const searchInput = document.getElementById('searchInput');
+
+        function updateStats() {
+            const total = messages.length;
+            const broadcast = messages.filter(m => m.type === 'broadcast').length;
+            const direct = messages.filter(m => m.type === 'direct').length;
+
+            totalEl.textContent = total;
+            broadcastEl.textContent = broadcast;
+            directEl.textContent = direct;
+        }
+
+        function getBadgeColor(recipient) {
+            if (recipient === 'All Users') return 'bg-blue-100 text-blue-700';
+            if (recipient === 'All Teachers') return 'bg-[#FCD34D] text-[#92400E]';
+            return 'bg-[#FEF9C3] text-[#854D0E]'; // Default / Direct
+        }
+
+        function renderMessages(data = messages) {
+            listContainer.innerHTML = '';
+            if (data.length === 0) {
+                listContainer.innerHTML = '<p class="text-center text-gray-400 py-8">No messages found.</p>';
+                return;
+            }
+
+            data.forEach(msg => {
+                const badgeColor = getBadgeColor(msg.recipient);
+                
+                const el = document.createElement('div');
+                el.className = "bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow";
+                el.innerHTML = `
+                    <div class="flex items-start gap-4">
+                        <!-- Icon -->
+                        <div class="flex-shrink-0 w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
+                            <i data-lucide="message-square" class="w-6 h-6"></i>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                                <div class="flex flex-wrap items-center gap-3">
+                                    <h3 class="text-base font-bold text-gray-900">${msg.subject}</h3>
+                                    <span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wide ${badgeColor}">${msg.recipient}</span>
+                                </div>
+                                <span class="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-semibold rounded-full capitalize">${msg.status}</span>
+                            </div>
+                            
+                            <p class="text-gray-600 text-sm mt-2 line-clamp-2">${msg.content}</p>
+                            
+                            <p class="text-xs text-gray-400 mt-3">Sent: ${msg.date}</p>
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(el);
+            });
+            lucide.createIcons();
+        }
+
+        // Search Logic
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = messages.filter(m => 
+                m.subject.toLowerCase().includes(term) || 
+                m.recipient.toLowerCase().includes(term)
+            );
+            renderMessages(filtered);
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('composeModal');
+        const modalContent = document.getElementById('modalContent');
+        const recipientSelect = document.getElementById('msgRecipient');
+        const specificInputDiv = document.getElementById('specificUserInput');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+            document.getElementById('composeForm').reset();
+            specificInputDiv.classList.add('hidden');
+        }
+
+        // Toggle specific name input
+        recipientSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'Student') {
+                specificInputDiv.classList.remove('hidden');
+                document.getElementById('msgSpecificName').setAttribute('required', 'true');
+            } else {
+                specificInputDiv.classList.add('hidden');
+                document.getElementById('msgSpecificName').removeAttribute('required');
+            }
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Form Submit
+        document.getElementById('composeForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const subject = document.getElementById('msgSubject').value;
+            const content = document.getElementById('msgContent').value;
+            let recipient = recipientSelect.value;
+            let type = 'broadcast';
+
+            if (recipient === 'Student') {
+                recipient = document.getElementById('msgSpecificName').value;
+                type = 'direct';
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+
+            const newMessage = {
+                id: Date.now(),
+                subject,
+                recipient,
+                type,
+                content,
+                date: today,
+                status: 'sent'
+            };
+
+            messages.unshift(newMessage);
+            renderMessages();
+            updateStats();
+            closeModal();
+        });
+
+        // Initial Render
+        renderMessages();
+        updateStats();
+
+    </script>
+</body>
+</html>
