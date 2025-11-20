@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings & Profile</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- Reusing Variables for Consistency --- */
+        :root {
+            --primary-color: #60a5fa; /* Blue-400 */
+            --primary-hover: #3b82f6; /* Blue-500 */
+            --bg-color: #fcfcfc;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 2px 15px -3px rgba(0,0,0,0.07), 0 10px 20px -2px rgba(0,0,0,0.04);
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { font-family: inherit; }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            /* Wide Layout */
+            max-width: 1600px; 
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover { color: var(--text-main); }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .user-profile img {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* --- Mobile Menu --- */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 80px; left: 0; width: 100%;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            z-index: 99;
+        }
+        .mobile-menu.open { display: block; }
+        .mobile-menu li a {
+            display: block; padding: 12px 24px;
+            font-weight: 500; color: var(--text-muted);
+        }
+        .mobile-menu li a.active {
+            background-color: #eff6ff; color: var(--primary-color);
+        }
+
+        /* --- Page Header --- */
+        .page-header { margin-top: 40px; margin-bottom: 30px; }
+        .header-title h1 { font-size: 1.75rem; font-weight: 700; color: black; }
+        .header-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+
+        /* --- Settings Grid Layout --- */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .settings-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--text-main);
+        }
+
+        /* --- Personal Info Form --- */
+        .avatar-upload {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+            transition: border-color 0.2s;
+        }
+        
+        .avatar-wrapper:hover {
+            border-color: var(--primary-color);
+        }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            text-align: center;
+            font-size: 0.8rem;
+            padding: 6px 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .avatar-wrapper:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #374151;
+            transition: border-color 0.2s;
+            background-color: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+
+        /* Style for Unchangeable Fields */
+        .form-input[readonly] {
+            background-color: #f3f4f6; /* Light gray background */
+            color: #6b7280; /* Muted text color */
+            cursor: not-allowed;
+            border-color: #e5e7eb;
+        }
+        
+        .form-input[readonly]:focus {
+            box-shadow: none;
+            border-color: #e5e7eb;
+        }
+
+        .btn-save {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* --- Preferences Section (New Feature) --- */
+        .preferences-section {
+            margin-top: 40px;
+            grid-column: span 2; /* Full width at bottom */
+        }
+
+        .pref-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pref-row:last-child { border-bottom: none; }
+
+        .pref-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+        .pref-info p { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #e5e7eb;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .container { padding: 0 20px; }
+            .settings-grid { grid-template-columns: 1fr; }
+            .preferences-section { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="certificate.html" class="nav-link">Certificates</a></li>
+                <li><a href="activities.html" class="nav-link">Activities</a></li>
+                <li><a href="resources.html" class="nav-link">Resources</a></li>
+                <li><a href="notifications.html" class="nav-link">Notifications</a></li>
+            </ul>
+
+            <!-- Profile Image acts as link to Settings -->
+            <div class="user-profile">
+                <a href="#" class="active">
+                    <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
+                </a>
+            </div>
+        </div>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="progress.html">Progress</a></li>
+                <li><a href="certificate.html">Certificates</a></li>
+                <li><a href="activities.html">Activities</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="notifications.html">Notifications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-title">
+                <h1>Settings & Profile</h1>
+                <p>Manage your personal information and system preferences.</p>
+            </div>
+        </header>
+
+        <div class="settings-grid">
+            
+            <!-- Left: Personal Information -->
+            <div class="settings-card">
+                <h2 class="card-title">Personal Information</h2>
+                
+                <form onsubmit="event.preventDefault(); alert('Profile Updated!');">
+                    <div class="avatar-upload">
+                        <div class="avatar-wrapper" title="Click to change photo" onclick="document.getElementById('fileInput').click()">
+                            <img src="assets/cinnamoroll.png" id="profilePreview" alt="Avatar">
+                            <div class="avatar-overlay">
+                                <i class="fas fa-camera"></i> Change
+                            </div>
+                        </div>
+                        <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="previewImage(this)">
+                    </div>
+
+                    <!-- Changeable Username -->
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" value="mianegacu">
+                    </div>
+
+                    <!-- Unchangeable Personal Details -->
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-input" value="Miane" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Middle Name</label>
+                        <input type="text" class="form-input" value="Marasigan" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-input" value="Gacu" readonly>
+                    </div>
+
+                    <!-- Unchangeable Email -->
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" value="mianegacu@gmail.com" readonly>
+                    </div>
+
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </form>
+            </div>
+
+            <!-- Right: Change Password -->
+            <div class="settings-card">
+                <h2 class="card-title">Change Password</h2>
+                
+                <form onsubmit="event.preventDefault(); alert('Password Updated!');">
+                    <div class="form-group">
+                        <label class="form-label">Current Password</label>
+                        <input type="password" class="form-input" placeholder="•••••••••">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">New Password</label>
+                        <input type="password" class="form-input" placeholder="•••••••••">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" class="form-input" placeholder="•••••••••">
+                    </div>
+
+                    <button type="submit" class="btn-save">Update Password</button>
+                </form>
+
+                <!-- Additional "Real Settings" Section -->
+                <div class="preferences-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
+                    <h3 class="card-title" style="font-size: 1.25rem; margin-bottom: 20px;">Preferences</h3>
+                    
+                    <div class="pref-row">
+                        <div class="pref-info">
+                            <h3>Email Notifications</h3>
+                            <p>Receive emails about course updates.</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Navbar Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+        }
+
+        // Image Preview Logic
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    document.getElementById('profilePreview').src = e.target.result;
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>

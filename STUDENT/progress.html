@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracking</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- Reusing Variables from Courses Page --- */
+        :root {
+            --primary-color: #60a5fa; /* Blue-400 */
+            --primary-hover: #3b82f6; /* Blue-500 */
+            --bg-color: #fcfcfc;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 2px 15px -3px rgba(0,0,0,0.07), 0 10px 20px -2px rgba(0,0,0,0.04);
+            --font-family: 'Poppins', sans-serif;
+            --bar-bg: #e5e7eb;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            /* Matching the "Courses" page width fix */
+            max-width: 1600px; 
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover { color: var(--text-main); }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .user-profile img {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* --- Mobile Menu --- */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 80px; left: 0; width: 100%;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            z-index: 99;
+        }
+        .mobile-menu.open { display: block; }
+        .mobile-menu li a {
+            display: block; padding: 12px 24px;
+            font-weight: 500; color: var(--text-muted);
+        }
+        .mobile-menu li a.active {
+            background-color: #eff6ff; color: var(--primary-color);
+        }
+
+        /* --- Page Header --- */
+        .page-header { margin-top: 40px; margin-bottom: 30px; }
+        .header-title h1 { font-size: 1.75rem; font-weight: 700; color: black; }
+        .header-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+
+        /* --- Top Stats Cards --- */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 Columns layout */
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover { transform: translateY(-2px); }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Specific Icon Colors if needed, currently all black/dark in design */
+        .stat-icon.check { color: #3b82f6; } /* Blue check */
+
+        /* --- Weekly Progress Section --- */
+        .weekly-progress-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .section-header { margin-bottom: 30px; }
+        .section-header h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 5px; }
+        .section-header p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .day-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .day-label {
+            width: 40px;
+            font-weight: 600;
+            color: var(--text-main);
+            flex-shrink: 0;
+        }
+
+        .bar-container {
+            flex-grow: 1;
+            background-color: var(--bar-bg);
+            height: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background-color: var(--primary-color); /* Default Blue */
+            border-radius: 999px;
+            width: 0; /* Animated via JS or inline style */
+            transition: all 0.3s ease;
+        }
+        
+        .time-label {
+            width: 60px;
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* --- Responsive Queries --- */
+        @media (max-width: 1024px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .stats-overview { grid-template-columns: repeat(2, 1fr); } /* 2x2 on Tablet */
+            .container { padding: 0 20px; }
+        }
+
+        @media (max-width: 640px) {
+            .stats-overview { grid-template-columns: 1fr; } /* Stack on Mobile */
+            .day-row { gap: 10px; }
+            .weekly-progress-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="#" class="nav-link active">Progress</a></li>
+                <li><a href="certificate.html" class="nav-link">Certificates</a></li>
+                <li><a href="activities.html" class="nav-link">Activities</a></li>
+                <li><a href="modules.html" class="nav-link">Modules</a></li>
+                <li><a href="resources.html" class="nav-link">Resources</a></li>
+                <li><a href="notifications.html" class="nav-link">Notifications</a></li>
+            </ul>
+
+            <div class="user-profile">
+                <a href="profile.html">
+                    <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
+                </a>
+            </div>
+            
+        </div>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="#" class="active">Progress</a></li>
+                <li><a href="certificate.html">Certificates</a></li>
+                <li><a href="activities.html">Activities</a></li>
+                <li><a href="modules.html">Modules</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="notifications.html">Notifications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-title">
+                <h1>Progress Tracking</h1>
+                <p>Monitor progress anytime, anywhere</p>
+            </div>
+        </header>
+
+        <!-- Top Stats Cards -->
+        <div class="stats-overview">
+            <!-- Total Hours -->
+            <div class="stat-card">
+                <div class="stat-icon"><i class="far fa-clock"></i></div>
+                <div class="stat-label">Total Hours</div>
+                <div class="stat-value">127</div>
+            </div>
+
+            <!-- Lesson Completed -->
+            <div class="stat-card">
+                <div class="stat-icon check"><i class="fas fa-check-circle" style="color: #3b82f6;"></i></div> <!-- Blue Check -->
+                <div class="stat-label">Lesson Completed</div>
+                <div class="stat-value" style="color: #3b82f6;">30</div>
+            </div>
+
+            <!-- Quizzes Passed -->
+            <div class="stat-card">
+                <div class="stat-icon"><i class="far fa-lightbulb"></i></div>
+                <div class="stat-label">Quizzes Passed</div>
+                <div class="stat-value" style="color: #818cf8;">6</div>
+            </div>
+
+            <!-- Assignments -->
+            <div class="stat-card">
+                <div class="stat-icon"><i class="far fa-clipboard"></i></div>
+                <div class="stat-label">Assignments</div>
+                <div class="stat-value" style="color: #60a5fa;">8</div>
+            </div>
+        </div>
+
+        <!-- Weekly Progress Chart -->
+        <div class="weekly-progress-card">
+            <div class="section-header">
+                <h2>Weekly Progress</h2>
+                <p>Your learning activity this week</p>
+            </div>
+
+            <div class="chart-container">
+                <!-- Monday -->
+                <div class="day-row">
+                    <span class="day-label">Mon</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 65%;"></div>
+                    </div>
+                    <span class="time-label">2h</span>
+                </div>
+
+                <!-- Tuesday -->
+                <div class="day-row">
+                    <span class="day-label">Tue</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 75%;"></div>
+                    </div>
+                    <span class="time-label">4h</span>
+                </div>
+
+                <!-- Wednesday -->
+                <div class="day-row">
+                    <span class="day-label">Wed</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 50%;"></div>
+                    </div>
+                    <span class="time-label">1h</span>
+                </div>
+
+                <!-- Thursday -->
+                <div class="day-row">
+                    <span class="day-label">Thu</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 55%;"></div>
+                    </div>
+                    <span class="time-label">1h 30m</span>
+                </div>
+
+                <!-- Friday -->
+                <div class="day-row">
+                    <span class="day-label">Fri</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 80%;"></div>
+                    </div>
+                    <span class="time-label">4h 30m</span>
+                </div>
+
+                <!-- Saturday -->
+                <div class="day-row">
+                    <span class="day-label">Sat</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 68%;"></div>
+                    </div>
+                    <span class="time-label">2h 15m</span>
+                </div>
+
+                <!-- Sunday -->
+                <div class="day-row">
+                    <span class="day-label">Sun</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 66%;"></div>
+                    </div>
+                    <span class="time-label">2h 10m</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Simple Navbar Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Function to highlight the current day
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, ...
+            
+            // Map JS day (0-6 starting Sunday) to our DOM order (0-6 starting Monday)
+            const dayMapping = {
+                1: 0, // Mon
+                2: 1, // Tue
+                3: 2, // Wed
+                4: 3, // Thu
+                5: 4, // Fri
+                6: 5, // Sat
+                0: 6  // Sun
+            };
+
+            const activeIndex = dayMapping[today];
+            const bars = document.querySelectorAll('.bar-fill');
+            
+            if (bars[activeIndex]) {
+                // Apply the styles dynamically
+                bars[activeIndex].style.border = '2px solid #3b82f6';
+                bars[activeIndex].style.backgroundColor = '#93c5fd';
+            }
+        });
+    </script>
+</body>
+</html>

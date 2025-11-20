@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- Reusing Variables for Consistency --- */
+        :root {
+            --primary-color: #60a5fa; /* Blue-400 */
+            --primary-hover: #3b82f6; /* Blue-500 */
+            --bg-color: #fcfcfc;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 2px 15px -3px rgba(0,0,0,0.07), 0 10px 20px -2px rgba(0,0,0,0.04);
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { font-family: inherit; }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            /* Matching the wide layout fix */
+            max-width: 1600px; 
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover { color: var(--text-main); }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .user-profile img {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* --- Mobile Menu --- */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 80px; left: 0; width: 100%;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            z-index: 99;
+        }
+        .mobile-menu.open { display: block; }
+        .mobile-menu li a {
+            display: block; padding: 12px 24px;
+            font-weight: 500; color: var(--text-muted);
+        }
+        .mobile-menu li a.active {
+            background-color: #eff6ff; color: var(--primary-color);
+        }
+
+        /* --- Page Header --- */
+        .page-header { margin-top: 40px; margin-bottom: 30px; }
+        .header-title h1 { font-size: 1.75rem; font-weight: 700; color: black; }
+        .header-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+
+        /* --- Certificates Grid --- */
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .cert-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 200px;
+            transition: transform 0.2s;
+        }
+
+        .cert-card:hover { transform: translateY(-2px); }
+
+        .cert-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .cert-info h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .cert-meta {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .cert-icon {
+            font-size: 1.5rem;
+            color: #60a5fa; /* Icon Blue */
+        }
+
+        .cert-icon.locked { color: #9ca3af; } /* Gray lock */
+
+        /* --- Buttons --- */
+        .cert-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-download {
+            background-color: #60a5fa;
+            color: white;
+        }
+        .btn-download:hover { background-color: #3b82f6; }
+
+        .btn-locked {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .container { padding: 0 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .certificates-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="#" class="nav-link active">Certificates</a></li>
+                <li><a href="activities.html" class="nav-link">Activities</a></li>
+                <li><a href="modules.html" class="nav-link">Modules</a></li>
+                <li><a href="resources.html" class="nav-link">Resources</a></li>
+                <li><a href="notifications.html" class="nav-link">Notifications</a></li>
+            </ul>
+
+            <div class="user-profile">
+                <a href="profile.html">
+                    <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
+                </a>
+            </div>
+            
+        </div>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="progress.html">Progress</a></li>
+                <li><a href="#" class="active">Certificates</a></li>
+                <li><a href="activities.html">Activities</a></li>
+                <li><a href="modules.html">Modules</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="notifications.html">Notifications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-title">
+                <h1>Certificates</h1>
+                <p>Track your achievements</p>
+            </div>
+        </header>
+
+        <!-- Certificates Grid -->
+        <div class="certificates-grid">
+            
+            <!-- 1. React Fundamentals (Completed in Course Page) -->
+            <div class="cert-card">
+                <div class="cert-top">
+                    <div class="cert-info">
+                        <h2>React Fundamentals</h2>
+                        <p class="cert-meta">Earned on 15-01-2024</p>
+                    </div>
+                    <div class="cert-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                </div>
+                <button class="cert-btn btn-download" onclick="alert('Downloading Certificate...')">
+                    Download Certificate
+                </button>
+            </div>
+
+            <!-- 2. OOP (Completed in Course Page) -->
+            <div class="cert-card">
+                <div class="cert-top">
+                    <div class="cert-info">
+                        <h2>Object-Oriented Programming</h2>
+                        <p class="cert-meta">Earned on 03-03-2023</p>
+                    </div>
+                    <div class="cert-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                </div>
+                <button class="cert-btn btn-download" onclick="alert('Downloading Certificate...')">
+                    Download Certificate
+                </button>
+            </div>
+
+            <!-- 3. Data Structures (In Progress in Course Page) -->
+            <div class="cert-card">
+                <div class="cert-top">
+                    <div class="cert-info">
+                        <h2>Data Structures</h2>
+                        <p class="cert-meta">In Progress (65%)</p>
+                    </div>
+                    <div class="cert-icon locked">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                <button class="cert-btn btn-locked" disabled>
+                    In Progress
+                </button>
+            </div>
+
+            <!-- 4. ITEC101 (Not Started in Course Page) -->
+            <div class="cert-card">
+                <div class="cert-top">
+                    <div class="cert-info">
+                        <h2>ITEC101</h2>
+                        <p class="cert-meta">Locked</p>
+                    </div>
+                    <div class="cert-icon locked">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                <button class="cert-btn btn-locked" disabled>
+                    Locked
+                </button>
+            </div>
+
+            <!-- 5. Extra Legacy One (From Image Idea) -->
+            <div class="cert-card">
+                <div class="cert-top">
+                    <div class="cert-info">
+                        <h2>CSS Mastery</h2>
+                        <p class="cert-meta">Earned on 03-03-2020</p>
+                    </div>
+                    <div class="cert-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                </div>
+                <button class="cert-btn btn-download" onclick="alert('Downloading Certificate...')">
+                    Download Certificate
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Simple Navbar Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

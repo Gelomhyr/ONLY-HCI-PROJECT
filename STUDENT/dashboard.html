@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- CSS Variables for Easy Theming --- */
+        :root {
+            --primary-color: #60a5fa; /* Blue-400 */
+            --primary-hover: #3b82f6; /* Blue-500 */
+            --bg-color: #fcfcfc;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 2px 15px -3px rgba(0,0,0,0.07), 0 10px 20px -2px rgba(0,0,0,0.04);
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* --- Global Resets --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1600px; /* Matched to other pages */
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover { color: var(--text-main); }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .nav-link.active:hover { background-color: var(--primary-hover); }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* --- Mobile Menu --- */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 80px; left: 0; width: 100%;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            z-index: 99;
+        }
+        .mobile-menu.open { display: block; }
+        .mobile-menu li a {
+            display: block; padding: 12px 24px;
+            font-weight: 500; color: var(--text-muted);
+        }
+        .mobile-menu li a.active {
+            background-color: #eff6ff; color: var(--primary-color);
+        }
+
+        /* --- Layout & Grid --- */
+        .main-content {
+            padding: 40px 0;
+            flex-grow: 1;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .welcome-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-text h1 { font-size: 1.5rem; font-weight: 700; }
+        .welcome-text p { color: var(--text-muted); font-size: 0.875rem; margin-top: 4px; }
+        
+        .header-meta {
+            text-align: right;
+        }
+        .meta-text { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; display: block; }
+        .meta-text span { color: var(--text-main); font-weight: 700; }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer; /* Indicating clickable */
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .card-join {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            background-color: black;
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .stat-header i { font-size: 1.5rem; color: #374151; }
+        .stat-header span { font-size: 1.125rem; font-weight: 700; }
+        .stat-number { font-size: 2.25rem; font-weight: 700; color: var(--primary-color); }
+
+        /* Dashboard Columns */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dashboard-columns {
+            display: grid;
+            grid-template-columns: 4fr 8fr; /* 1/3 and 2/3 ratio */
+            gap: 32px;
+        }
+
+        .col-left, .col-right {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Progress Section */
+        .progress-card {
+            height: 100%;
+            padding: 24px;
+            cursor: pointer;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .circular-progress-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        /* SVG Rings */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            color: var(--primary-color);
+        }
+
+        /* Linear Bars */
+        .skill-item { 
+            margin-bottom: 24px; 
+            transition: opacity 0.2s;
+        }
+        .skill-item:hover {
+            opacity: 0.8;
+        }
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            background-color: #f3f4f6;
+            height: 14px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 999px;
+        }
+        .skill-subtext { font-size: 0.75rem; color: #9ca3af; margin-top: 4px; }
+
+        /* Alerts & Todos */
+        .alert-list li {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-hover);
+            border-radius: 50%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        /* To-Do Input Area */
+        .todo-input-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .todo-input {
+            flex-grow: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .todo-add-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .todo-add-btn:hover { background-color: var(--primary-hover); }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 8px 0;
+            transition: opacity 0.2s;
+        }
+        
+        .todo-content {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .todo-delete-btn {
+            color: #ef4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .todo-item:hover .todo-delete-btn {
+            opacity: 1;
+        }
+
+        /* Custom Checkbox */
+        .checkbox-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-top: 3px;
+        }
+        .checkbox-wrapper input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkmark {
+            height: 20px;
+            width: 20px;
+            background-color: white;
+            border: 2px solid #9ca3af;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .checkbox-wrapper input:checked ~ .checkmark {
+            background-color: #6366f1;
+            border-color: #6366f1;
+        }
+        .checkmark i {
+            display: none;
+            color: white;
+            font-size: 12px;
+        }
+        .checkbox-wrapper input:checked ~ .checkmark i { display: block; }
+
+        .todo-text span { font-weight: 700; color: var(--text-main); }
+        .todo-text { color: var(--text-main); font-size: 0.95rem; }
+        
+        /* Strikethrough for checked items */
+        .checkbox-wrapper input:checked ~ .checkmark ~ p {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+
+        /* --- Responsive Media Queries --- */
+        @media (max-width: 1024px) {
+            .nav-links { display: none; } /* Hide desktop nav */
+            .mobile-menu-btn { display: block; } /* Show burger menu */
+            .container { padding: 0 20px; }
+            
+            .dashboard-columns {
+                grid-template-columns: 1fr; /* Stack columns */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr; /* Stack stats */
+            }
+
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .header-meta {
+                text-align: left;
+                padding-left: 80px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Desktop Navigation -->
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active">Dashboard</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="certificate.html" class="nav-link">Certificates</a></li>
+                <li><a href="activities.html" class="nav-link">Activities</a></li>
+                <!-- Modules Removed -->
+                <li><a href="resources.html" class="nav-link">Resources</a></li>
+                <li><a href="notifications.html" class="nav-link">Notifications</a></li>
+            </ul>
+
+            <div class="user-profile">
+                <a href="profile.html">
+                    <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
+                </a>
+            </div>
+            
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="progress.html">Progress</a></li>
+                <li><a href="certificate.html">Certificates</a></li>
+                <li><a href="activities.html">Activities</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="notifications.html">Notifications</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Welcome Section -->
+            <div class="header-section">
+                <div class="welcome-box">
+                    <img src="assets/cinnamoroll.png" alt="User" class="welcome-avatar">
+                    <div class="welcome-text">
+                        <h1>Welcome Back, Miane! 🎉</h1>
+                        <p>Ready to continue your learning journey?</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span class="meta-text">Last Login: <span>10/01/25</span></span>
+                    <span class="meta-text" style="margin-top: 4px;">Current Time: <span id="currentTime">Loading...</span></span>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <!-- Join Course Card -->
+                <div class="card card-join" onclick="window.location.href='courses.html'">
+                    <div class="icon-box">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <span style="font-size: 1.25rem; font-weight: 700;">Join Course</span>
+                </div>
+
+                <!-- Active Courses Card -->
+                <div class="card card-stat" onclick="window.location.href='courses.html'">
+                    <div class="stat-header">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Active Courses</span>
+                    </div>
+                    <span class="stat-number">4</span>
+                </div>
+
+                <!-- Certificates Card -->
+                <div class="card card-stat" onclick="window.location.href='certificates.html'">
+                    <div class="stat-header">
+                        <i class="fas fa-certificate"></i>
+                        <span>Certificates</span>
+                    </div>
+                    <span class="stat-number">5</span>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Area -->
+            <div>
+                <h2 class="section-title">Daily Reminders</h2>
+                
+                <div class="dashboard-columns">
+                    <!-- Left Column: Progress -->
+                    <div class="col-left">
+                        <div class="card progress-card" onclick="window.location.href='progress.html'">
+                            <h3 class="card-title">Learning Progress</h3>
+                            
+                            <!-- Circular Progress SVG -->
+                            <!-- Average: (100+65+100+0)/4 = 66.25% -> Offset ~110 -->
+                            <div class="circular-progress-container">
+                                <svg width="120" height="120">
+                                    <circle cx="60" cy="60" r="52" stroke="#e5e7eb" stroke-width="12" fill="transparent"/>
+                                    <circle class="progress-ring__circle" cx="60" cy="60" r="52" stroke="currentColor" stroke-width="12" fill="transparent" stroke-dasharray="326.72" stroke-dashoffset="110"/>
+                                </svg>
+                                <div class="progress-text">66%</div>
+                            </div>
+
+                            <!-- Linear Progress Bars (Connected to Courses) -->
+                            <div class="skills-list">
+                                <!-- React Fundamentals -->
+                                <div class="skill-item" onclick="event.stopPropagation(); window.location.href='courses.html'">
+                                    <div class="skill-header">
+                                        <span>React Fundamentals</span>
+                                    </div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill" style="width: 100%"></div>
+                                    </div>
+                                    <p class="skill-subtext">100% Completed</p>
+                                </div>
+
+                                <!-- Data Structures -->
+                                <div class="skill-item" onclick="event.stopPropagation(); window.location.href='courses.html'">
+                                    <div class="skill-header">
+                                        <span>Data Structures</span>
+                                    </div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill" style="width: 65%"></div>
+                                    </div>
+                                    <p class="skill-subtext">65% Completed</p>
+                                </div>
+
+                                <!-- OOP -->
+                                <div class="skill-item" onclick="event.stopPropagation(); window.location.href='courses.html'">
+                                    <div class="skill-header">
+                                        <span>Object-Oriented Programming</span>
+                                    </div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill" style="width: 100%"></div>
+                                    </div>
+                                    <p class="skill-subtext">100% Completed</p>
+                                </div>
+
+                                <!-- ITEC101 -->
+                                <div class="skill-item" onclick="event.stopPropagation(); window.location.href='courses.html'">
+                                    <div class="skill-header">
+                                        <span>ITEC101</span>
+                                    </div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill" style="width: 0%"></div>
+                                    </div>
+                                    <p class="skill-subtext">0% Completed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Alerts & Todos -->
+                    <div class="col-right">
+                        <!-- Important Alerts (Linked to Notifications) -->
+                        <div class="card" style="cursor: pointer;" onclick="window.location.href='notifications.html'">
+                            <h3 class="card-title" style="text-align: left; margin-bottom: 16px;">Important Alerts</h3>
+                            <ul class="alert-list">
+                                <li>
+                                    <div class="dot"></div>
+                                    <p><strong>New Quiz Posted:</strong> React Hooks Quiz (Due Today)</p>
+                                </li>
+                                <li>
+                                    <div class="dot"></div>
+                                    <p><strong>New Activity:</strong> Linked List Implementation (Pending)</p>
+                                </li>
+                                <li>
+                                    <div class="dot"></div>
+                                    <p><strong>New Assignment:</strong> React To-Do App (Check Requirements)</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- To-Do List -->
+                        <div class="card" style="flex-grow: 1; cursor: default;">
+                            <h3 class="card-title" style="text-align: left; margin-bottom: 16px;">To-Do</h3>
+                            
+                            <div class="todo-input-wrapper">
+                                <input type="text" id="newTodoInput" class="todo-input" placeholder="Add a new task...">
+                                <button class="todo-add-btn" onclick="addTodo()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+
+                            <div id="todoList" style="display: flex; flex-direction: column; gap: 12px;">
+                                
+                                <!-- Existing Todo Items -->
+                                <div class="todo-item">
+                                    <label class="todo-content">
+                                        <div class="checkbox-wrapper">
+                                            <input type="checkbox">
+                                            <div class="checkmark"><i class="fas fa-check"></i></div>
+                                        </div>
+                                        <p class="todo-text"><span>REACTJS ACTIVITY:</span> Build a simple REACTJS website.</p>
+                                    </label>
+                                    <button class="todo-delete-btn" onclick="deleteTodo(this)"><i class="fas fa-trash"></i></button>
+                                </div>
+
+                                <div class="todo-item">
+                                    <label class="todo-content">
+                                        <div class="checkbox-wrapper">
+                                            <input type="checkbox" checked>
+                                            <div class="checkmark"><i class="fas fa-check"></i></div>
+                                        </div>
+                                        <p class="todo-text"><span>NESTJS ACTIVITY:</span> Build 2 simple CRUD systems.</p>
+                                    </label>
+                                    <button class="todo-delete-btn" onclick="deleteTodo(this)"><i class="fas fa-trash"></i></button>
+                                </div>
+
+                                <div class="todo-item">
+                                    <label class="todo-content">
+                                        <div class="checkbox-wrapper">
+                                            <input type="checkbox" checked>
+                                            <div class="checkmark"><i class="fas fa-check"></i></div>
+                                        </div>
+                                        <p class="todo-text"><span>HTML ACTIVITY:</span> Layout video recording.</p>
+                                    </label>
+                                    <button class="todo-delete-btn" onclick="deleteTodo(this)"><i class="fas fa-trash"></i></button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+        }
+
+        // Time Updater
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('currentTime').textContent = timeString;
+        }
+        setInterval(updateTime, 1000);
+        updateTime(); // Initial call
+
+        // To-Do Functionality
+        function addTodo() {
+            const input = document.getElementById('newTodoInput');
+            const text = input.value.trim();
+            
+            if (text) {
+                const todoList = document.getElementById('todoList');
+                const newItem = document.createElement('div');
+                newItem.className = 'todo-item';
+                newItem.innerHTML = `
+                    <label class="todo-content">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox">
+                            <div class="checkmark"><i class="fas fa-check"></i></div>
+                        </div>
+                        <p class="todo-text">${text}</p>
+                    </label>
+                    <button class="todo-delete-btn" onclick="deleteTodo(this)"><i class="fas fa-trash"></i></button>
+                `;
+                todoList.prepend(newItem);
+                input.value = '';
+            }
+        }
+
+        // Allow 'Enter' key to add todo
+        document.getElementById('newTodoInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                addTodo();
+            }
+        });
+
+        function deleteTodo(btn) {
+            const item = btn.closest('.todo-item');
+            item.style.opacity = '0';
+            setTimeout(() => {
+                item.remove();
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>

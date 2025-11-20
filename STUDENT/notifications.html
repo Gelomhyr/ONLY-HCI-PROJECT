@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages and Notifications</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- Reusing Variables for Consistency --- */
+        :root {
+            --primary-color: #60a5fa; /* Blue-400 */
+            --primary-hover: #3b82f6; /* Blue-500 */
+            --bg-color: #fcfcfc;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 2px 15px -3px rgba(0,0,0,0.07), 0 10px 20px -2px rgba(0,0,0,0.04);
+            --font-family: 'Poppins', sans-serif;
+            
+            /* Notification Specific Colors */
+            --unread-bg: #ffffff;
+            --read-bg: #f3f4f6;
+            --accent-unread: #3b82f6;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { font-family: inherit; }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            /* Wide Layout */
+            max-width: 1600px; 
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover { color: var(--text-main); }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .user-profile img {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* --- Mobile Menu --- */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 80px; left: 0; width: 100%;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            z-index: 99;
+        }
+        .mobile-menu.open { display: block; }
+        .mobile-menu li a {
+            display: block; padding: 12px 24px;
+            font-weight: 500; color: var(--text-muted);
+        }
+        .mobile-menu li a.active {
+            background-color: #eff6ff; color: var(--primary-color);
+        }
+
+        /* --- Page Header --- */
+        .page-header { margin-top: 40px; margin-bottom: 30px; }
+        .header-title h1 { font-size: 1.75rem; font-weight: 700; color: black; }
+        .header-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+
+        /* --- Notification List Styling (Email Style) --- */
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .notification-item {
+            display: grid;
+            /* Icon | Content | Actions */
+            grid-template-columns: 60px 1fr 220px; 
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease, opacity 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-item:last-child { border-bottom: none; }
+
+        /* Unread State (Default visual) */
+        .notification-item.unread {
+            background-color: var(--unread-bg);
+        }
+        
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background-color: var(--accent-unread);
+        }
+
+        .notification-item.unread .notif-title {
+            font-weight: 700;
+            color: black;
+        }
+
+        /* Read State */
+        .notification-item.read {
+            background-color: var(--read-bg);
+            opacity: 0.8; /* Slightly faded */
+        }
+
+        .notification-item.read .notif-title {
+            font-weight: 500;
+            color: #4b5563;
+        }
+        
+        .notification-item.read .icon-wrapper {
+            background-color: #e5e7eb; /* Gray icon bg */
+            color: #9ca3af;
+        }
+
+        .notification-item:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Icon Wrapper */
+        .icon-wrapper {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+
+        /* Icon Colors (For Unread) */
+        .icon-assignment { background-color: #eff6ff; color: #3b82f6; }
+        .icon-quiz { background-color: #fef3c7; color: #d97706; }
+        .icon-cert { background-color: #ecfdf5; color: #059669; }
+        .icon-system { background-color: #f3f4f6; color: #6b7280; }
+
+        /* Content Area */
+        .notif-content {
+            padding-right: 20px;
+        }
+
+        .notif-header {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .notif-title {
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+
+        .notif-tag {
+            font-size: 0.75rem;
+            background-color: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .notif-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Actions Area */
+        .notif-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .btn-view {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .btn-view:hover { background-color: var(--primary-hover); }
+
+        .btn-read {
+            background-color: white;
+            border-color: var(--border-color);
+            color: var(--text-muted);
+        }
+        .btn-read:hover { 
+            border-color: var(--text-muted); 
+            color: var(--text-main);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .container { padding: 0 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .notification-item {
+                grid-template-columns: 50px 1fr; /* Stack actions */
+                grid-template-rows: auto auto;
+                padding: 15px;
+                gap: 10px;
+            }
+            
+            .notif-actions {
+                grid-column: 2;
+                justify-content: flex-start;
+                padding-top: 5px;
+            }
+
+            .notif-desc {
+                white-space: normal; /* Allow wrapping on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="certificate.html" class="nav-link">Certificates</a></li>
+                <li><a href="activities.html" class="nav-link">Activities</a></li>
+                <li><a href="resources.html" class="nav-link">Resources</a></li>
+                <li><a href="#" class="nav-link active">Notifications</a></li>
+            </ul>
+
+            <div class="user-profile">
+                <a href="profile.html">
+                    <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
+                </a>
+            </div>
+            
+        </div>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="progress.html">Progress</a></li>
+                <li><a href="certificate.html">Certificates</a></li>
+                <li><a href="activities.html">Activities</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="#" class="active">Notifications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-title">
+                <h1>Messages and Notification</h1>
+                <p>The system provides alerts to keep user informed of important events.</p>
+            </div>
+            <button class="btn-action btn-read" onclick="markAllRead()">Mark all as read</button>
+        </header>
+
+        <!-- Notification List (Email Style) -->
+        <div class="notification-list" id="notifList">
+            
+            <!-- Item 1: Assignment (Unread) -->
+            <div class="notification-item unread" onclick="toggleRead(this)">
+                <div class="icon-wrapper icon-assignment">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-header">
+                        <span class="notif-title">New Assignment: React To-Do App</span>
+                        <span class="notif-tag">React Fundamentals</span>
+                    </div>
+                    <p class="notif-desc">A new project assignment "Building a To-Do App" has been posted. Check the requirements document.</p>
+                </div>
+                <div class="notif-actions">
+                    <button class="btn-action btn-view" onclick="event.stopPropagation(); alert('Viewing Assignment...')">View</button>
+                    <button class="btn-action btn-read" onclick="event.stopPropagation(); toggleRead(this.closest('.notification-item'))">
+                        <i class="far fa-envelope-open"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 2: Quiz (Unread) -->
+            <div class="notification-item unread" onclick="toggleRead(this)">
+                <div class="icon-wrapper icon-quiz">
+                    <i class="fas fa-question"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-header">
+                        <span class="notif-title">Quiz Graded: Binary Trees</span>
+                        <span class="notif-tag">Data Structures</span>
+                    </div>
+                    <p class="notif-desc">Your submission for Binary Trees Assessment has been graded. You scored 95/100. Great job!</p>
+                </div>
+                <div class="notif-actions">
+                    <button class="btn-action btn-view" onclick="event.stopPropagation(); alert('Viewing Results...')">Results</button>
+                    <button class="btn-action btn-read" onclick="event.stopPropagation(); toggleRead(this.closest('.notification-item'))">
+                        <i class="far fa-envelope-open"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 3: System Update (Read) -->
+            <div class="notification-item read" onclick="toggleRead(this)">
+                <div class="icon-wrapper icon-system">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-header">
+                        <span class="notif-title">System Maintenance Complete</span>
+                        <span class="notif-tag">System</span>
+                    </div>
+                    <p class="notif-desc">The scheduled maintenance is complete. All modules including OOP labs are back online.</p>
+                </div>
+                <div class="notif-actions">
+                    <button class="btn-action btn-view" onclick="event.stopPropagation(); alert('Viewing Details...')">Details</button>
+                    <button class="btn-action btn-read" onclick="event.stopPropagation(); toggleRead(this.closest('.notification-item'))">
+                        <i class="far fa-envelope"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 4: Certificate (Unread) -->
+            <div class="notification-item unread" onclick="toggleRead(this)">
+                <div class="icon-wrapper icon-cert">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-header">
+                        <span class="notif-title">Certificate Ready</span>
+                        <span class="notif-tag">React Fundamentals</span>
+                    </div>
+                    <p class="notif-desc">Congratulations! Your certificate for React Fundamentals is ready to download.</p>
+                </div>
+                <div class="notif-actions">
+                    <button class="btn-action btn-view" onclick="event.stopPropagation(); window.location.href='certificate.html'">Download</button>
+                    <button class="btn-action btn-read" onclick="event.stopPropagation(); toggleRead(this.closest('.notification-item'))">
+                        <i class="far fa-envelope-open"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Item 5: Class Update (Read) -->
+            <div class="notification-item read" onclick="toggleRead(this)">
+                <div class="icon-wrapper icon-assignment">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-header">
+                        <span class="notif-title">Lecture Rescheduled</span>
+                        <span class="notif-tag">Object-Oriented Programming</span>
+                    </div>
+                    <p class="notif-desc">The live session on Inheritance has been moved to next Monday at 10:00 AM.</p>
+                </div>
+                <div class="notif-actions">
+                    <button class="btn-action btn-view" onclick="event.stopPropagation(); alert('Viewing Schedule...')">View</button>
+                    <button class="btn-action btn-read" onclick="event.stopPropagation(); toggleRead(this.closest('.notification-item'))">
+                        <i class="far fa-envelope"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Navbar Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Mark as Read Logic
+        function toggleRead(element) {
+            const icon = element.querySelector('.btn-read i');
+            
+            if (element.classList.contains('unread')) {
+                // Mark as Read
+                element.classList.remove('unread');
+                element.classList.add('read');
+                icon.classList.remove('fa-envelope-open');
+                icon.classList.add('fa-envelope'); // Closed envelope implies "archive" or "read state" visually
+            } else {
+                // Mark as Unread
+                element.classList.remove('read');
+                element.classList.add('unread');
+                icon.classList.remove('fa-envelope');
+                icon.classList.add('fa-envelope-open');
+            }
+        }
+
+        function markAllRead() {
+            const items = document.querySelectorAll('.notification-item.unread');
+            items.forEach(item => {
+                toggleRead(item);
+            });
+        }
+    </script>
+</body>
+</html>

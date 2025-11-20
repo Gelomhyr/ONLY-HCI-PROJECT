@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activities & Quizzes</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- Reusing Variables for Consistency --- */
+        :root {
+            --primary-color: #60a5fa; /* Blue-400 */
+            --primary-hover: #3b82f6; /* Blue-500 */
+            --bg-color: #fcfcfc;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 2px 15px -3px rgba(0,0,0,0.07), 0 10px 20px -2px rgba(0,0,0,0.04);
+            --font-family: 'Poppins', sans-serif;
+            
+            /* Status Colors */
+            --status-pending: #9ca3af; /* Gray */
+            --status-completed: #10b981; /* Green */
+            --status-late: #ef4444; /* Red */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { font-family: inherit; }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            /* Wide Layout */
+            max-width: 1600px; 
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover { color: var(--text-main); }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .user-profile img {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* --- Mobile Menu --- */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 80px; left: 0; width: 100%;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            z-index: 99;
+        }
+        .mobile-menu.open { display: block; }
+        .mobile-menu li a {
+            display: block; padding: 12px 24px;
+            font-weight: 500; color: var(--text-muted);
+        }
+        .mobile-menu li a.active {
+            background-color: #eff6ff; color: var(--primary-color);
+        }
+
+        /* --- Page Header & Filters --- */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title h1 { font-size: 1.75rem; font-weight: 700; color: black; }
+        .header-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Dropdown Styling */
+        .dropdown { position: relative; display: inline-block; }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            background-color: white;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+            justify-content: space-between;
+        }
+
+        .filter-btn:hover { border-color: var(--text-muted); color: var(--text-main); }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 110%; right: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            z-index: 50;
+            overflow: hidden;
+        }
+        .dropdown.show .dropdown-menu { display: block; }
+        .dropdown-item {
+            display: block; width: 100%; padding: 12px 16px;
+            text-align: left; border: none; background: none;
+            color: var(--text-main); cursor: pointer;
+        }
+        .dropdown-item:hover { background-color: #f3f4f6; }
+
+
+        /* --- Activities List --- */
+        .activities-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .activity-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .activity-card:hover { transform: translateY(-2px); }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .activity-info h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .activity-subtext {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .course-tag {
+            background-color: #eff6ff;
+            color: var(--primary-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-pending { color: var(--status-pending); }
+        .status-completed { color: var(--status-completed); }
+
+        /* Button Styles */
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: center;
+        }
+
+        .btn-start {
+            background-color: #60a5fa; /* The specific blue from image */
+            color: white;
+        }
+        .btn-start:hover { background-color: #3b82f6; }
+
+        .btn-review {
+            background-color: #f3f4f6;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+        .btn-review:hover { background-color: #e5e7eb; }
+
+        /* Score Badge for Done items */
+        .score-badge {
+            background-color: #ecfdf5;
+            color: #059669;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .container { padding: 0 20px; }
+        }
+        
+        @media (max-width: 640px) {
+            .card-top { flex-direction: column; gap: 10px; }
+            .status-wrapper { align-self: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="certificate.html" class="nav-link">Certificates</a></li>
+                <li><a href="#" class="nav-link active">Activities</a></li>
+                <li><a href="resources.html" class="nav-link">Resources</a></li>
+                <li><a href="notifications.html" class="nav-link">Notifications</a></li>
+            </ul>
+
+            <div class="user-profile">
+                <a href="profile.html">
+                    <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
+                </a>
+            </div>
+            
+        </div>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="progress.html">Progress</a></li>
+                <li><a href="certificate.html">Certificates</a></li>
+                <li><a href="#" class="active">Activities</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="notifications.html">Notifications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-title">
+                <h1>Activities</h1>
+                <p>This will test your skills</p>
+            </div>
+
+            <div class="filters">
+                <!-- Course Filter -->
+                <div class="dropdown">
+                    <button class="filter-btn" onclick="toggleDropdown('courseDropdown')">
+                        <span id="courseFilterText">All Courses</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                    </button>
+                    <div id="courseDropdown" class="dropdown-menu">
+                        <button class="dropdown-item" onclick="setCourseFilter('All Courses')">All Courses</button>
+                        <button class="dropdown-item" onclick="setCourseFilter('React Fundamentals')">React Fundamentals</button>
+                        <button class="dropdown-item" onclick="setCourseFilter('Data Structures')">Data Structures</button>
+                        <button class="dropdown-item" onclick="setCourseFilter('Object-Oriented Programming')">Object-Oriented Programming</button>
+                    </div>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="dropdown">
+                    <button class="filter-btn" onclick="toggleDropdown('statusDropdown')">
+                        <span id="statusFilterText">All Status</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                    </button>
+                    <div id="statusDropdown" class="dropdown-menu">
+                        <button class="dropdown-item" onclick="setStatusFilter('All Status')">All Status</button>
+                        <button class="dropdown-item" onclick="setStatusFilter('Completed')">Completed</button>
+                        <button class="dropdown-item" onclick="setStatusFilter('Pending')">Pending</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Activities List -->
+        <div class="activities-list" id="activitiesList">
+            
+            <!-- Item 1: Pending (From Image) -->
+            <div class="activity-card" data-course="React Fundamentals" data-status="Pending">
+                <div class="card-top">
+                    <div class="activity-info">
+                        <h2>WebHooks</h2>
+                        <div class="activity-subtext">
+                            <span class="course-tag">React Fundamentals</span>
+                            <span>• Activity</span>
+                        </div>
+                    </div>
+                    <div class="status-wrapper">
+                        <span class="status-text status-pending">Pending</span>
+                    </div>
+                </div>
+                <button class="action-btn btn-start">Start</button>
+            </div>
+
+            <!-- Item 2: Pending Quiz (From Image) -->
+            <div class="activity-card" data-course="React Fundamentals" data-status="Pending">
+                <div class="card-top">
+                    <div class="activity-info">
+                        <h2>React Hooks Quiz</h2>
+                        <div class="activity-subtext">
+                            <span class="course-tag">React Fundamentals</span>
+                            <span>• Quiz</span>
+                        </div>
+                    </div>
+                    <div class="status-wrapper">
+                        <span class="status-text status-pending">Pending</span>
+                    </div>
+                </div>
+                <button class="action-btn btn-start">Start</button>
+            </div>
+
+            <!-- Item 3: Pending (From Image) -->
+            <div class="activity-card" data-course="React Fundamentals" data-status="Pending">
+                <div class="card-top">
+                    <div class="activity-info">
+                        <h2>React To-Do List</h2>
+                        <div class="activity-subtext">
+                            <span class="course-tag">React Fundamentals</span>
+                            <span>• Project</span>
+                        </div>
+                    </div>
+                    <div class="status-wrapper">
+                        <span class="status-text status-pending">Pending</span>
+                    </div>
+                </div>
+                <button class="action-btn btn-start">Start</button>
+            </div>
+
+            <!-- Item 4: COMPLETED Quiz (New Feature) -->
+            <div class="activity-card" data-course="Data Structures" data-status="Completed">
+                <div class="card-top">
+                    <div class="activity-info">
+                        <h2>Binary Trees Assessment</h2>
+                        <div class="activity-subtext">
+                            <span class="course-tag">Data Structures</span>
+                            <span>• Quiz</span>
+                        </div>
+                    </div>
+                    <div class="status-wrapper" style="display: flex; align-items: center; gap: 12px;">
+                        <span class="score-badge">Score: 95/100</span>
+                        <span class="status-text status-completed">Completed</span>
+                    </div>
+                </div>
+                <button class="action-btn btn-review">Review Answers</button>
+            </div>
+
+            <!-- Item 5: COMPLETED Activity (New Feature) -->
+            <div class="activity-card" data-course="Object-Oriented Programming" data-status="Completed">
+                <div class="card-top">
+                    <div class="activity-info">
+                        <h2>Class Inheritance Lab</h2>
+                        <div class="activity-subtext">
+                            <span class="course-tag">Object-Oriented Programming</span>
+                            <span>• Activity</span>
+                        </div>
+                    </div>
+                    <div class="status-wrapper" style="display: flex; align-items: center; gap: 12px;">
+                        <span class="score-badge">Grade: A</span>
+                        <span class="status-text status-completed">Completed</span>
+                    </div>
+                </div>
+                <button class="action-btn btn-review">View Submission</button>
+            </div>
+
+            <!-- Item 6: Pending Data Structures -->
+            <div class="activity-card" data-course="Data Structures" data-status="Pending">
+                <div class="card-top">
+                    <div class="activity-info">
+                        <h2>Linked List Implementation</h2>
+                        <div class="activity-subtext">
+                            <span class="course-tag">Data Structures</span>
+                            <span>• Activity</span>
+                        </div>
+                    </div>
+                    <div class="status-wrapper">
+                        <span class="status-text status-pending">Pending</span>
+                    </div>
+                </div>
+                <button class="action-btn btn-start">Start</button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // --- Navbar Logic ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // --- Dropdown Logic ---
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const parent = dropdown.parentElement;
+            
+            // Close others if any
+            document.querySelectorAll('.dropdown').forEach(d => {
+                if (d !== parent) d.classList.remove('show');
+            });
+
+            parent.classList.toggle('show');
+        }
+
+        // Close dropdowns when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.filter-btn') && !event.target.closest('.filter-btn')) {
+                document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+            }
+        }
+
+        // --- Combined Filtering Logic ---
+        let currentCourse = 'All Courses';
+        let currentStatus = 'All Status';
+
+        function filterActivities() {
+            const list = document.getElementById('activitiesList');
+            const items = list.querySelectorAll('.activity-card');
+
+            items.forEach(item => {
+                const itemCourse = item.getAttribute('data-course');
+                const itemStatus = item.getAttribute('data-status');
+
+                // Logic: Show item if it matches BOTH the course filter AND the status filter
+                const matchCourse = (currentCourse === 'All Courses' || itemCourse === currentCourse);
+                const matchStatus = (currentStatus === 'All Status' || itemStatus === currentStatus);
+
+                if (matchCourse && matchStatus) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function setCourseFilter(course) {
+            currentCourse = course;
+            document.getElementById('courseFilterText').textContent = course;
+            filterActivities();
+        }
+
+        function setStatusFilter(status) {
+            currentStatus = status;
+            document.getElementById('statusFilterText').textContent = status;
+            filterActivities();
+        }
+    </script>
+</body>
+</html>

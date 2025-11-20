@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Resources</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- Reusing Variables for Consistency --- */
+        :root {
+            --primary-color: #60a5fa; /* Blue-400 */
+            --primary-hover: #3b82f6; /* Blue-500 */
+            --bg-color: #fcfcfc;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 2px 15px -3px rgba(0,0,0,0.07), 0 10px 20px -2px rgba(0,0,0,0.04);
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { font-family: inherit; }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            /* Wide Layout */
+            max-width: 1600px; 
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover { color: var(--text-main); }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .user-profile img {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* --- Mobile Menu --- */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 80px; left: 0; width: 100%;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            z-index: 99;
+        }
+        .mobile-menu.open { display: block; }
+        .mobile-menu li a {
+            display: block; padding: 12px 24px;
+            font-weight: 500; color: var(--text-muted);
+        }
+        .mobile-menu li a.active {
+            background-color: #eff6ff; color: var(--primary-color);
+        }
+
+        /* --- Page Header --- */
+        .page-header { margin-top: 40px; margin-bottom: 30px; }
+        .header-title h1 { font-size: 1.75rem; font-weight: 700; color: black; }
+        .header-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+
+        /* --- Main Grid Layout --- */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .resource-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+        }
+
+        .icon-file { color: #60a5fa; }
+        .icon-help { color: #0ea5e9; } /* Cyan-ish blue */
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Resource List Items */
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .list-item-btn {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .list-item-btn:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        .item-icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #eff6ff;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .list-item-btn.support-btn .item-icon-circle {
+            background-color: #f9fafb;
+            color: #4b5563;
+        }
+
+        .item-text {
+            font-weight: 500;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        /* --- Quick Links Section --- */
+        .quick-links-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .quick-links-header h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .quick-links-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .quick-link-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-link-card:hover {
+            border-color: var(--text-muted);
+            background-color: #f9fafb;
+        }
+
+        .quick-link-icon {
+            font-size: 1.5rem;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .quick-link-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* --- Modal Styles --- */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-backdrop.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .modal-body {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: #9ca3af;
+        }
+
+        .modal-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .container { padding: 0 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .resources-grid { grid-template-columns: 1fr; }
+            .quick-links-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="certificate.html" class="nav-link">Certificates</a></li>
+                <li><a href="activities.html" class="nav-link">Activities</a></li>
+                <li><a href="#" class="nav-link active">Resources</a></li>
+                <li><a href="notifications.html" class="nav-link">Notifications</a></li>
+            </ul>
+
+            <div class="user-profile">
+                <a href="profile.html">
+                    <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
+                </a>
+            </div>
+            
+        </div>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="progress.html">Progress</a></li>
+                <li><a href="certificate.html">Certificates</a></li>
+                <li><a href="activities.html">Activities</a></li>
+                <li><a href="#" class="active">Resources</a></li>
+                <li><a href="notifications.html">Notifications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-title">
+                <h1>System Resources</h1>
+                <p>Essential software components to ensure overall functionality.</p>
+            </div>
+        </header>
+
+        <!-- Main Grid -->
+        <div class="resources-grid">
+            
+            <!-- Left: Downloadable Materials -->
+            <div class="resource-card">
+                <div class="card-header">
+                    <i class="fas fa-file-alt icon-file"></i>
+                    <h2>Downloadable Materials</h2>
+                </div>
+                <div class="resource-list">
+                    <button class="list-item-btn" onclick="alert('Downloading React Cheat Sheet...')">
+                        <div class="item-icon-circle">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <span class="item-text">React Cheat Sheet (PDF)</span>
+                    </button>
+                    
+                    <button class="list-item-btn" onclick="alert('Downloading JS Reference...')">
+                        <div class="item-icon-circle">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <span class="item-text">JavaScript Reference Guide</span>
+                    </button>
+
+                    <button class="list-item-btn" onclick="alert('Downloading Project Templates...')">
+                        <div class="item-icon-circle">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <span class="item-text">Project Templates</span>
+                    </button>
+
+                    <button class="list-item-btn" onclick="alert('Opening Repositories...')">
+                        <div class="item-icon-circle">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <span class="item-text">Code Example Repositories</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Help & Support (With Interactive Content) -->
+            <div class="resource-card">
+                <div class="card-header">
+                    <i class="fas fa-question-circle icon-help"></i>
+                    <h2>Help & Support</h2>
+                </div>
+                <div class="resource-list">
+                    <button class="list-item-btn support-btn" onclick="openModal('Technical Support', 'For any technical issues, please reach out to our IT desk.<br><br><strong>Email:</strong> support@school.edu<br><strong>Hours:</strong> Mon-Fri, 9AM - 5PM')">
+                        <div class="item-icon-circle">
+                            <i class="far fa-question-circle"></i>
+                        </div>
+                        <span class="item-text">Technical Support</span>
+                    </button>
+
+                    <button class="list-item-btn support-btn" onclick="openModal('Contact Instructor', 'Need help with course material?<br><br><strong>Instructor:</strong> Mr. Smith<br><strong>Office Hours:</strong> Tue & Thu, 2PM - 4PM')">
+                        <div class="item-icon-circle">
+                            <i class="far fa-comment-alt"></i>
+                        </div>
+                        <span class="item-text">Contact Instructor</span>
+                    </button>
+
+                    <button class="list-item-btn support-btn" onclick="openModal('Learning Guide', 'Access the comprehensive student handbook and learning path documentation here to guide your studies.')">
+                        <div class="item-icon-circle">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span class="item-text">Learning Guide</span>
+                    </button>
+
+                    <button class="list-item-btn support-btn" onclick="openModal('System Requirements', 'Ensure your device meets the following specs:<br><br>- Node.js v14+<br>- 8GB RAM<br>- Modern Web Browser (Chrome/Firefox)')">
+                        <div class="item-icon-circle">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <span class="item-text">System Requirements</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom: Quick Links -->
+        <div class="quick-links-section">
+            <div class="quick-links-header">
+                <h3>Quick Links</h3>
+                <p>Frequently accessed resources</p>
+            </div>
+            <div class="quick-links-grid">
+                <div class="quick-link-card">
+                    <i class="far fa-lightbulb quick-link-icon"></i>
+                    <span class="quick-link-text">Course Catalog</span>
+                </div>
+                <div class="quick-link-card">
+                    <i class="far fa-edit quick-link-icon"></i>
+                    <span class="quick-link-text">Discussion Forum</span>
+                </div>
+                <div class="quick-link-card">
+                    <i class="fas fa-certificate quick-link-icon"></i>
+                    <span class="quick-link-text">Certificate Guide</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Dynamic Content Modal -->
+    <div class="modal-backdrop" id="infoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-header" id="modalTitle">Title</h2>
+            <div class="modal-body" id="modalBody">Content goes here...</div>
+            <button class="modal-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Navbar Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Modal Logic for Help & Support Content
+        const modal = document.getElementById('infoModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        function openModal(title, content) {
+            modalTitle.textContent = title;
+            modalBody.innerHTML = content; // Using innerHTML to support <br> and <strong>
+            modal.classList.add('open');
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+        }
+
+        // Close modal on backdrop click
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
