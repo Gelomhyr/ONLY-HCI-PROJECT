@@ -55,7 +55,7 @@
         }
 
         .container {
-            max-width: 1600px; /* Matched to other pages */
+            max-width: 1600px;
             margin: 0 auto;
             padding: 0 40px;
             width: 100%;
@@ -68,10 +68,30 @@
             height: 100%;
         }
 
+        /* Branding Style */
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-right: 40px;
+            transition: opacity 0.2s;
+        }
+        
+        .brand-logo i {
+            color: var(--primary-color);
+            font-size: 1.75rem;
+        }
+
+        .brand-logo:hover { opacity: 0.8; }
+
         .nav-links {
             display: flex;
             gap: 30px;
             align-items: center;
+            margin-right: auto; /* Pushes profile to the right */
         }
 
         .nav-link {
@@ -182,7 +202,7 @@
             padding: 32px;
             box-shadow: var(--shadow);
             transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer; /* Indicating clickable */
+            cursor: pointer;
         }
 
         .card:hover {
@@ -439,6 +459,10 @@
         @media (max-width: 1024px) {
             .nav-links { display: none; } /* Hide desktop nav */
             .mobile-menu-btn { display: block; } /* Show burger menu */
+            
+            /* On mobile, remove the right margin so the logo stays centered or flexible */
+            .brand-logo { margin-right: 0; }
+
             .container { padding: 0 20px; }
             
             .dashboard-columns {
@@ -475,6 +499,12 @@
                 <i class="fas fa-bars"></i>
             </button>
 
+            <!-- Company Logo (Added Here) -->
+            <a href="#" class="brand-logo">
+                <i class="fa-solid fa-book"></i>
+                <span>E+Learn</span>
+            </a>
+
             <!-- Desktop Navigation -->
             <ul class="nav-links">
                 <li><a href="#" class="nav-link active">Dashboard</a></li>
@@ -482,14 +512,13 @@
                 <li><a href="progress.html" class="nav-link">Progress</a></li>
                 <li><a href="certificate.html" class="nav-link">Certificates</a></li>
                 <li><a href="activities.html" class="nav-link">Activities</a></li>
-                <!-- Modules Removed -->
                 <li><a href="resources.html" class="nav-link">Resources</a></li>
                 <li><a href="notifications.html" class="nav-link">Notifications</a></li>
             </ul>
 
             <div class="user-profile">
                 <a href="profile.html">
-                    <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
+                    <img src="assets/cinnamoroll.png" alt="Profile" onerror="this.src='https://via.placeholder.com/40?text=User'" style="border: 2px solid var(--primary-color);">
                 </a>
             </div>
             
@@ -517,7 +546,7 @@
             <!-- Welcome Section -->
             <div class="header-section">
                 <div class="welcome-box">
-                    <img src="assets/cinnamoroll.png" alt="User" class="welcome-avatar">
+                    <img src="assets/cinnamoroll.png" alt="User" onerror="this.src='https://via.placeholder.com/64?text=User'" class="welcome-avatar">
                     <div class="welcome-text">
                         <h1>Welcome Back, Miane! 🎉</h1>
                         <p>Ready to continue your learning journey?</p>
@@ -569,7 +598,6 @@
                             <h3 class="card-title">Learning Progress</h3>
                             
                             <!-- Circular Progress SVG -->
-                            <!-- Average: (100+65+100+0)/4 = 66.25% -> Offset ~110 -->
                             <div class="circular-progress-container">
                                 <svg width="120" height="120">
                                     <circle cx="60" cy="60" r="52" stroke="#e5e7eb" stroke-width="12" fill="transparent"/>

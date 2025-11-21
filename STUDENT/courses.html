@@ -492,6 +492,25 @@
                 width: 100%;
             }
         }
+         /* Branding Style */
+         .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-right: 40px;
+            transition: opacity 0.2s;
+        }
+        
+        .brand-logo i {
+            color: var(--primary-color);
+            font-size: 1.75rem;
+        }
+
+        .brand-logo:hover { opacity: 0.8; }
+
     </style>
 </head>
 <body>
@@ -503,6 +522,12 @@
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
             </button>
+
+            <!-- Company Logo (Added Here) -->
+            <a href="#" class="brand-logo">
+                <i class="fa-solid fa-book"></i>
+                <span>E+Learn</span>
+            </a>
 
             <!-- Desktop Navigation -->
             <ul class="nav-links">
