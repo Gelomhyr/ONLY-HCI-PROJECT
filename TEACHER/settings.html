@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - E+Learn</title>
+
+    <link rel="stylesheet" href="css/settings.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+</head>
+<body class="text-slate-800 bg-slate-50 overflow-hidden h-screen flex">
+
+    <!-- ================= SIDEBAR (Desktop) ================= -->
+    <aside class="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 h-full fixed left-0 top-0 z-30">
+        <!-- Logo Area -->
+        <div class="h-20 flex items-center px-8 border-b border-slate-100">
+            <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                <i data-lucide="book-open" class="text-blue-600 w-6 h-6"></i>
+            </div>
+            <span class="text-2xl font-bold text-blue-600 tracking-tight">E+Learn</span>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Dashboard
+            </a>
+            
+            <a href="courses.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="book" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Courses
+            </a>
+
+            <a href="upload.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="upload-cloud" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Upload
+            </a>
+
+            <a href="assignments.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="file-check" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Assignments
+            </a>
+
+            <a href="progress.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Progress
+            </a>
+
+            <a href="announcements.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bell" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Announcements
+            </a>
+
+            <a href="certificates.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="award" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Certificates
+            </a>
+        </div>
+
+        <!-- Bottom Actions (Settings Active) -->
+        <div class="p-4 border-t border-slate-100 space-y-2">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg font-medium transition-colors">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+                Settings
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT WRAPPER ================= -->
+    <div class="flex-1 flex flex-col h-full lg:ml-64 relative">
+        
+        <!-- Mobile Header -->
+        <header class="lg:hidden bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sticky top-0 z-20">
+            <div class="flex items-center">
+                <div class="bg-blue-100 p-1.5 rounded-lg mr-2">
+                    <i data-lucide="book-open" class="text-blue-600 w-5 h-5"></i>
+                </div>
+                <span class="text-xl font-bold text-blue-600">E+Learn</span>
+            </div>
+            <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Scrollable Main Area -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8">
+            <div class="max-w-5xl mx-auto space-y-8 fade-in">
+                
+                <!-- 1. Page Header -->
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">Settings & Profile</h1>
+                    <p class="text-slate-500 mt-1 text-sm">Manage your account and preferences</p>
+                </div>
+
+                <!-- 2. Profile Information Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 sm:p-8">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Profile Information</h2>
+                    
+                    <form onsubmit="event.preventDefault(); alert('Changes saved successfully!');">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <!-- Full Name -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-slate-700">Full Name</label>
+                                <input type="text" 
+                                       value="Dr. Smith"
+                                       class="form-input block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white text-slate-800 placeholder-slate-400 focus:outline-none transition-all"
+                                       placeholder="Enter full name">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-slate-700">Email</label>
+                                <input type="email" 
+                                       value="dr.smith@elearn.com"
+                                       class="form-input block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white text-slate-800 placeholder-slate-400 focus:outline-none transition-all"
+                                       placeholder="Enter email address">
+                            </div>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="mb-6 space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Department</label>
+                            <input type="text" 
+                                   value="Computer Science"
+                                   class="form-input block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white text-slate-800 placeholder-slate-400 focus:outline-none transition-all"
+                                   placeholder="Enter department">
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="mb-6 space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Bio</label>
+                            <textarea rows="4" 
+                                      class="form-input block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white text-slate-800 placeholder-slate-400 focus:outline-none transition-all resize-none"
+                                      placeholder="Write a short bio...">Passionate educator with 10+ years of experience in computer science education. Specializing in web development and modern programming practices.</textarea>
+                            <div class="flex justify-end">
+                                <i data-lucide="grip-horizontal" class="w-3 h-3 text-slate-300"></i>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <button type="submit" class="bg-[#4361ee] hover:bg-[#3a53d0] text-white px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors shadow-sm active:scale-95">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 3. Notification Preferences Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 sm:p-8">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Notification Preferences</h2>
+                    
+                    <div class="space-y-6 divide-y divide-slate-100">
+                        
+                        <!-- Toggle Item 1 -->
+                        <div class="flex items-center justify-between pt-2">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800">Email notifications for new submissions</h3>
+                                <p class="text-xs text-slate-500 mt-1">Receive an email when students submit assignments</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-200 checked:border-[#4361ee] transition-all duration-300 left-0 checked:left-6 shadow-sm" checked/>
+                                <label for="toggle1" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+
+                        <!-- Toggle Item 2 -->
+                        <div class="flex items-center justify-between pt-6">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800">Student question alerts</h3>
+                                <p class="text-xs text-slate-500 mt-1">Get notified when students ask questions</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle2" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-200 checked:border-[#4361ee] transition-all duration-300 left-0 checked:left-6 shadow-sm" checked/>
+                                <label for="toggle2" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+
+                        <!-- Toggle Item 3 -->
+                        <div class="flex items-center justify-between pt-6">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800">Course completion notifications</h3>
+                                <p class="text-xs text-slate-500 mt-1">Receive alerts when students complete courses</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle3" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-200 checked:border-[#4361ee] transition-all duration-300 left-0 checked:left-6 shadow-sm" checked/>
+                                <label for="toggle3" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+
+                        <!-- Toggle Item 4 (Off by default) -->
+                        <div class="flex items-center justify-between pt-6">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800">Weekly progress reports</h3>
+                                <p class="text-xs text-slate-500 mt-1">Get a summary of all course activities weekly</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle4" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-200 checked:border-[#4361ee] transition-all duration-300 left-0 checked:left-6 shadow-sm"/>
+                                <label for="toggle4" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

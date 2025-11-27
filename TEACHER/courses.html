@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Courses - E+Learn</title>
+    
+    <link rel="stylesheet" href="css/courses.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+</head>
+<body class="text-slate-800 bg-slate-50 overflow-hidden h-screen flex">
+
+    <!-- ================= SIDEBAR (Desktop) ================= -->
+    <aside class="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 h-full fixed left-0 top-0 z-30">
+        <!-- Logo Area -->
+        <div class="h-20 flex items-center px-8 border-b border-slate-100">
+            <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                <i data-lucide="book-open" class="text-blue-600 w-6 h-6"></i>
+            </div>
+            <span class="text-2xl font-bold text-blue-600 tracking-tight">E+Learn</span>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            
+            <!-- Standard Link (Dashboard is now inactive) -->
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Dashboard
+            </a>
+            
+            <!-- Active Link (Courses is now active) -->
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg font-medium transition-colors">
+                <i data-lucide="book" class="w-5 h-5"></i>
+                Courses
+            </a>
+
+            <!-- Standard Links -->
+            <a href="upload.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="upload-cloud" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Upload
+            </a>
+            <a href="assignments.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="file-check" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Assignments
+            </a>
+            <a href="progress.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Progress
+            </a>
+            <a href="announcements.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bell" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Announcements
+            </a>
+            <a href="certificates.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="award" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Certificates
+            </a>
+        </div>
+
+        <!-- Bottom Actions (Settings/Logout) -->
+        <div class="p-4 border-t border-slate-100 space-y-2">
+            <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="settings" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Settings
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT WRAPPER ================= -->
+    <div class="flex-1 flex flex-col h-full lg:ml-64 relative">
+        
+        <!-- Mobile Header -->
+        <header class="lg:hidden bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sticky top-0 z-20">
+            <div class="flex items-center">
+                <div class="bg-blue-100 p-1.5 rounded-lg mr-2">
+                    <i data-lucide="book-open" class="text-blue-600 w-5 h-5"></i>
+                </div>
+                <span class="text-xl font-bold text-blue-600">E+Learn</span>
+            </div>
+            <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Scrollable Main Area -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8">
+            <div class="max-w-7xl mx-auto space-y-8 fade-in">
+                
+                <!-- 1. Page Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900">Manage Courses</h1>
+                        <p class="text-slate-500 mt-1 text-sm">View and manage all your courses</p>
+                    </div>
+                    <button class="bg-[#7c8fff] hover:bg-[#687ceb] text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors shadow-sm active:scale-95">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        Create New Course
+                    </button>
+                </div>
+
+                <!-- 2. Course Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Course Card 1 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition-shadow">
+                        <!-- Header -->
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-lg font-bold text-slate-900">React Fundamentals</h3>
+                            <span class="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-full font-medium">Active</span>
+                        </div>
+                        
+                        <!-- Students Count -->
+                        <div class="flex items-center gap-2 text-slate-500 text-sm mb-6">
+                            <i data-lucide="users" class="w-4 h-4"></i>
+                            <span>45 enrolled students</span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-slate-700">Average Progress</span>
+                                <span class="text-sm font-bold text-slate-900">68%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-[#7c8fff] h-2.5 rounded-full" style="width: 68%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-3">
+                            <button class="flex-1 px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg border border-slate-200 text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                Edit Course
+                            </button>
+                            <button class="flex-1 px-4 py-2 bg-[#7c8fff] hover:bg-[#687ceb] text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Course Card 2 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition-shadow">
+                        <!-- Header -->
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-lg font-bold text-slate-900">JavaScript Mastery</h3>
+                            <span class="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-full font-medium">Active</span>
+                        </div>
+                        
+                        <!-- Students Count -->
+                        <div class="flex items-center gap-2 text-slate-500 text-sm mb-6">
+                            <i data-lucide="users" class="w-4 h-4"></i>
+                            <span>38 enrolled students</span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-slate-700">Average Progress</span>
+                                <span class="text-sm font-bold text-slate-900">85%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-[#7c8fff] h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-3">
+                            <button class="flex-1 px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg border border-slate-200 text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                Edit Course
+                            </button>
+                            <button class="flex-1 px-4 py-2 bg-[#7c8fff] hover:bg-[#687ceb] text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Course Card 3 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition-shadow">
+                        <!-- Header -->
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-lg font-bold text-slate-900">UI/UX Design Principles</h3>
+                            <span class="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-full font-medium">Active</span>
+                        </div>
+                        
+                        <!-- Students Count -->
+                        <div class="flex items-center gap-2 text-slate-500 text-sm mb-6">
+                            <i data-lucide="users" class="w-4 h-4"></i>
+                            <span>52 enrolled students</span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-slate-700">Average Progress</span>
+                                <span class="text-sm font-bold text-slate-900">55%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-[#7c8fff] h-2.5 rounded-full" style="width: 55%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-3">
+                            <button class="flex-1 px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg border border-slate-200 text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                Edit Course
+                            </button>
+                            <button class="flex-1 px-4 py-2 bg-[#7c8fff] hover:bg-[#687ceb] text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Course Card 4 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition-shadow">
+                        <!-- Header -->
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-lg font-bold text-slate-900">Data Structures & Algorithms</h3>
+                            <span class="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-full font-medium">Active</span>
+                        </div>
+                        
+                        <!-- Students Count -->
+                        <div class="flex items-center gap-2 text-slate-500 text-sm mb-6">
+                            <i data-lucide="users" class="w-4 h-4"></i>
+                            <span>28 enrolled students</span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-slate-700">Average Progress</span>
+                                <span class="text-sm font-bold text-slate-900">42%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-[#7c8fff] h-2.5 rounded-full" style="width: 42%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-3">
+                            <button class="flex-1 px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg border border-slate-200 text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                Edit Course
+                            </button>
+                            <button class="flex-1 px-4 py-2 bg-[#7c8fff] hover:bg-[#687ceb] text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ================= FOOTER ================= -->
+                <footer class="bg-white border-t border-slate-200 pt-8 pb-8 mt-12 rounded-t-xl mx-[-1.5rem] px-[1.5rem] lg:mx-[-2rem] lg:px-[2rem] -mb-8 lg:-mb-8">
+                    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                        
+                        <!-- Left: Brand & Socials -->
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 p-2 rounded-lg mr-2">
+                                    <i data-lucide="book-open" class="text-blue-600 w-5 h-5"></i>
+                                </div>
+                                <span class="text-xl font-bold text-blue-600">E+Learn</span>
+                            </div>
+
+                            <div class="hidden md:block w-px h-6 bg-slate-300"></div>
+
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Right: Copyright -->
+                        <div class="text-center md:text-right space-y-1">
+                            <p class="text-sm text-slate-400">© 2024 E+Learn. All Rights Reserved</p>
+                            <p class="text-sm text-slate-400 flex justify-center md:justify-end items-center gap-1">
+                                Made With <i data-lucide="heart" class="w-3 h-3 text-red-500 fill-red-500"></i> For Learners Worldwide
+                            </p>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
