@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings & Profile</title>
-    <!-- FontAwesome for Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
@@ -65,6 +64,25 @@
             align-items: center;
             height: 100%;
         }
+
+        /* Branding Style */
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-right: 40px;
+            transition: opacity 0.2s;
+        }
+        
+        .brand-logo i {
+            color: var(--primary-color);
+            font-size: 1.75rem;
+        }
+
+        .brand-logo:hover { opacity: 0.8; }
 
         .nav-links { display: flex; gap: 30px; align-items: center; }
 
@@ -255,6 +273,34 @@
             background-color: var(--primary-hover);
         }
 
+        .btn-logout {
+            background-color: rgb(204, 8, 8);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+            /* NOTE: I removed 'margin-left: 405px' and used float/flex utility instead 
+               because 405px will break the layout on smaller screens (phones/tablets).
+               Instead, I added a simple float or margin-left: auto approach below.
+            */
+            float: right; 
+        }
+
+        .btn-logout:hover {
+            background-color: rgb(173, 7, 7);
+        }
+
+        /* Clearfix for the float on the button */
+        form::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
         /* --- Preferences Section (New Feature) --- */
         .preferences-section {
             margin-top: 40px;
@@ -325,12 +371,16 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="container nav-content">
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
             </button>
+
+            <a href="#" class="brand-logo">
+                <i class="fa-solid fa-book"></i>
+                <span>E+Learn</span>
+            </a>
 
             <ul class="nav-links">
                 <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
@@ -342,7 +392,6 @@
                 <li><a href="notifications.html" class="nav-link">Notifications</a></li>
             </ul>
 
-            <!-- Profile Image acts as link to Settings -->
             <div class="user-profile">
                 <a href="#" class="active">
                     <img src="assets/cinnamoroll.png" alt="Profile" style="border: 2px solid var(--primary-color);">
@@ -365,7 +414,6 @@
 
     <main class="container">
         
-        <!-- Page Header -->
         <header class="page-header">
             <div class="header-title">
                 <h1>Settings & Profile</h1>
@@ -375,7 +423,6 @@
 
         <div class="settings-grid">
             
-            <!-- Left: Personal Information -->
             <div class="settings-card">
                 <h2 class="card-title">Personal Information</h2>
                 
@@ -390,13 +437,11 @@
                         <input type="file" id="fileInput" style="display: none;" accept="image/*" onchange="previewImage(this)">
                     </div>
 
-                    <!-- Changeable Username -->
                     <div class="form-group">
                         <label class="form-label">Username</label>
                         <input type="text" class="form-input" value="mianegacu">
                     </div>
 
-                    <!-- Unchangeable Personal Details -->
                     <div class="form-group">
                         <label class="form-label">First Name</label>
                         <input type="text" class="form-input" value="Miane" readonly>
@@ -412,17 +457,17 @@
                         <input type="text" class="form-input" value="Gacu" readonly>
                     </div>
 
-                    <!-- Unchangeable Email -->
                     <div class="form-group">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-input" value="mianegacu@gmail.com" readonly>
                     </div>
 
                     <button type="submit" class="btn-save">Save Changes</button>
+                    <button type="button" class="btn-logout" onclick="window.location.href='../index.html'">Logout</button>
+
                 </form>
             </div>
 
-            <!-- Right: Change Password -->
             <div class="settings-card">
                 <h2 class="card-title">Change Password</h2>
                 
@@ -445,7 +490,6 @@
                     <button type="submit" class="btn-save">Update Password</button>
                 </form>
 
-                <!-- Additional "Real Settings" Section -->
                 <div class="preferences-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;">
                     <h3 class="card-title" style="font-size: 1.25rem; margin-bottom: 20px;">Preferences</h3>
                     

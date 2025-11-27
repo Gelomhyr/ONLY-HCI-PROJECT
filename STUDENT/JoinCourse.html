@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Course - E+Learn</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1', // Indigo-500 matching the dashboard accents
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc; /* Light gray background like the dashboard */
+        }
+        .course-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c7c7c7;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header Section (No Navbar, just Back Button and Title) -->
+    <header class="bg-white shadow-sm sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <!-- Back Button -->
+                <button onclick="goBack()" class="group flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 hover:bg-brand-50 text-slate-600 hover:text-brand-600 transition-colors">
+                    <i class="fa-solid fa-arrow-left text-lg group-hover:-translate-x-1 transition-transform"></i>
+                </button>
+                
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">Explore Courses</h1>
+                    <p class="text-sm text-slate-500 hidden sm:block">Discover new skills and join a community of learners.</p>
+                </div>
+            </div>
+
+            <!-- Search Bar (Right aligned) -->
+            <div class="relative w-full max-w-xs hidden sm:block">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-search text-slate-400"></i>
+                </div>
+                <input type="text" id="searchInput" onkeyup="filterCourses()" class="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-brand-500 focus:border-brand-500 sm:text-sm transition duration-150 ease-in-out" placeholder="Search for courses...">
+            </div>
+             <!-- Mobile Search Icon trigger -->
+             <button class="sm:hidden p-2 text-slate-500 hover:text-brand-600">
+                <i class="fa-solid fa-search text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Search Bar (Visible only on small screens below header) -->
+    <div class="sm:hidden px-4 py-3 bg-white border-b border-slate-100">
+        <input type="text" id="mobileSearchInput" onkeyup="filterCoursesMobile()" class="block w-full px-4 py-2 border border-slate-200 rounded-lg bg-slate-50 focus:outline-none focus:border-brand-500 text-sm" placeholder="Search courses...">
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Filters / Categories -->
+        <div class="flex flex-wrap gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+            <button class="filter-btn active px-4 py-2 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors" data-category="all">All</button>
+            <button class="filter-btn px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-brand-500 hover:text-brand-600 transition-colors" data-category="Development">Development</button>
+            <button class="filter-btn px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-brand-500 hover:text-brand-600 transition-colors" data-category="Design">Design</button>
+            <button class="filter-btn px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-brand-500 hover:text-brand-600 transition-colors" data-category="Business">Business</button>
+            <button class="filter-btn px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-brand-500 hover:text-brand-600 transition-colors" data-category="Data Science">Data Science</button>
+        </div>
+
+        <!-- Course Grid -->
+        <div id="courseGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Courses will be injected here via JS -->
+        </div>
+
+        <!-- No Results State (Hidden by default) -->
+        <div id="noResults" class="hidden flex-col items-center justify-center py-20 text-center">
+            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa-solid fa-book-open text-slate-400 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-slate-900">No courses found</h3>
+            <p class="text-slate-500">Try adjusting your search or filters.</p>
+        </div>
+    </main>
+
+    <!-- Success Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <div class="bg-slate-900 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3">
+            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div>
+                <h4 class="font-medium text-sm">Enrollment Successful!</h4>
+                <p class="text-xs text-slate-300">You have joined <span id="toastCourseName" class="font-bold">Course</span>.</p>
+            </div>
+            <button onclick="closeToast()" class="ml-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Join Confirmation Modal -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/50 hidden z-40 backdrop-blur-sm transition-opacity opacity-0"></div>
+    <div id="confirmModal" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-6 w-11/12 max-w-sm hidden z-50 scale-95 transition-all opacity-0">
+        <div class="text-center">
+            <div class="w-14 h-14 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-graduation-cap text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Join this Course?</h3>
+            <p class="text-slate-500 mb-6 text-sm">You are about to enroll in <span id="modalCourseTitle" class="font-semibold text-slate-800">Course Title</span>. This will be added to your active courses.</p>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium transition-colors">Cancel</button>
+                <button onclick="confirmJoin()" class="px-4 py-2 rounded-lg bg-brand-600 text-white hover:bg-brand-700 font-medium shadow-lg shadow-brand-500/30 transition-all">Confirm Join</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data ---
+        const courses = [
+            {
+                id: 1,
+                title: "React Fundamentals 2024",
+                instructor: "Sarah Jenkins",
+                category: "Development",
+                rating: 4.8,
+                students: "12k",
+                image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 12,
+                color: "bg-blue-100 text-blue-800"
+            },
+            {
+                id: 2,
+                title: "Advanced UI/UX Design",
+                instructor: "Michael Chen",
+                category: "Design",
+                rating: 4.9,
+                students: "8.5k",
+                image: "https://images.unsplash.com/photo-1586717791821-3f44a5638d48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 24,
+                color: "bg-purple-100 text-purple-800"
+            },
+            {
+                id: 3,
+                title: "Python for Data Science",
+                instructor: "Dr. Emily Ro",
+                category: "Data Science",
+                rating: 4.7,
+                students: "15k",
+                image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 18,
+                color: "bg-green-100 text-green-800"
+            },
+            {
+                id: 4,
+                title: "Digital Marketing Masterclass",
+                instructor: "Gary V.",
+                category: "Business",
+                rating: 4.6,
+                students: "22k",
+                image: "https://images.unsplash.com/photo-1533750516457-a7f992034fec?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 10,
+                color: "bg-orange-100 text-orange-800"
+            },
+            {
+                id: 5,
+                title: "Full Stack Web Bootcamp",
+                instructor: "Code Academy",
+                category: "Development",
+                rating: 4.5,
+                students: "30k",
+                image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 45,
+                color: "bg-blue-100 text-blue-800"
+            },
+            {
+                id: 6,
+                title: "Mobile App Design (Figma)",
+                instructor: "Jessica Lee",
+                category: "Design",
+                rating: 4.9,
+                students: "5k",
+                image: "https://images.unsplash.com/photo-1513530534585-c7b1394c6d51?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 14,
+                color: "bg-purple-100 text-purple-800"
+            },
+            {
+                id: 7,
+                title: "Financial Analysis 101",
+                instructor: "Robert Kiyosaki",
+                category: "Business",
+                rating: 4.4,
+                students: "9k",
+                image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 8,
+                color: "bg-orange-100 text-orange-800"
+            },
+            {
+                id: 8,
+                title: "Machine Learning A-Z",
+                instructor: "Andrew Ng",
+                category: "Data Science",
+                rating: 4.9,
+                students: "40k",
+                image: "https://images.unsplash.com/photo-1555255707-c07966088b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 32,
+                color: "bg-green-100 text-green-800"
+            },
+            {
+                id: 9,
+                title: "Photography Essentials",
+                instructor: "Annie L.",
+                category: "Design",
+                rating: 4.8,
+                students: "3k",
+                image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 12,
+                color: "bg-purple-100 text-purple-800"
+            },
+            {
+                id: 10,
+                title: "Blockchain Basics",
+                instructor: "Satoshi N.",
+                category: "Development",
+                rating: 4.6,
+                students: "18k",
+                image: "https://images.unsplash.com/photo-1621504450168-b8c4375c2b3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                lessons: 6,
+                color: "bg-blue-100 text-blue-800"
+            }
+        ];
+
+        let selectedCourse = null;
+
+        // --- Functions ---
+
+        function renderCourses(data) {
+            const grid = document.getElementById('courseGrid');
+            const noResults = document.getElementById('noResults');
+            
+            grid.innerHTML = '';
+
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+                noResults.classList.add('flex');
+            } else {
+                noResults.classList.add('hidden');
+                noResults.classList.remove('flex');
+            }
+
+            data.forEach(course => {
+                const card = document.createElement('div');
+                card.className = 'course-card bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full cursor-pointer';
+                card.onclick = () => openModal(course);
+                
+                card.innerHTML = `
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${course.image}" alt="${course.title}" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 left-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${course.color} backdrop-blur-md bg-opacity-90 shadow-sm">
+                                ${course.category}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center text-amber-400 text-xs">
+                                <i class="fa-solid fa-star mr-1"></i>
+                                <span class="text-slate-700 font-medium">${course.rating}</span>
+                                <span class="text-slate-400 ml-1">(${course.students})</span>
+                            </div>
+                            <div class="text-slate-400 text-xs flex items-center">
+                                <i class="fa-regular fa-clock mr-1"></i>
+                                ${course.lessons} Lessons
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-1 leading-tight line-clamp-2">${course.title}</h3>
+                        <p class="text-sm text-slate-500 mb-4">by ${course.instructor}</p>
+                        
+                        <div class="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">
+                            <span class="font-bold text-slate-900">Free</span>
+                            <button class="bg-slate-50 text-brand-600 hover:bg-brand-50 font-semibold py-2 px-4 rounded-lg text-sm transition-colors flex items-center gap-2">
+                                <i class="fa-solid fa-plus text-xs"></i> Join
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCourses() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const activeCategory = document.querySelector('.filter-btn.active').getAttribute('data-category');
+            
+            const filtered = courses.filter(course => {
+                const matchesSearch = course.title.toLowerCase().includes(query) || course.instructor.toLowerCase().includes(query);
+                const matchesCategory = activeCategory === 'all' || course.category === activeCategory;
+                return matchesSearch && matchesCategory;
+            });
+
+            renderCourses(filtered);
+        }
+
+        function filterCoursesMobile() {
+            const query = document.getElementById('mobileSearchInput').value.toLowerCase();
+            const activeCategory = document.querySelector('.filter-btn.active').getAttribute('data-category');
+            
+            const filtered = courses.filter(course => {
+                const matchesSearch = course.title.toLowerCase().includes(query) || course.instructor.toLowerCase().includes(query);
+                const matchesCategory = activeCategory === 'all' || course.category === activeCategory;
+                return matchesSearch && matchesCategory;
+            });
+
+            renderCourses(filtered);
+        }
+
+        // Handle Category Buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Remove active class from all
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-slate-900', 'text-white');
+                    b.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+                });
+                
+                // Add active class to clicked
+                e.target.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+                e.target.classList.add('bg-slate-900', 'text-white');
+                
+                // Add active class marker logic for filtering
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+
+                filterCourses();
+            });
+        });
+
+        // --- Navigation ---
+        function goBack() {
+            const btn = document.querySelector('header button');
+            btn.classList.add('animate-pulse');
+            setTimeout(() => {
+                // Redirects to dashboard.html - ensure this file exists in your folder
+                window.location.href = 'dashboard.html';
+            }, 300);
+        }
+
+        // --- Modal & Enrollment ---
+        const modalOverlay = document.getElementById('modalOverlay');
+        const confirmModal = document.getElementById('confirmModal');
+        const modalTitle = document.getElementById('modalCourseTitle');
+
+        function openModal(course) {
+            selectedCourse = course;
+            modalTitle.innerText = course.title;
+            
+            modalOverlay.classList.remove('hidden');
+            confirmModal.classList.remove('hidden');
+            
+            // Small delay for animation
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                confirmModal.classList.remove('opacity-0', 'scale-95');
+                confirmModal.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalOverlay.classList.add('opacity-0');
+            confirmModal.classList.remove('scale-100');
+            confirmModal.classList.add('opacity-0', 'scale-95');
+            
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+                confirmModal.classList.add('hidden');
+                selectedCourse = null;
+            }, 300);
+        }
+
+        function confirmJoin() {
+            if (!selectedCourse) return;
+            
+            closeModal();
+            showToast(selectedCourse.title);
+        }
+
+        // --- Toast Notification ---
+        function showToast(courseName) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastCourseName').innerText = courseName;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                closeToast();
+            }, 3000);
+        }
+
+        function closeToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('translate-y-20', 'opacity-0');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCourses(courses);
+        });
+
+    </script>
+</body>
+</html>
