@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Course Management - E+Learn</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="css/course.css" rel="stylesheet"/>
+<!-- FontAwesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ===== E+Learn UI Polish (compact + responsive + minimal motion) ===== */
+:root{--ui-ring:rgba(99,132,255,.25)}
+@media (prefers-reduced-motion: reduce){
+  *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+.ui-btn, button, a[role="button"]{
+  transition: transform .08s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+.ui-btn:active, button:active, a[role="button"]:active{ transform: scale(.98); }
+.ui-focus:focus, button:focus, input:focus, textarea:focus, select:focus{
+  outline: none;
+}
+.focus-ring:focus{
+  box-shadow: 0 0 0 4px var(--ui-ring);
+}
+.sidebar-drawer{
+  will-change: transform;
+}
+/* Toast */
+#uiToastHost{
+  position: fixed; right: 16px; bottom: 16px; z-index: 10000;
+  display:flex; flex-direction:column; gap:10px;
+}
+.ui-toast{
+  background:#111827; color:white; border-radius:12px; padding:10px 12px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.25);
+  display:flex; gap:10px; align-items:flex-start;
+  opacity:0; transform: translateY(8px);
+  transition: opacity .18s ease, transform .18s ease;
+  max-width: 340px;
+}
+.ui-toast.show{ opacity:1; transform: translateY(0); }
+.ui-toast .title{ font-weight:700; font-size:12px; letter-spacing:.2px; }
+.ui-toast .msg{ font-size:12px; color:rgba(255,255,255,.82); margin-top:2px; line-height:1.35; }
+.ui-toast .icon{ width:18px; height:18px; margin-top:2px; opacity:.9; }
+</style></head>
+<body class="bg-gray-50 text-slate-800">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar (Consistent navigation) -->
+<aside class="w-64 bg-[#6384FF] text-white flex-shrink-0 flex-col transition-all duration-300 flex sidebar-drawer fixed md:static inset-y-0 left-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform" id="uiSidebar">
+<div class="p-5 flex items-center gap-3">
+<div class="bg-white/20 p-2 rounded-lg">
+<i class="fa-solid fa-book text-xl"></i>
+</div>
+<div>
+<h1 class="font-bold text-lg leading-tight">E+Learn</h1>
+<p class="text-xs text-blue-100">Admin Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-3.5 py-2.5 hover:bg-white/5 rounded-lg text-blue-100 transition-colors hover:translate-x-[1px] transition-transform" href="admin.html">
+<i class="w-5 h-5" data-lucide="layout-dashboard"></i>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 hover:bg-white/5 rounded-lg text-blue-100 transition-colors hover:translate-x-[1px] transition-transform" href="user.html">
+<i class="w-5 h-5" data-lucide="users"></i>
+                    User Management
+                </a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 bg-white/10 rounded-lg text-white font-medium" href="#">
+<i class="w-5 h-5" data-lucide="book-open"></i>
+                    Course Management
+                </a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 hover:bg-white/5 rounded-lg text-blue-100 transition-colors hover:translate-x-[1px] transition-transform" href="announcement.html">
+<i class="w-5 h-5" data-lucide="megaphone"></i>
+                    Announcements
+                </a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 hover:bg-white/5 rounded-lg text-blue-100 transition-colors hover:translate-x-[1px] transition-transform" href="report.html">
+<i class="w-5 h-5" data-lucide="bar-chart-2"></i>
+                    Reports &amp; Analytics
+                </a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 hover:bg-white/5 rounded-lg text-blue-100 transition-colors hover:translate-x-[1px] transition-transform" href="settings.html">
+<i class="w-5 h-5" data-lucide="settings"></i>
+                    System Settings
+                </a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 hover:bg-white/5 rounded-lg text-blue-100 transition-colors hover:translate-x-[1px] transition-transform" href="notif.html">
+<i class="w-5 h-5" data-lucide="bell"></i>
+                    Notifications
+                </a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 hover:bg-white/5 rounded-lg text-blue-100 transition-colors hover:translate-x-[1px] transition-transform" href="message.html">
+<i class="w-5 h-5" data-lucide="message-square"></i>
+                    Messaging
+                </a>
+</nav>
+<div class="p-4 mt-auto">
+<div class="flex items-center gap-3 px-4 py-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold">AU</div>
+<div class="overflow-hidden">
+<p class="text-sm font-medium truncate">Admin User</p>
+<p class="text-xs text-blue-200 truncate">admin@gmail.com</p>
+</div>
+</div>
+<a class="flex items-center gap-2 px-3.5 py-2 text-sm text-blue-200 hover:text-white transition-colors ui-btn" data-logout-link="true" href="../login.html">
+<i class="w-4 h-4" data-lucide="log-out"></i>
+                    Logout
+                </a>
+</div>
+</aside><div class="sidebar-overlay fixed inset-0 bg-black/40 hidden md:hidden z-40 opacity-0 transition-opacity duration-200" id="uiSidebarOverlay"></div>
+<!-- Main Content -->
+<main class="flex-1 h-full overflow-y-auto overflow-x-hidden bg-gray-50">
+<!-- Mobile Header -->
+<div class="md:hidden bg-[#6384FF] text-white p-4 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<i class="fa-solid fa-book text-lg"></i>
+<span class="font-bold">E+Learn</span>
+</div>
+<button aria-label="Open menu" class="p-1 ui-btn" data-sidebar-toggle="true"><i class="w-6 h-6" data-lucide="menu"></i></button>
+</div>
+<div class="p-6 max-w-7xl mx-auto space-y-6">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="text-2xl font-bold text-gray-900">Course Management</h2>
+<p class="text-gray-500 text-sm mt-1">Manage all courses and assignments</p>
+</div>
+<button class="bg-[#819CFF] hover:bg-[#6384FF] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-sm" onclick="openModal()">
+<i class="w-4 h-4" data-lucide="plus"></i>
+                        Add Course
+                    </button>
+</div>
+<h3 class="text-lg font-semibold text-gray-800 pt-2">Active Courses</h3>
+<!-- Course Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="courseGrid">
+<!-- Course Cards will be injected here -->
+</div>
+</div>
+</main>
+</div>
+<!-- Add Course Modal -->
+<div class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="courseModal">
+<div class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 transform scale-95 transition-transform duration-300 overflow-hidden" id="modalContent">
+<!-- Modal Header -->
+<div class="flex justify-between items-start p-6">
+<div>
+<h3 class="text-xl font-bold text-gray-900">Create New Course</h3>
+<p class="text-sm text-gray-500 mt-1">Add a new course to the platform</p>
+</div>
+<button class="text-gray-400 hover:text-gray-600 transition-colors" onclick="closeModal()">
+<i class="w-5 h-5" data-lucide="x"></i>
+</button>
+</div>
+<!-- Modal Body -->
+<form class="p-6 pt-2 space-y-5" id="addCourseForm">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1.5">Course Title</label>
+<input class="w-full px-3.5 py-2.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm text-gray-700" id="courseTitle" placeholder="Enter course title" required="" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+<textarea class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm text-gray-700 resize-none" id="courseDescription" placeholder="Course description" required="" rows="3"></textarea>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1.5">Teacher</label>
+<input class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm text-gray-700" id="courseTeacher" placeholder="Assigned teacher" required="" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1.5">Tags (comma separated)</label>
+<input class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm text-gray-700" id="courseTags" placeholder="e.g., Web Dev, Beginner" type="text"/>
+</div>
+<div class="pt-4">
+<button class="w-full py-3 bg-[#819CFF] hover:bg-[#6384FF] text-white rounded-lg font-semibold text-sm transition-all shadow-sm hover:shadow-md" type="submit">
+                        Create Course
+                    </button>
+</div>
+</form>
+</div>
+</div>
+<script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initial Course Data
+        let courses = [
+            {
+                id: 1,
+                title: "Introduction to Web Development",
+                description: "Learn HTML, CSS, and JavaScript basics",
+                enrolled: 245,
+                teacher: "Sarah Johnson",
+                tags: ["Web Dev", "Beginner"],
+                featured: true
+            },
+            {
+                id: 2,
+                title: "Data Science Fundamentals",
+                description: "Python, statistics, and machine learning basics",
+                enrolled: 189,
+                teacher: "Dr. Michael Chen",
+                tags: ["Data Science", "Python"],
+                featured: true
+            },
+            {
+                id: 3,
+                title: "UI/UX Design Principles",
+                description: "Master modern design thinking and tools",
+                enrolled: 156,
+                teacher: "Emily Brown",
+                tags: ["Design", "UI/UX"],
+                featured: false
+            }
+        ];
+
+        const courseGrid = document.getElementById('courseGrid');
+
+        // Render Courses
+        function renderCourses() {
+            courseGrid.innerHTML = '';
+            courses.forEach(course => {
+                // Create Tags HTML
+                const tagsHtml = course.tags.map((tag, index) => {
+                    // Alternate yellow colors slightly for variety if desired, 
+                    // but strictly following image style:
+                    return `<span class="px-2.5 py-1 bg-[#FEF9C3] text-[#854D0E] text-xs font-semibold rounded-md">${tag.trim()}</span>`;
+                }).join('');
+
+                // Featured Button State
+                const featureBtnClass = course.featured ? "text-gray-700 bg-gray-50" : "text-gray-500 bg-white hover:bg-gray-50";
+                const featureIconClass = course.featured ? "fa-solid fa-star" : "fa-regular fa-star";
+                const featureText = course.featured ? "Unfeature" : "Feature";
+                const starColor = course.featured ? "text-yellow-400" : "text-gray-400";
+
+                // Top Right Star (only if featured)
+                const cornerStar = course.featured ? `<i class="fa-solid fa-star text-yellow-400 absolute top-6 right-6 text-sm"></i>` : '';
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow relative";
+                card.innerHTML = `
+                    ${cornerStar}
+                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-500 mb-4">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                    </div>
+                    
+                    <h3 class="font-bold text-lg text-gray-900 mb-1">${course.title}</h3>
+                    <p class="text-sm text-gray-500 mb-4 line-clamp-2 h-10">${course.description}</p>
+                    
+                    <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        <span>${course.enrolled} enrolled</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4">Teacher: ${course.teacher}</p>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        ${tagsHtml}
+                    </div>
+
+                    <div class="flex items-center gap-3 border-t border-gray-100 pt-4 mt-auto">
+                        <button onclick="toggleFeature(${course.id})" class="flex-1 flex items-center justify-center gap-2 py-2 border border-gray-200 rounded-lg text-xs font-medium transition-colors hover:bg-gray-50">
+                            <i class="${featureIconClass} ${course.featured ? 'text-gray-800' : 'text-gray-400'}"></i>
+                            <span class="text-gray-700">${featureText}</span>
+                        </button>
+                        <button class="p-2 border border-gray-200 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors" title="Archive">
+                            <i data-lucide="archive" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteCourse(${course.id})" class="p-2 border border-gray-200 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors" title="Delete">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+                courseGrid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // --- Actions ---
+
+        function toggleFeature(id) {
+            const course = courses.find(c => c.id === id);
+            if (course) {
+                course.featured = !course.featured;
+                renderCourses();
+            }
+        }
+
+        function deleteCourse(id) {
+            if (confirm("Are you sure you want to delete this course?")) {
+                courses = courses.filter(c => c.id !== id);
+                renderCourses();
+            }
+        }
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('courseModal');
+        const modalContent = document.getElementById('modalContent');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+            document.getElementById('addCourseForm').reset();
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // --- Form Submission ---
+        document.getElementById('addCourseForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('courseTitle').value;
+            const description = document.getElementById('courseDescription').value;
+            const teacher = document.getElementById('courseTeacher').value;
+            const tagsInput = document.getElementById('courseTags').value;
+            
+            // Process tags
+            const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+
+            const newCourse = {
+                id: Date.now(), // Simple ID generation
+                title: title,
+                description: description,
+                enrolled: 0, // Default for new course
+                teacher: teacher,
+                tags: tags.length > 0 ? tags : ["New"],
+                featured: false
+            };
+
+            courses.push(newCourse);
+            renderCourses();
+            closeModal();
+        });
+
+        // Initial render
+        renderCourses();
+
+    </script>
+<div id="uiToastHost"></div>
+<!-- Logout Modal -->
+<div class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[9999] backdrop-blur-sm opacity-0 transition-opacity duration-200" id="logoutOverlay">
+<div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 transform scale-95 opacity-0 transition-all duration-200" id="logoutModal">
+<div class="p-5 flex gap-3">
+<div class="w-11 h-11 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+<i class="w-5 h-5" data-lucide="log-out"></i>
+</div>
+<div class="flex-1">
+<h3 class="text-base font-bold text-gray-900">Confirm Logout</h3>
+<p class="text-sm text-gray-500 mt-1" id="logoutText">Are you sure you want to logout?</p>
+<div class="mt-4 hidden items-center justify-between gap-3" id="logoutStatus">
+<p class="text-sm font-semibold text-gray-700">Redirecting in <span id="logoutCountdown">3</span>s</p>
+<div class="w-28 h-2 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full bg-red-600 w-0 transition-all duration-1000" id="logoutBar"></div>
+</div>
+</div>
+<div class="mt-4 flex justify-end gap-2" id="logoutActions">
+<button class="ui-btn px-4 py-2 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50" id="logoutCancel" type="button">Cancel</button>
+<button class="ui-btn px-4 py-2 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700" id="logoutConfirm" type="button">Logout</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+  // ===== Sidebar (mobile drawer) =====
+  const sidebar = document.getElementById('uiSidebar');
+  const overlay = document.getElementById('uiSidebarOverlay');
+  const toggleBtns = document.querySelectorAll('[data-sidebar-toggle="true"]');
+
+  function openSidebar(){
+    if(!sidebar || !overlay) return;
+    sidebar.classList.remove('-translate-x-full');
+    sidebar.classList.add('translate-x-0');
+    overlay.classList.remove('hidden');
+    requestAnimationFrame(()=> overlay.classList.add('opacity-100'));
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar(){
+    if(!sidebar || !overlay) return;
+    sidebar.classList.add('-translate-x-full');
+    sidebar.classList.remove('translate-x-0');
+    overlay.classList.remove('opacity-100');
+    setTimeout(()=> overlay.classList.add('hidden'), 180);
+    document.body.style.overflow = '';
+  }
+  toggleBtns.forEach(btn => btn.addEventListener('click', (e)=>{ e.preventDefault(); openSidebar(); }));
+  if(overlay) overlay.addEventListener('click', closeSidebar);
+
+  // Close drawer on ESC
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') { closeSidebar(); closeLogoutModal(); }
+  });
+
+  // ===== Toast helper (optional) =====
+  const toastHost = document.getElementById('uiToastHost');
+  window.uiToast = function(title, msg){
+    if(!toastHost) return;
+    const el = document.createElement('div');
+    el.className = 'ui-toast';
+    el.innerHTML = `
+      <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="title">${title || 'Done'}</div>
+        <div class="msg">${msg || ''}</div>
+      </div>`;
+    toastHost.appendChild(el);
+    requestAnimationFrame(()=> el.classList.add('show'));
+    setTimeout(()=> {
+      el.classList.remove('show');
+      setTimeout(()=> el.remove(), 220);
+    }, 2400);
+  }
+
+  // Add subtle interaction feedback to common action buttons (non-breaking)
+  document.querySelectorAll('button, a').forEach(el=>{
+    if(el.classList.contains('ui-btn')) return;
+    // only add if it already looks like a button in tailwind
+    const cls = (el.getAttribute('class') || '');
+    if(cls.includes('rounded') && (cls.includes('px-') || cls.includes('py-'))){
+      el.classList.add('ui-btn');
+    }
+  });
+
+  // ===== Logout Modal (intercepts logout link) =====
+  const logoutLink = document.querySelector('a[data-logout-link="true"]');
+  const logoutOverlay = document.getElementById('logoutOverlay');
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutCancel = document.getElementById('logoutCancel');
+  const logoutConfirm = document.getElementById('logoutConfirm');
+  const logoutActions = document.getElementById('logoutActions');
+  const logoutStatus = document.getElementById('logoutStatus');
+  const logoutCountdown = document.getElementById('logoutCountdown');
+  const logoutBar = document.getElementById('logoutBar');
+  const logoutText = document.getElementById('logoutText');
+
+  let timer = null;
+  let targetHref = (logoutLink && logoutLink.getAttribute('href')) ? logoutLink.getAttribute('href') : 'login.html';
+
+  function openLogoutModal(){
+    if(!logoutOverlay || !logoutModal) return;
+    // reset
+    if(timer){ clearInterval(timer); timer = null; }
+    logoutActions && (logoutActions.style.display = 'flex');
+    logoutStatus && (logoutStatus.style.display = 'none');
+    logoutConfirm && (logoutConfirm.disabled = false);
+    logoutCancel && (logoutCancel.disabled = false);
+    logoutCountdown && (logoutCountdown.textContent = '3');
+    logoutBar && (logoutBar.style.width = '0%');
+    logoutText && (logoutText.textContent = 'Are you sure you want to logout?');
+
+    logoutOverlay.classList.remove('hidden');
+    logoutOverlay.classList.add('flex');
+    requestAnimationFrame(()=>{
+      logoutOverlay.classList.remove('opacity-0');
+      logoutOverlay.classList.add('opacity-100');
+      logoutModal.classList.remove('scale-95','opacity-0');
+      logoutModal.classList.add('scale-100','opacity-100');
+    });
+  }
+
+  function closeLogoutModal(){
+    if(!logoutOverlay || !logoutModal) return;
+    logoutModal.classList.add('scale-95','opacity-0');
+    logoutModal.classList.remove('scale-100','opacity-100');
+    logoutOverlay.classList.add('opacity-0');
+    logoutOverlay.classList.remove('opacity-100');
+    setTimeout(()=>{
+      logoutOverlay.classList.add('hidden');
+      logoutOverlay.classList.remove('flex');
+    }, 200);
+  }
+  window.closeLogoutModal = closeLogoutModal;
+
+  if(logoutLink){
+    logoutLink.addEventListener('click', (e)=>{
+      e.preventDefault();
+      targetHref = logoutLink.getAttribute('href') || targetHref;
+      openLogoutModal();
+    });
+  }
+  if(logoutCancel) logoutCancel.addEventListener('click', closeLogoutModal);
+  if(logoutOverlay) logoutOverlay.addEventListener('click', (e)=>{ if(e.target === logoutOverlay) closeLogoutModal(); });
+
+  if(logoutConfirm){
+    logoutConfirm.addEventListener('click', ()=>{
+      logoutConfirm.disabled = true;
+      logoutCancel && (logoutCancel.disabled = true);
+      logoutActions && (logoutActions.style.display = 'none');
+      logoutStatus && (logoutStatus.style.display = 'flex');
+      logoutText && (logoutText.textContent = 'Logging out securely…');
+
+      let seconds = 3;
+      logoutCountdown && (logoutCountdown.textContent = seconds);
+      setTimeout(()=> { if(logoutBar) logoutBar.style.width = '33.33%'; }, 50);
+
+      timer = setInterval(()=>{
+        seconds--;
+        logoutCountdown && (logoutCountdown.textContent = seconds);
+        if(seconds === 2 && logoutBar) logoutBar.style.width = '66.66%';
+        if(seconds === 1 && logoutBar) logoutBar.style.width = '100%';
+        if(seconds <= 0){
+          clearInterval(timer);
+          window.location.href = targetHref;
+        }
+      }, 1000);
+    });
+  }
+
+
+  // ===== Optional wrappers for existing page functions (adds feedback without breaking) =====
+  function safeWrap(fnName, after){
+    try{
+      const original = window[fnName];
+      if(typeof original === 'function'){
+        window[fnName] = function(){
+          const res = original.apply(this, arguments);
+          try{ after && after.apply(this, arguments); }catch(_e){}
+          return res;
+        }
+      }
+    }catch(_e){}
+  }
+  safeWrap('saveChanges', ()=> window.uiToast && window.uiToast('Saved', 'Your changes were saved.'));
+  safeWrap('exportData', (type)=> window.uiToast && window.uiToast('Export started', (type||'file').toUpperCase() + ' export generated.'));
+  safeWrap('markAllRead', ()=> window.uiToast && window.uiToast('Done', 'All notifications marked as read.'));
+  safeWrap('clearAll', ()=> window.uiToast && window.uiToast('Cleared', 'All notifications were removed.'));
+  safeWrap('sendMessage', ()=> window.uiToast && window.uiToast('Sent', 'Message queued successfully.'));
+
+  // Make lucide icons render
+  if(window.lucide && typeof window.lucide.createIcons === 'function'){
+    window.lucide.createIcons();
+  }
+})();
+</script>
+</body>
+</html>

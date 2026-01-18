@@ -1,89 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - E+Learn</title>
-    <link rel="stylesheet" href="css/signup.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - E+Learn</title>
 
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/signup.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Popup Modal Styles (Minimal & Sleek) -->
+  <style>
+    /* Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+
+      /* animation base */
+      opacity: 0;
+      transition: opacity 180ms ease;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+    }
+
+    /* Modal */
+    .modal {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      padding: 18px 18px 16px;
+      transform: translateY(10px) scale(0.98);
+      opacity: 0;
+      transition: transform 200ms ease, opacity 200ms ease;
+      font-family: "Inter", sans-serif;
+    }
+
+    .modal.visible {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .modal-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(22, 163, 74, 0.12);
+      color: #16a34a;
+      font-size: 18px;
+      flex: 0 0 auto;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.2;
+    }
+
+    .modal-text {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .modal-footer {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-countdown {
+      font-size: 13px;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .modal-loader {
+      width: 110px;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .modal-loader > div {
+      width: 0%;
+      height: 100%;
+      background: #16a34a;
+      border-radius: 999px;
+      transition: width 1000ms linear;
+    }
+
+    /* Inline error message */
+    .inline-error {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #b91c1c;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="signup-card">
-        <!-- Icon -->
-        <div class="icon-wrapper">
-            <i class="fa-solid fa-book"></i>
-        </div>
-
-        <!-- Title -->
-        <h1 class="app-title">E+Learn</h1>
-        <p class="app-subtitle">Create your free account</p>
-
-        <!-- Form -->
-        <form class="signup-form" onsubmit="event.preventDefault(); window.location.href='index.html';">
-            <div class="form-grid">
-                
-                <!-- Email (Full Width) -->
-                <div class="form-group full-width">
-                    <label class="form-label" for="email">Email Address</label>
-                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
-                </div>
-
-                <!-- First Name -->
-                <div class="form-group">
-                    <label class="form-label" for="firstname">First Name</label>
-                    <input type="text" id="firstname" class="form-input" placeholder="John" required>
-                </div>
-
-                <!-- Middle Name -->
-                <div class="form-group">
-                    <label class="form-label" for="middlename">Middle Name <span style="font-weight:400; color:#9ca3af;">(Optional)</span></label>
-                    <input type="text" id="middlename" class="form-input" placeholder="D.">
-                </div>
-
-                <!-- Last Name -->
-                <div class="form-group">
-                    <label class="form-label" for="lastname">Last Name</label>
-                    <input type="text" id="lastname" class="form-input" placeholder="Doe" required>
-                </div>
-
-                <!-- Contact Number -->
-                <div class="form-group">
-                    <label class="form-label" for="contact">Contact Number</label>
-                    <input type="tel" id="contact" class="form-input" placeholder="+1 (555) 000-0000" required>
-                </div>
-
-                <!-- Password -->
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
-                </div>
-
-                <!-- Confirm Password -->
-                <div class="form-group">
-                    <label class="form-label" for="confirm_password">Confirm Password</label>
-                    <input type="password" id="confirm_password" class="form-input" placeholder="••••••••" required>
-                </div>
-            </div>
-
-            <!-- Checkbox -->
-            <div class="checkbox-group">
-                <input type="checkbox" id="agree" class="checkbox-input" required>
-                <label for="agree" class="checkbox-label">
-                    I agree to the <a href="#" class="link-terms">Terms of Service</a> and <a href="#" class="link-terms">Privacy Policy</a>.
-                </label>
-            </div>
-
-            <button type="submit" class="btn-submit">Sign Up</button>
-        </form>
-
-        <!-- Footer -->
-        <div class="auth-footer">
-            Already have an account? <a href="login.html" class="link-login">Sign in</a>
-        </div>
+  <div class="signup-card">
+    <!-- Icon -->
+    <div class="icon-wrapper">
+      <i class="fa-solid fa-book"></i>
     </div>
+
+    <!-- Title -->
+    <h1 class="app-title">E+Learn</h1>
+    <p class="app-subtitle">Create your free account</p>
+
+    <!-- Inline Error -->
+    <div id="inlineError" class="inline-error"></div>
+
+    <!-- Form -->
+    <form class="signup-form" onsubmit="handleSignup(event)">
+      <div class="form-grid">
+
+        <!-- Email -->
+        <div class="form-group full-width">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+        </div>
+
+        <!-- First Name -->
+        <div class="form-group">
+          <label class="form-label" for="firstname">First Name</label>
+          <input type="text" id="firstname" class="form-input" placeholder="John" required>
+        </div>
+
+        <!-- Middle Name -->
+        <div class="form-group">
+          <label class="form-label" for="middlename">
+            Middle Name <span style="font-weight:400; color:#9ca3af;">(Optional)</span>
+          </label>
+          <input type="text" id="middlename" class="form-input" placeholder="D.">
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+          <label class="form-label" for="lastname">Last Name</label>
+          <input type="text" id="lastname" class="form-input" placeholder="Doe" required>
+        </div>
+
+        <!-- Contact Number -->
+        <div class="form-group">
+          <label class="form-label" for="contact">Contact Number</label>
+          <input type="tel" id="contact" class="form-input" placeholder="+1 (555) 000-0000" required>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label class="form-label" for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" class="form-input" placeholder="••••••••" required>
+        </div>
+      </div>
+
+      <!-- Checkbox -->
+      <div class="checkbox-group">
+        <input type="checkbox" id="agree" class="checkbox-input" required>
+        <label for="agree" class="checkbox-label">
+          I agree to the <a href="#" class="link-terms">Terms of Service</a> and <a href="#" class="link-terms">Privacy Policy</a>.
+        </label>
+      </div>
+
+      <button type="submit" class="btn-submit">Sign Up</button>
+    </form>
+
+    <!-- Footer -->
+    <div class="auth-footer">
+      Already have an account? <a href="login.html" class="link-login">Sign in</a>
+    </div>
+  </div>
+
+  <!-- POPUP MODAL -->
+  <div id="modalOverlay" class="modal-overlay" aria-hidden="true">
+    <div id="modalBox" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+          <h2 class="modal-title" id="modalTitle">Registration Successful</h2>
+          <p class="modal-text">Your account has been created. Redirecting to login…</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="modal-countdown">
+          Redirecting in <span id="countdown">3</span>s
+        </div>
+
+        <div class="modal-loader" aria-hidden="true">
+          <div id="loaderBar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showError(msg) {
+      const el = document.getElementById("inlineError");
+      el.textContent = msg;
+      el.style.display = "block";
+    }
+
+    function clearError() {
+      const el = document.getElementById("inlineError");
+      el.textContent = "";
+      el.style.display = "none";
+    }
+
+    function openModal() {
+      const overlay = document.getElementById("modalOverlay");
+      const modal = document.getElementById("modalBox");
+
+      overlay.classList.add("show");
+      // allow display:flex to apply before opacity transition
+      requestAnimationFrame(() => {
+        overlay.classList.add("visible");
+        modal.classList.add("visible");
+      });
+
+      overlay.setAttribute("aria-hidden", "false");
+    }
+
+    function handleSignup(event) {
+      event.preventDefault();
+      clearError();
+
+      const password = document.getElementById("password").value.trim();
+      const confirmPassword = document.getElementById("confirm_password").value.trim();
+
+      if (password !== confirmPassword) {
+        showError("Passwords do not match. Please try again.");
+        return;
+      }
+
+      // Disable submit button to prevent double submit
+      const submitBtn = document.querySelector(".btn-submit");
+      submitBtn.disabled = true;
+
+      // Show modal popup
+      openModal();
+
+      // Countdown + loader
+      const countdownEl = document.getElementById("countdown");
+      const loaderBar = document.getElementById("loaderBar");
+
+      let seconds = 3;
+      countdownEl.textContent = seconds;
+
+      // animate loader in 3 steps
+      loaderBar.style.width = "0%";
+      setTimeout(() => loaderBar.style.width = "33.33%", 50);
+
+      const timer = setInterval(() => {
+        seconds--;
+        countdownEl.textContent = seconds;
+
+        if (seconds === 2) loaderBar.style.width = "66.66%";
+        if (seconds === 1) loaderBar.style.width = "100%";
+
+        if (seconds <= 0) {
+          clearInterval(timer);
+          window.location.href = "login.html";
+        }
+      }, 1000);
+    }
+  </script>
 
 </body>
 </html>

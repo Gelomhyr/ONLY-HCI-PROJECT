@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements - E+Learn</title>
+
+    <link rel="stylesheet" href="css/announcements.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+</head>
+<body class="text-slate-800 bg-slate-50 overflow-hidden h-screen flex">
+
+    <!-- ================= SIDEBAR (Desktop) ================= -->
+    <aside class="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 h-full fixed left-0 top-0 z-30">
+        <!-- Logo Area -->
+        <div class="h-20 flex items-center px-8 border-b border-slate-100">
+            <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                <i data-lucide="book-open" class="text-blue-600 w-6 h-6"></i>
+            </div>
+            <span class="text-2xl font-bold text-blue-600 tracking-tight">E+Learn</span>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Dashboard
+            </a>
+            
+            <a href="courses.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="book" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Courses
+            </a>
+
+            <a href="upload.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="upload-cloud" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Upload
+            </a>
+
+            <a href="assignments.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="file-check" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Assignments
+            </a>
+
+            <a href="progress.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Progress
+            </a>
+
+            <!-- Active Link (Announcements) -->
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg font-medium transition-colors">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                Announcements
+            </a>
+
+            <a href="certificates.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="award" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Certificates
+            </a>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="p-4 border-t border-slate-100 space-y-2">
+            <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="settings" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Settings
+            </a>
+            <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT WRAPPER ================= -->
+    <div class="flex-1 flex flex-col h-full lg:ml-64 relative">
+        
+        <!-- Mobile Header -->
+        <header class="lg:hidden bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sticky top-0 z-20">
+            <div class="flex items-center">
+                <div class="bg-blue-100 p-1.5 rounded-lg mr-2">
+                    <i data-lucide="book-open" class="text-blue-600 w-5 h-5"></i>
+                </div>
+                <span class="text-xl font-bold text-blue-600">E+Learn</span>
+            </div>
+            <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Scrollable Main Area -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8">
+            <div class="max-w-5xl mx-auto space-y-8 fade-in">
+                
+                <!-- 1. Page Header -->
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">Announcements & Messaging</h1>
+                    <p class="text-slate-500 mt-1 text-sm">Communicate with your students</p>
+                </div>
+
+                <!-- 2. New Announcement Form Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex items-center gap-2">
+                        <i data-lucide="megaphone" class="w-5 h-5 text-[#4361ee]"></i>
+                        <h2 class="text-lg font-bold text-slate-900">New Announcement</h2>
+                    </div>
+                    
+                    <div class="p-6 space-y-6">
+                        
+                        <!-- Send To -->
+                        <div class="space-y-3">
+                            <label class="block text-sm font-semibold text-slate-700">Send To</label>
+                            <div class="flex gap-6">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="send_to" class="custom-radio" checked>
+                                    <span class="text-sm text-slate-700">All Students</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="send_to" class="custom-radio">
+                                    <span class="text-sm text-slate-700">Course Specific</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Category</label>
+                            <select class="block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-shadow">
+                                <option>Course Updates</option>
+                                <option>Assignment Help</option>
+                                <option>Quiz Reminder</option>
+                                <option>Office Hours</option>
+                            </select>
+                        </div>
+
+                        <!-- Title -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Title</label>
+                            <input type="text" 
+                                   class="block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-shadow"
+                                   placeholder="Enter announcement title">
+                        </div>
+
+                        <!-- Message -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Message</label>
+                            <textarea rows="4" 
+                                      class="block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-shadow resize-none"
+                                      placeholder="Write your announcement message here..."></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button class="w-full bg-[#4361ee] hover:bg-[#3a53d0] text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-sm active:scale-[0.99]">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Post Announcement
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- 3. Recent Announcements Section -->
+                <div>
+                    <!-- Header with Interactive Search/Filter (Added functionality) -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                        <h2 class="text-lg font-bold text-slate-900">Recent Announcements</h2>
+                        
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <!-- Search -->
+                            <div class="relative flex-1 sm:flex-none">
+                                <input type="text" 
+                                       class="w-full sm:w-48 pl-8 pr-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500" 
+                                       placeholder="Search...">
+                                <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
+                            </div>
+                            <!-- Filter -->
+                            <select class="text-sm border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-blue-500">
+                                <option>All Categories</option>
+                                <option>Updates</option>
+                                <option>Reminders</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- List Card -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        
+                        <!-- Item 1 -->
+                        <div class="p-6 border-b border-slate-100 hover:bg-slate-50 transition-colors group relative">
+                            <!-- Header Row -->
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-3">
+                                    <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide">Course Updates</span>
+                                    <span class="text-xs text-slate-400">2h ago</span>
+                                </div>
+                                <button class="text-slate-300 hover:text-red-500 transition-colors p-1" title="Delete">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Content -->
+                            <h3 class="text-base font-bold text-slate-900 mb-1">New React Module Released</h3>
+                            <p class="text-sm text-slate-600 mb-3 leading-relaxed">A new module on React Hooks has been added to the course. Please review the material before Monday's lecture.</p>
+                            
+                            <!-- Footer Tag -->
+                            <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600">
+                                <i data-lucide="layers" class="w-3 h-3"></i>
+                                React Fundamentals
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="p-6 border-b border-slate-100 hover:bg-slate-50 transition-colors group relative">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-3">
+                                    <span class="bg-purple-50 text-purple-600 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-100 uppercase tracking-wide">Quiz Reminder</span>
+                                    <span class="text-xs text-slate-400">5h ago</span>
+                                </div>
+                                <button class="text-slate-300 hover:text-red-500 transition-colors p-1" title="Delete">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            
+                            <h3 class="text-base font-bold text-slate-900 mb-1">JavaScript Quiz Due Tomorrow</h3>
+                            <p class="text-sm text-slate-600 mb-3 leading-relaxed">Don't forget to submit your JavaScript ES6+ quiz by tomorrow at 5 PM EST. Late submissions will incur a penalty.</p>
+                            
+                            <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600">
+                                <i data-lucide="file-code" class="w-3 h-3"></i>
+                                JavaScript Mastery
+                            </div>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="p-6 hover:bg-slate-50 transition-colors group relative">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-3">
+                                    <span class="bg-orange-50 text-orange-600 text-[10px] font-bold px-2 py-0.5 rounded border border-orange-100 uppercase tracking-wide">Office Hours</span>
+                                    <span class="text-xs text-slate-400">1d ago</span>
+                                </div>
+                                <button class="text-slate-300 hover:text-red-500 transition-colors p-1" title="Delete">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            
+                            <h3 class="text-base font-bold text-slate-900 mb-1">Additional Office Hours This Week</h3>
+                            <p class="text-sm text-slate-600 mb-3 leading-relaxed">I will be holding extra office hours on Thursday from 3-5 PM to help with final projects.</p>
+                            
+                            <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600">
+                                <i data-lucide="users" class="w-3 h-3"></i>
+                                All Students
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= FOOTER ================= -->
+                <footer class="bg-white border-t border-slate-200 pt-8 pb-8 mt-12 rounded-t-xl -mx-4 lg:-mx-8 px-4 lg:px-8 -mb-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        
+                        <!-- Left: Brand & Socials -->
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 p-2 rounded-lg mr-2">
+                                    <i data-lucide="book-open" class="text-blue-600 w-5 h-5"></i>
+                                </div>
+                                <span class="text-xl font-bold text-blue-600">E+Learn</span>
+                            </div>
+
+                            <div class="hidden md:block w-px h-6 bg-slate-300"></div>
+
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Right: Copyright -->
+                        <div class="text-center md:text-right space-y-1">
+                            <p class="text-sm text-slate-400">© 2024 E+Learn. All Rights Reserved</p>
+                            <p class="text-sm text-slate-400 flex justify-center md:justify-end items-center gap-1">
+                                Made With <i data-lucide="heart" class="w-3 h-3 text-red-500 fill-red-500"></i> For Learners Worldwide
+                            </p>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

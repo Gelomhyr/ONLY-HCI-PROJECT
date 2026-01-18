@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - E+Learn</title>
+
+    <link rel="stylesheet" href="css/settings.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+<style id="elearn-ui">
+  /* ===== E+Learn Admin UI (Refined) ===== */
+  :root{
+    --app-bg: #f5f6f7;
+    --surface: #ffffff;
+    --surface-2: #f3f4f6;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+
+    --sidebar-bg: #6384FF;
+    --sidebar-text: #ffffff;
+    --sidebar-muted: rgba(255,255,255,.80);
+    --sidebar-hover: rgba(255,255,255,.14);
+    --sidebar-active: rgba(255,255,255,.20);
+    --sidebar-border: rgba(255,255,255,.18);
+
+    --focus: rgba(99,132,255,.35);
+
+    --modal-overlay: rgba(0,0,0,.45);
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+  }
+
+  html[data-theme="dark"]{
+    --app-bg: #18191A;
+    --surface: #242526;
+    --surface-2: #2f3031;
+    --text: #E4E6EB;
+    --muted: #B0B3B8;
+    --border: #3A3B3C;
+
+    /* sidebar in dark mode should follow app theme */
+    --sidebar-bg: #242526;
+    --sidebar-text: #E4E6EB;
+    --sidebar-muted: #B0B3B8;
+    --sidebar-hover: #2f3031;
+    --sidebar-active: #3A3B3C;
+    --sidebar-border: #3A3B3C;
+
+    --modal-overlay: rgba(0,0,0,.55);
+  }
+
+  /* Smooth theme transitions */
+  body, main, aside, .bg-white, .bg-gray-50, .text-gray-900, .text-gray-500, .text-gray-600, .border-gray-200, .border-gray-100{
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+
+  body{ background: var(--app-bg) !important; color: var(--text) !important; }
+  main{ background: var(--app-bg) !important; }
+
+  /* Fix dark leftovers from external css (admin.css) */
+  html[data-theme="light"] main{ background: var(--app-bg) !important; }
+
+  /* Generic Tailwind overrides for dark mode */
+  html[data-theme="dark"] .bg-white{ background-color: var(--surface) !important; }
+  html[data-theme="dark"] .bg-gray-50{ background-color: var(--app-bg) !important; }
+  html[data-theme="dark"] .text-gray-900{ color: var(--text) !important; }
+  html[data-theme="dark"] .text-gray-500,
+  html[data-theme="dark"] .text-gray-600{ color: var(--muted) !important; }
+  html[data-theme="dark"] .border-gray-100,
+  html[data-theme="dark"] .border-gray-200{ border-color: var(--border) !important; }
+
+  /* Sidebar theming + outline */
+  aside#sidebar{
+    background: var(--sidebar-bg) !important;
+    color: var(--sidebar-text) !important;
+    border-right: 1px solid var(--sidebar-border) !important;
+  }
+  aside#sidebar .sidebar-subtitle{ color: var(--sidebar-muted) !important; }
+  aside#sidebar .sidebar-link{
+    color: var(--sidebar-text) !important;
+    border-radius: 12px;
+  }
+  aside#sidebar .sidebar-link:hover{ background: var(--sidebar-hover) !important; }
+  aside#sidebar .sidebar-link.active{ background: var(--sidebar-active) !important; }
+
+  /* Hover text visibility fix */
+  aside#sidebar .sidebar-link .nav-label{ color: inherit !important; }
+
+  /* Top toggle button (outside sidebar) */
+  .top-toggle-btn{
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  }
+  html[data-theme="dark"] .top-toggle-btn{
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+  .top-toggle-btn:active{ transform: scale(.98); }
+
+  /* Sidebar collapsed (desktop) */
+  body.sidebar-collapsed aside#sidebar{ width: 88px !important; }
+  body.sidebar-collapsed aside#sidebar .nav-label,
+  body.sidebar-collapsed aside#sidebar .user-meta,
+  body.sidebar-collapsed aside#sidebar .sidebar-title-wrap{ display:none !important; }
+
+  body.sidebar-collapsed aside#sidebar .sidebar-header{
+    justify-content: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.sidebar-collapsed aside#sidebar .sidebar-link{
+    justify-content: center !important;
+    padding: 12px !important;
+    width: 52px;
+    height: 52px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 9999px !important; /* circle, no oblong */
+  }
+  body.sidebar-collapsed aside#sidebar .sidebar-link i,
+  body.sidebar-collapsed aside#sidebar .sidebar-link svg{
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  /* User avatar squircle */
+  .avatar-squircle{
+    border-radius: 14px !important;
+  }
+
+  /* Mobile drawer overlay */
+  #sidebarOverlay{
+    position: fixed;
+    inset: 0;
+    background: var(--modal-overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+    z-index: 40;
+  }
+  #sidebarOverlay.open{
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Logout Modal */
+  #logoutOverlay{
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: var(--modal-overlay);
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+  #logoutOverlay.show{ display:flex; }
+  #logoutOverlay.visible{ opacity:1; }
+
+  #logoutModal{
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    padding: 18px;
+    transform: translateY(10px) scale(.98);
+    opacity: 0;
+    transition: transform 200ms ease, opacity 200ms ease, background-color 180ms ease, border-color 180ms ease;
+  }
+  #logoutModal.visible{
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  #logoutModal .m-title{ color: var(--text); }
+  #logoutModal .m-text{ color: var(--muted); }
+  #logoutModal .btn{
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 700;
+    transition: transform 80ms ease, background-color 180ms ease, border-color 180ms ease;
+  }
+  #logoutModal .btn:hover{ background: var(--surface); }
+  #logoutModal .btn:active{ transform: scale(.98); }
+  #logoutModal .btn-danger{
+    border: none;
+    background: var(--danger);
+    color: #fff;
+  }
+  #logoutModal .btn-danger:hover{ background: var(--danger-hover); }
+
+  #logoutModal .bar{
+    width: 140px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  #logoutModal .bar > div{
+    width: 0%;
+    height: 100%;
+    background: var(--danger);
+    border-radius: 999px;
+    transition: width 1000ms linear;
+  }
+</style>
+
+</head>
+<body class="text-slate-800 bg-slate-50 overflow-hidden h-screen flex">
+
+    <!-- ================= SIDEBAR (Desktop) ================= -->
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 h-full fixed left-0 top-0 z-30">
+        <!-- Logo Area -->
+        <div class="h-20 flex items-center px-8 border-b border-slate-100">
+            <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                <i data-lucide="book-open" class="text-blue-600 w-6 h-6"></i>
+            </div>
+            <span class="text-2xl font-bold text-blue-600 tracking-tight">E+Learn</span>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            
+            <a href="index.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                <span class="nav-label">Dashboard</span></a>
+            
+            <a href="courses.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="book" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                <span class="nav-label">Courses</span></a>
+
+            <a href="upload.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="upload-cloud" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                <span class="nav-label">Upload</span></a>
+
+            <a href="assignments.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="file-check" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                <span class="nav-label">Assignments</span></a>
+
+            <a href="progress.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                <span class="nav-label">Progress</span></a>
+
+            <a href="announcements.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bell" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                <span class="nav-label">Announcements</span></a>
+
+            <a href="certificates.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="award" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                <span class="nav-label">Certificates</span></a>
+        </div>
+
+        <!-- Bottom Actions (Settings Active) -->
+        <div class="p-4 border-t border-slate-100 space-y-2">
+            <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg font-medium transition-colors">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+                <span class="nav-label">Settings</span></a>
+                <a href="#" id="themeToggle" class="sidebar-link flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors">
+                    <i data-lucide="moon" class="w-4 h-4"></i>
+                    <span class="nav-label">Theme</span>
+                </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span class="nav-label">Logout</span></a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT WRAPPER ================= -->
+    <div class="flex-1 flex flex-col h-full lg:ml-64 relative">
+        
+        <!-- Mobile Header -->
+        <header class="lg:hidden bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sticky top-0 z-20">
+            <div class="flex items-center">
+                <div class="bg-blue-100 p-1.5 rounded-lg mr-2">
+                    <i data-lucide="book-open" class="text-blue-600 w-5 h-5"></i>
+                </div>
+                <span class="text-xl font-bold text-blue-600">E+Learn</span>
+            </div>
+            <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Scrollable Main Area -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8">
+            <div class="max-w-5xl mx-auto space-y-8 fade-in">
+                
+                <!-- 1. Page Header -->
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">Settings & Profile</h1>
+                    <p class="text-slate-500 mt-1 text-sm">Manage your account and preferences</p>
+                </div>
+
+                <!-- 2. Profile Information Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 sm:p-8">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Profile Information</h2>
+                    
+                    <form onsubmit="event.preventDefault(); alert('Changes saved successfully!');">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <!-- Full Name -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-slate-700">Full Name</label>
+                                <input type="text" 
+                                       value="Dr. Smith"
+                                       class="form-input block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white text-slate-800 placeholder-slate-400 focus:outline-none transition-all"
+                                       placeholder="Enter full name">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-slate-700">Email</label>
+                                <input type="email" 
+                                       value="dr.smith@elearn.com"
+                                       class="form-input block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white text-slate-800 placeholder-slate-400 focus:outline-none transition-all"
+                                       placeholder="Enter email address">
+                            </div>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="mb-6 space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Department</label>
+                            <input type="text" 
+                                   value="Computer Science"
+                                   class="form-input block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white text-slate-800 placeholder-slate-400 focus:outline-none transition-all"
+                                   placeholder="Enter department">
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="mb-6 space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">Bio</label>
+                            <textarea rows="4" 
+                                      class="form-input block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm bg-white text-slate-800 placeholder-slate-400 focus:outline-none transition-all resize-none"
+                                      placeholder="Write a short bio...">Passionate educator with 10+ years of experience in computer science education. Specializing in web development and modern programming practices.</textarea>
+                            <div class="flex justify-end">
+                                <i data-lucide="grip-horizontal" class="w-3 h-3 text-slate-300"></i>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <button type="submit" class="bg-[#4361ee] hover:bg-[#3a53d0] text-white px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors shadow-sm active:scale-95">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 3. Notification Preferences Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 sm:p-8">
+                    <h2 class="text-lg font-bold text-slate-900 mb-6">Notification Preferences</h2>
+                    
+                    <div class="space-y-6 divide-y divide-slate-100">
+                        
+                        <!-- Toggle Item 1 -->
+                        <div class="flex items-center justify-between pt-2">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800">Email notifications for new submissions</h3>
+                                <p class="text-xs text-slate-500 mt-1">Receive an email when students submit assignments</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-200 checked:border-[#4361ee] transition-all duration-300 left-0 checked:left-6 shadow-sm" checked/>
+                                <label for="toggle1" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+
+                        <!-- Toggle Item 2 -->
+                        <div class="flex items-center justify-between pt-6">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800">Student question alerts</h3>
+                                <p class="text-xs text-slate-500 mt-1">Get notified when students ask questions</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle2" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-200 checked:border-[#4361ee] transition-all duration-300 left-0 checked:left-6 shadow-sm" checked/>
+                                <label for="toggle2" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+
+                        <!-- Toggle Item 3 -->
+                        <div class="flex items-center justify-between pt-6">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800">Course completion notifications</h3>
+                                <p class="text-xs text-slate-500 mt-1">Receive alerts when students complete courses</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle3" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-200 checked:border-[#4361ee] transition-all duration-300 left-0 checked:left-6 shadow-sm" checked/>
+                                <label for="toggle3" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+
+                        <!-- Toggle Item 4 (Off by default) -->
+                        <div class="flex items-center justify-between pt-6">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-800">Weekly progress reports</h3>
+                                <p class="text-xs text-slate-500 mt-1">Get a summary of all course activities weekly</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle4" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-200 checked:border-[#4361ee] transition-all duration-300 left-0 checked:left-6 shadow-sm"/>
+                                <label for="toggle4" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-200 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+
+<!-- Logout Confirmation Modal -->
+<div id="logoutOverlay" aria-hidden="true">
+  <div id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div style="display:flex; gap:12px; align-items:flex-start;">
+      <div style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(220,38,38,.12);color:var(--danger);flex:0 0 auto;">
+        <i data-lucide="log-out" class="w-5 h-5"></i>
+      </div>
+      <div style="flex:1;">
+        <div class="m-title" id="logoutTitle" style="font-size:16px;font-weight:800;line-height:1.2;">Confirm Logout</div>
+        <div class="m-text" id="logoutText" style="margin-top:6px;font-size:13px;line-height:1.45;">Are you sure you want to logout? You will be redirected to the login page.</div>
+      </div>
+    </div>
+
+    <div id="logoutStatus" style="display:none;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;">
+      <div style="font-size:13px;font-weight:800;color:var(--text);">Redirecting in <span id="logoutCountdown">3</span>s</div>
+      <div class="bar"><div id="logoutBar"></div></div>
+    </div>
+
+    <div id="logoutActions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;">
+      <button class="btn" id="logoutCancel" type="button">Cancel</button>
+      <button class="btn btn-danger" id="logoutConfirm" type="button">Logout</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Ensure lucide icons render
+  if (window.lucide && window.lucide.createIcons) {
+    window.lucide.createIcons();
+  }
+
+  const root = document.documentElement;
+  const body = document.body;
+
+  // Theme
+  const THEME_KEY = "elearn_theme";
+  const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+  root.dataset.theme = savedTheme;
+
+  // Sidebar collapsed state (desktop)
+  const SIDEBAR_KEY = "elearn_sidebar_collapsed";
+  const isCollapsed = localStorage.getItem(SIDEBAR_KEY) === "1";
+  if (isCollapsed) body.classList.add("sidebar-collapsed");
+
+  // Elements
+  const sidebar = document.getElementById("sidebar");
+  const sidebarOverlay = document.getElementById("sidebarOverlay");
+  const toggleBtn = document.getElementById("sidebarToggle");
+  const themeBtn = document.getElementById("themeToggle");
+
+  // Mobile open/close
+  function openMobileSidebar(){
+    if (!sidebar) return;
+    sidebar.classList.add("translate-x-0");
+    sidebar.classList.remove("-translate-x-full");
+    if (sidebarOverlay) sidebarOverlay.classList.add("open");
+  }
+  function closeMobileSidebar(){
+    if (!sidebar) return;
+    sidebar.classList.add("-translate-x-full");
+    sidebar.classList.remove("translate-x-0");
+    if (sidebarOverlay) sidebarOverlay.classList.remove("open");
+  }
+
+  // Toggle behavior:
+  // - On mobile: open/close drawer
+  // - On desktop: collapse/expand
+  function toggleSidebar(){
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    if (isMobile){
+      // if currently hidden, open; else close
+      if (sidebar && sidebar.classList.contains("-translate-x-full")) openMobileSidebar();
+      else closeMobileSidebar();
+      return;
+    }
+    body.classList.toggle("sidebar-collapsed");
+    localStorage.setItem(SIDEBAR_KEY, body.classList.contains("sidebar-collapsed") ? "1" : "0");
+  }
+
+  if (toggleBtn) toggleBtn.addEventListener("click", toggleSidebar);
+  if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeMobileSidebar);
+
+  // Theme toggle
+  if (themeBtn){
+    themeBtn.addEventListener("click", function(e){
+      e.preventDefault();
+      const next = (root.dataset.theme === "dark") ? "light" : "dark";
+      root.dataset.theme = next;
+      localStorage.setItem(THEME_KEY, next);
+    });
+  }
+
+  // Close mobile sidebar on resize to desktop
+  window.addEventListener("resize", function(){
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    if (!isMobile) {
+      if (sidebarOverlay) sidebarOverlay.classList.remove("open");
+      if (sidebar){
+        sidebar.classList.remove("-translate-x-full");
+        sidebar.classList.remove("translate-x-0");
+      }
+    } else {
+      // Ensure sidebar is hidden by default on mobile
+      if (sidebar){
+        sidebar.classList.add("-translate-x-full");
+      }
+    }
+  });
+
+  // ===== Logout Modal Logic =====
+  const logoutOverlay = document.getElementById("logoutOverlay");
+  const logoutModal = document.getElementById("logoutModal");
+  const logoutCancel = document.getElementById("logoutCancel");
+  const logoutConfirm = document.getElementById("logoutConfirm");
+  const logoutStatus = document.getElementById("logoutStatus");
+  const logoutActions = document.getElementById("logoutActions");
+  const logoutCountdown = document.getElementById("logoutCountdown");
+  const logoutBar = document.getElementById("logoutBar");
+  const logoutText = document.getElementById("logoutText");
+
+  // Find logout links (icon or href containing login)
+  const logoutLinks = Array.from(document.querySelectorAll('aside a')).filter(a=>{
+    return a.querySelector('[data-lucide="log-out"]') || /login\.html|index\.html/i.test(a.getAttribute("href")||"");
+  });
+
+  let logoutHref = "login.html";
+  if (logoutLinks.length) logoutHref = logoutLinks[0].getAttribute("href") || logoutHref;
+
+  function openLogout(){
+    if (!logoutOverlay || !logoutModal) return;
+    logoutOverlay.classList.add("show");
+    requestAnimationFrame(()=>{
+      logoutOverlay.classList.add("visible");
+      logoutModal.classList.add("visible");
+    });
+    logoutOverlay.setAttribute("aria-hidden","false");
+
+    // reset UI
+    if (logoutStatus) logoutStatus.style.display = "none";
+    if (logoutActions) logoutActions.style.display = "flex";
+    if (logoutCountdown) logoutCountdown.textContent = "3";
+    if (logoutBar) logoutBar.style.width = "0%";
+    if (logoutText) logoutText.textContent = "Are you sure you want to logout? You will be redirected to the login page.";
+    if (logoutConfirm) logoutConfirm.disabled = false;
+    if (logoutCancel) logoutCancel.disabled = false;
+  }
+
+  function closeLogout(){
+    if (!logoutOverlay || !logoutModal) return;
+    logoutModal.classList.remove("visible");
+    logoutOverlay.classList.remove("visible");
+    logoutOverlay.setAttribute("aria-hidden","true");
+    setTimeout(()=>logoutOverlay.classList.remove("show"), 200);
+  }
+
+  // Intercept clicks
+  logoutLinks.forEach(a=>{
+    a.addEventListener("click", function(e){
+      e.preventDefault();
+      openLogout();
+    });
+  });
+
+  if (logoutCancel) logoutCancel.addEventListener("click", closeLogout);
+  if (logoutOverlay) logoutOverlay.addEventListener("click", (e)=>{ if (e.target === logoutOverlay) closeLogout(); });
+
+  let timer = null;
+  if (logoutConfirm){
+    logoutConfirm.addEventListener("click", function(){
+      logoutConfirm.disabled = true;
+      if (logoutCancel) logoutCancel.disabled = true;
+
+      if (logoutActions) logoutActions.style.display = "none";
+      if (logoutStatus) logoutStatus.style.display = "flex";
+      if (logoutText) logoutText.textContent = "Logging out securely…";
+
+      let seconds = 3;
+      if (logoutCountdown) logoutCountdown.textContent = String(seconds);
+      if (logoutBar) setTimeout(()=>logoutBar.style.width="33.33%", 50);
+
+      timer = setInterval(()=>{
+        seconds--;
+        if (logoutCountdown) logoutCountdown.textContent = String(seconds);
+
+        if (seconds === 2 && logoutBar) logoutBar.style.width = "66.66%";
+        if (seconds === 1 && logoutBar) logoutBar.style.width = "100%";
+
+        if (seconds <= 0){
+          clearInterval(timer);
+          timer = null;
+          window.location.href = logoutHref || "login.html";
+        }
+      }, 1000);
+    });
+  }
+
+  // ESC closes things
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape"){
+      closeMobileSidebar();
+      closeLogout();
+    }
+  });
+
+  // Initial mobile state
+  if (window.matchMedia("(max-width: 767px)").matches && sidebar){
+    sidebar.classList.add("-translate-x-full");
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates Management - E+Learn</title>
+
+    <link rel="stylesheet" href="css/certificate.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+</head>
+<body class="text-slate-800 bg-slate-50 overflow-hidden h-screen flex">
+
+    <!-- ================= SIDEBAR (Desktop) ================= -->
+    <aside class="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 h-full fixed left-0 top-0 z-30">
+        <!-- Logo Area -->
+        <div class="h-20 flex items-center px-8 border-b border-slate-100">
+            <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                <i data-lucide="book-open" class="text-blue-600 w-6 h-6"></i>
+            </div>
+            <span class="text-2xl font-bold text-blue-600 tracking-tight">E+Learn</span>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Dashboard
+            </a>
+            
+            <a href="courses.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="book" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Courses
+            </a>
+
+            <a href="upload.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="upload-cloud" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Upload
+            </a>
+
+            <a href="assignments.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="file-check" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Assignments
+            </a>
+
+            <a href="progress.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Progress
+            </a>
+
+            <a href="announcements.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="bell" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Announcements
+            </a>
+
+            <!-- Active Link (Certificates) -->
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg font-medium transition-colors">
+                <i data-lucide="award" class="w-5 h-5"></i>
+                Certificates
+            </a>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="p-4 border-t border-slate-100 space-y-2">
+            <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-lg font-medium transition-colors group">
+                <i data-lucide="settings" class="w-5 h-5 text-slate-400 group-hover:text-blue-600"></i>
+                Settings
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT WRAPPER ================= -->
+    <div class="flex-1 flex flex-col h-full lg:ml-64 relative">
+        
+        <!-- Mobile Header -->
+        <header class="lg:hidden bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sticky top-0 z-20">
+            <div class="flex items-center">
+                <div class="bg-blue-100 p-1.5 rounded-lg mr-2">
+                    <i data-lucide="book-open" class="text-blue-600 w-5 h-5"></i>
+                </div>
+                <span class="text-xl font-bold text-blue-600">E+Learn</span>
+            </div>
+            <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-md">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </header>
+
+        <!-- Scrollable Main Area -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8">
+            <div class="max-w-6xl mx-auto space-y-8 fade-in">
+                
+                <!-- 1. Page Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900">Certificates Management</h1>
+                        <p class="text-slate-500 mt-1 text-sm">Manage and issue course completion certificates</p>
+                    </div>
+                    <button class="bg-[#4361ee] hover:bg-[#3a53d0] text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors shadow-sm active:scale-95">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        Issue Certificate
+                    </button>
+                </div>
+
+                <!-- 2. Certificate Templates Section -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4">Certificate Templates</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <!-- Template 1 -->
+                        <div class="border border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                                    <i data-lucide="award" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-900 text-sm">React Fundamentals</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">12 certificates issued</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1.5 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors flex items-center gap-1">
+                                    <i data-lucide="edit-3" class="w-3 h-3"></i> Edit
+                                </button>
+                                <button class="px-3 py-1.5 bg-[#4361ee] text-white rounded text-xs font-medium hover:bg-[#3a53d0] transition-colors flex items-center gap-1">
+                                    <i data-lucide="eye" class="w-3 h-3"></i> View
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template 2 -->
+                        <div class="border border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                                    <i data-lucide="award" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-900 text-sm">JavaScript Mastery</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">15 certificates issued</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1.5 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors flex items-center gap-1">
+                                    <i data-lucide="edit-3" class="w-3 h-3"></i> Edit
+                                </button>
+                                <button class="px-3 py-1.5 bg-[#4361ee] text-white rounded text-xs font-medium hover:bg-[#3a53d0] transition-colors flex items-center gap-1">
+                                    <i data-lucide="eye" class="w-3 h-3"></i> View
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template 3 -->
+                        <div class="border border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                                    <i data-lucide="award" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-900 text-sm">UI/UX Design Principles</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">8 certificates issued</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1.5 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors flex items-center gap-1">
+                                    <i data-lucide="edit-3" class="w-3 h-3"></i> Edit
+                                </button>
+                                <button class="px-3 py-1.5 bg-[#4361ee] text-white rounded text-xs font-medium hover:bg-[#3a53d0] transition-colors flex items-center gap-1">
+                                    <i data-lucide="eye" class="w-3 h-3"></i> View
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template 4 -->
+                        <div class="border border-slate-200 rounded-lg p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                                    <i data-lucide="award" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-900 text-sm">Data Structures & Algorithms</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">5 certificates issued</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1.5 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors flex items-center gap-1">
+                                    <i data-lucide="edit-3" class="w-3 h-3"></i> Edit
+                                </button>
+                                <button class="px-3 py-1.5 bg-[#4361ee] text-white rounded text-xs font-medium hover:bg-[#3a53d0] transition-colors flex items-center gap-1">
+                                    <i data-lucide="eye" class="w-3 h-3"></i> View
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 3. Recently Issued Certificates Section -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h2 class="text-lg font-bold text-slate-900">Recently Issued Certificates</h2>
+                        
+                        <!-- Interactive Filters -->
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <div class="relative flex-1 sm:flex-none">
+                                <input type="text" 
+                                       class="w-full sm:w-48 pl-8 pr-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500" 
+                                       placeholder="Search student...">
+                                <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
+                            </div>
+                            <select class="text-sm border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-blue-500">
+                                <option>All Courses</option>
+                                <option>React</option>
+                                <option>JS Mastery</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
+                                
+                                <!-- Row 1 -->
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="p-4 pl-6 w-10">
+                                        <input type="checkbox" class="custom-checkbox rounded border-gray-300">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs">SJ</div>
+                                            <div>
+                                                <div class="font-bold text-slate-900">Sarah Johnson</div>
+                                                <div class="text-xs text-slate-500">React Fundamentals</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded border border-green-200 uppercase">Issued</span>
+                                    </td>
+                                    <td class="p-4 text-right text-xs text-slate-500">Jan 14, 2024</td>
+                                    <td class="p-4 pr-6 text-right">
+                                        <button class="px-3 py-1 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors">
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 2 -->
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="p-4 pl-6 w-10">
+                                        <input type="checkbox" class="custom-checkbox rounded border-gray-300">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">AC</div>
+                                            <div>
+                                                <div class="font-bold text-slate-900">Alex Chen</div>
+                                                <div class="text-xs text-slate-500">JavaScript Mastery</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded border border-green-200 uppercase">Issued</span>
+                                    </td>
+                                    <td class="p-4 text-right text-xs text-slate-500">Jan 12, 2024</td>
+                                    <td class="p-4 pr-6 text-right">
+                                        <button class="px-3 py-1 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors">
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 3 -->
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="p-4 pl-6 w-10">
+                                        <input type="checkbox" class="custom-checkbox rounded border-gray-300">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs">ED</div>
+                                            <div>
+                                                <div class="font-bold text-slate-900">Emma Davis</div>
+                                                <div class="text-xs text-slate-500">React Fundamentals</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded border border-green-200 uppercase">Issued</span>
+                                    </td>
+                                    <td class="p-4 text-right text-xs text-slate-500">Jan 10, 2024</td>
+                                    <td class="p-4 pr-6 text-right">
+                                        <button class="px-3 py-1 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors">
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 4 -->
+                                <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="p-4 pl-6 w-10">
+                                        <input type="checkbox" class="custom-checkbox rounded border-gray-300">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs">JW</div>
+                                            <div>
+                                                <div class="font-bold text-slate-900">James Wilson</div>
+                                                <div class="text-xs text-slate-500">UI/UX Design</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded border border-green-200 uppercase">Issued</span>
+                                    </td>
+                                    <td class="p-4 text-right text-xs text-slate-500">Jan 08, 2024</td>
+                                    <td class="p-4 pr-6 text-right">
+                                        <button class="px-3 py-1 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors">
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                 <!-- Row 5 -->
+                                 <tr class="hover:bg-slate-50 transition-colors group">
+                                    <td class="p-4 pl-6 w-10">
+                                        <input type="checkbox" class="custom-checkbox rounded border-gray-300">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold text-xs">ML</div>
+                                            <div>
+                                                <div class="font-bold text-slate-900">Michael Lee</div>
+                                                <div class="text-xs text-slate-500">JavaScript Mastery</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded border border-green-200 uppercase">Issued</span>
+                                    </td>
+                                    <td class="p-4 text-right text-xs text-slate-500">Jan 05, 2024</td>
+                                    <td class="p-4 pr-6 text-right">
+                                        <button class="px-3 py-1 border border-slate-200 rounded text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 transition-colors">
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- ================= FOOTER ================= -->
+                <footer class="bg-white border-t border-slate-200 pt-8 pb-8 mt-12 rounded-t-xl -mx-4 lg:-mx-8 px-4 lg:px-8 -mb-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        
+                        <!-- Left: Brand & Socials -->
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 p-2 rounded-lg mr-2">
+                                    <i data-lucide="book-open" class="text-blue-600 w-5 h-5"></i>
+                                </div>
+                                <span class="text-xl font-bold text-blue-600">E+Learn</span>
+                            </div>
+
+                            <div class="hidden md:block w-px h-6 bg-slate-300"></div>
+
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Right: Copyright -->
+                        <div class="text-center md:text-right space-y-1">
+                            <p class="text-sm text-slate-400">© 2024 E+Learn. All Rights Reserved</p>
+                            <p class="text-sm text-slate-400 flex justify-center md:justify-end items-center gap-1">
+                                Made With <i data-lucide="heart" class="w-3 h-3 text-red-500 fill-red-500"></i> For Learners Worldwide
+                            </p>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

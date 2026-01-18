@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Management - E+Learn</title>
+<script>tailwind.config = { darkMode: 'class' };</script><script src="https://cdn.tailwindcss.com"></script>
+<link href="css/user.css" rel="stylesheet"/>
+<!-- FontAwesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style id="ui-enhancements">
+/* === UI Enhancements: compact + animations + dark mode + modal === */
+:root { color-scheme: light; }
+html.dark { color-scheme: dark; }
+body { transition: background-color .2s ease, color .2s ease; }
+
+/* Dark mode utility overrides (covers common Tailwind classes used in pages) */
+.dark .bg-white { background-color: #0b1220 !important; }
+.dark .bg-gray-50 { background-color: #050a14 !important; }
+.dark .bg-gray-100 { background-color: #0b1220 !important; }
+.dark .text-gray-900 { color: #e5e7eb !important; }
+.dark .text-gray-800, .dark .text-slate-800 { color: #e5e7eb !important; }
+.dark .text-gray-700 { color: #cbd5e1 !important; }
+.dark .text-gray-600, .dark .text-gray-500 { color: #94a3b8 !important; }
+.dark .border-gray-100, .dark .border-gray-200, .dark .border-gray-300 { border-color: rgba(148,163,184,.18) !important; }
+
+/* Sidebar collapse */
+aside.sidebar { transition: width .22s ease; }
+aside.sidebar.sidebar-collapsed { width: 72px !important; }
+aside.sidebar.sidebar-collapsed .brand-text,
+aside.sidebar.sidebar-collapsed .nav-label { display:none !important; }
+aside.sidebar.sidebar-collapsed .nav-item { justify-content:center !important; }
+aside.sidebar.sidebar-collapsed .nav-item i { margin: 0 !important; }
+aside.sidebar.sidebar-collapsed .brand-wrap { justify-content:center !important; }
+
+/* Subtle interactive animations */
+a, button { transition: transform .08s ease, background-color .2s ease, color .2s ease, opacity .2s ease; }
+button:active, a:active { transform: scale(.98); }
+.nav-item:hover { transform: translateX(2px); }
+
+/* Mobile overlay for sidebar */
+#mobileOverlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  display:none; opacity:0;
+  transition: opacity .18s ease;
+  z-index: 40;
+}
+#mobileOverlay.show { display:block; }
+#mobileOverlay.visible { opacity:1; }
+
+/* Logout modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  display:none; align-items:center; justify-content:center;
+  padding:16px;
+  opacity:0; transition: opacity .18s ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 60;
+}
+.modal-overlay.show { display:flex; }
+.modal-overlay.visible { opacity:1; }
+.modal {
+  width:100%; max-width:420px;
+  background:#fff;
+  border-radius:16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  padding:18px 18px 16px;
+  transform: translateY(10px) scale(.98);
+  opacity:0; transition: transform .2s ease, opacity .2s ease;
+}
+.dark .modal { background:#0b1220; border:1px solid rgba(148,163,184,.18); }
+.modal.visible { transform: translateY(0) scale(1); opacity:1; }
+.modal-title { font-weight:700; font-size:16px; color:#111827; }
+.dark .modal-title { color:#e5e7eb; }
+.modal-text { margin-top:6px; font-size:13px; color:#6b7280; line-height:1.5; }
+.dark .modal-text { color:#94a3b8; }
+.modal-actions { margin-top:16px; display:flex; gap:10px; justify-content:flex-end; }
+.btn-modal { border:1px solid rgba(229,231,235,1); background:#fff; color:#111827; padding:10px 14px; border-radius:10px; font-weight:600; cursor:pointer; }
+.dark .btn-modal { background:#0b1220; color:#e5e7eb; border-color: rgba(148,163,184,.18); }
+.btn-modal:hover { background: rgba(243,244,246,.7); }
+.dark .btn-modal:hover { background: rgba(148,163,184,.08); }
+.btn-danger { border:none; background: rgb(204,8,8); color:#fff; }
+.btn-danger:hover { background: rgb(173,7,7); }
+.logout-status { margin-top:14px; display:none; align-items:center; justify-content:space-between; gap:12px; }
+.logout-countdown { font-size:13px; color:#374151; font-weight:700; }
+.dark .logout-countdown { color:#cbd5e1; }
+.logout-loader { width:140px; height:6px; background:#e5e7eb; border-radius:999px; overflow:hidden; }
+.dark .logout-loader { background: rgba(148,163,184,.18); }
+.logout-loader > div { width:0%; height:100%; background: rgb(204,8,8); border-radius:999px; transition: width 1000ms linear; }
+
+/* Toast */
+#toastRoot { position: fixed; bottom: 18px; right: 18px; z-index: 80; display:flex; flex-direction:column; gap:10px; }
+.toast {
+  background:#111827; color:#fff;
+  padding:10px 12px; border-radius:12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  font-size:13px; font-weight:600;
+  opacity:0; transform: translateY(8px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.toast.show { opacity:1; transform: translateY(0); }
+.dark .toast { background:#0b1220; border:1px solid rgba(148,163,184,.18); }
+</style></head>
+<body class="bg-gray-50 text-slate-800 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100"><div id="mobileOverlay"></div>
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar (Identical to Dashboard) -->
+<aside class="w-64 bg-[#6384FF] text-white flex-shrink-0 hidden md:flex flex-col transition-all duration-300 sidebar" id="sidebar">
+<div class="p-6 flex items-center gap-3 brand-wrap">
+<div class="bg-white/20 p-2 rounded-lg">
+<i class="fa-solid fa-book text-xl"></i>
+</div>
+<div class="brand-text">
+<h1 class="font-bold text-lg leading-tight">E+Learn</h1>
+<p class="text-xs text-blue-100">Admin Portal</p>
+</div>
+<button class="ml-auto p-2 rounded-lg hover:bg-white/10 text-white/90 hidden md:inline-flex" id="sidebarCollapseBtn"><i class="w-5 h-5" data-lucide="chevrons-left"></i></button></div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="admin.html" title="Dashboard"><i class="w-5 h-5" data-lucide="layout-dashboard"></i><span class="nav-label"> Dashboard</span></a>
+<a class="flex items-center gap-3 px-4 bg-white/10 rounded-lg text-white font-medium nav-item py-2" href="#" title="User Management"><i class="w-5 h-5" data-lucide="users"></i><span class="nav-label"> User Management</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="course.html" title="Course Management"><i class="w-5 h-5" data-lucide="book-open"></i><span class="nav-label"> Course Management</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="announcement.html" title="Announcements"><i class="w-5 h-5" data-lucide="megaphone"></i><span class="nav-label"> Announcements</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="report.html" title="Reports &amp; Analytics"><i class="w-5 h-5" data-lucide="bar-chart-2"></i><span class="nav-label"> Reports &amp; Analytics</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="settings.html" title="System Settings"><i class="w-5 h-5" data-lucide="settings"></i><span class="nav-label"> System Settings</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="notif.html" title="Notifications"><i class="w-5 h-5" data-lucide="bell"></i><span class="nav-label"> Notifications</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="message.html" title="Messaging"><i class="w-5 h-5" data-lucide="message-square"></i><span class="nav-label"> Messaging</span></a>
+</nav>
+<div class="p-4 mt-auto">
+<div class="flex items-center gap-3 px-4 py-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold">AU</div>
+<div class="overflow-hidden">
+<p class="text-sm font-medium truncate">Admin User</p>
+<p class="text-xs text-blue-200 truncate">admin@gmail.com</p>
+</div>
+</div>
+<button class="mt-2 flex items-center gap-2 px-4 py-2 rounded-lg text-blue-100 hover:bg-white/5 transition-colors nav-item w-full" id="themeToggleBtn" title="Theme" type="button"><i class="w-4 h-4" data-lucide="moon"></i><span class="nav-label"> Theme</span></button><a class="flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors nav-item" href="../login.html" title="Logout"><i class="w-4 h-4" data-lucide="log-out"></i><span class="nav-label"> Logout</span></a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 h-full overflow-y-auto overflow-x-hidden bg-white md:bg-gray-50">
+<!-- Mobile Header -->
+<div class="md:hidden bg-[#6384FF] text-white p-4 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<i class="fa-solid fa-book text-lg"></i>
+<span class="font-bold">E+Learn</span>
+</div>
+<button class="p-1" id="mobileMenuToggle"><i class="w-6 h-6" data-lucide="menu"></i></button>
+</div>
+<div class="p-6 max-w-7xl mx-auto space-y-6">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="text-2xl font-bold text-gray-900">User Management</h2>
+<p class="text-gray-500 text-sm mt-1">Manage all platform users</p>
+</div>
+<button class="bg-[#819CFF] hover:bg-[#6384FF] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-sm" onclick="openModal()">
+<i class="w-4 h-4" data-lucide="user-plus"></i>
+                        Add User
+                    </button>
+</div>
+<!-- Filters & Search -->
+<div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+<div class="relative w-full md:w-96">
+<i class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" data-lucide="search"></i>
+<input class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" id="searchInput" placeholder="Search by name or email..." type="text"/>
+</div>
+<div class="w-full md:w-48">
+<select class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white cursor-pointer" id="roleFilter">
+<option value="All">All Roles</option>
+<option value="Student">Student</option>
+<option value="Teacher">Teacher</option>
+<option value="Admin">Admin</option>
+</select>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50/50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500 font-semibold">
+<th class="px-6 py-4">Name</th>
+<th class="px-6 py-4">Email</th>
+<th class="px-6 py-4">Role</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Joined</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 text-sm text-gray-700" id="userTableBody">
+<!-- Rows will be populated by JS -->
+</tbody>
+</table>
+</div>
+<!-- Pagination (Static for UI) -->
+<div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500">
+<span>Showing 1 to 5 of 12 results</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50">Next</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Add User Modal -->
+<div class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="userModal">
+<div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 transform scale-95 transition-transform duration-300" id="modalContent">
+<div class="flex justify-between items-center p-6 border-b border-gray-100">
+<h3 class="text-lg font-bold text-gray-900">Add New User</h3>
+<button class="text-gray-400 hover:text-gray-600 transition-colors" onclick="closeModal()">
+<i class="w-5 h-5" data-lucide="x"></i>
+</button>
+</div>
+<form class="p-6 space-y-4" id="addUserForm">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+<input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors" id="newUserName" required="" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+<input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors" id="newUserEmail" required="" type="email"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+<select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white" id="newUserRole">
+<option value="student">Student</option>
+<option value="teacher">Teacher</option>
+<option value="admin">Admin</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+<select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white" id="newUserStatus">
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+</div>
+</div>
+<div class="pt-4 flex gap-3">
+<button class="flex-1 px-4 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 font-medium transition-colors" onclick="closeModal()" type="button">Cancel</button>
+<button class="flex-1 px-4 py-2 bg-[#6384FF] text-white rounded-lg hover:bg-blue-600 font-medium transition-colors" type="submit">Save User</button>
+</div>
+</form>
+</div>
+</div>
+<script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Sample Data
+        let users = [
+            { id: 1, name: "John Smith", email: "john@example.com", role: "student", status: "active", joined: "2024-01-15" },
+            { id: 2, name: "Sarah Johnson", email: "sarah@example.com", role: "teacher", status: "active", joined: "2024-02-20" },
+            { id: 3, name: "Michael Chen", email: "michael@example.com", role: "student", status: "active", joined: "2024-03-10" },
+            { id: 4, name: "Emily Brown", email: "emily@example.com", role: "teacher", status: "inactive", joined: "2024-01-05" },
+            { id: 5, name: "David Wilson", email: "david@example.com", role: "admin", status: "active", joined: "2023-12-01" },
+        ];
+
+        const tableBody = document.getElementById('userTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const roleFilter = document.getElementById('roleFilter');
+
+        // Role Badge Styling
+        const getRoleBadge = (role) => {
+            const styles = {
+                student: 'bg-yellow-100 text-yellow-800',
+                teacher: 'bg-orange-100 text-orange-800',
+                admin: 'bg-blue-100 text-blue-800'
+            };
+            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${styles[role.toLowerCase()] || 'bg-gray-100'}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>`;
+        };
+
+        // Status Badge Styling
+        const getStatusBadge = (status) => {
+            const styles = {
+                active: 'bg-blue-500 text-white',
+                inactive: 'bg-yellow-100 text-yellow-800'
+            };
+            // Using specific styles from image
+            return `<span class="px-2.5 py-0.5 rounded text-xs font-medium ${status === 'active' ? 'bg-[#819CFF] text-white' : 'bg-[#FEF3C7] text-[#92400E]'}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+        };
+
+        // Render Table
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">No users found.</td></tr>';
+                return;
+            }
+
+            data.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-colors group';
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-gray-900">${user.name}</td>
+                    <td class="px-6 py-4 text-gray-500">${user.email}</td>
+                    <td class="px-6 py-4">${getRoleBadge(user.role)}</td>
+                    <td class="px-6 py-4">${getStatusBadge(user.status)}</td>
+                    <td class="px-6 py-4 text-gray-500">${user.joined}</td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end gap-3 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="text-gray-400 hover:text-blue-600 transition-colors" title="View Details"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                            <button class="text-gray-400 hover:text-green-600 transition-colors" title="Edit"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="deleteUser(${user.id})" class="text-gray-400 hover:text-red-500 transition-colors" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            lucide.createIcons();
+        }
+
+        // Filter Function
+        function filterUsers() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedRole = roleFilter.value.toLowerCase();
+
+            const filtered = users.filter(user => {
+                const matchesSearch = user.name.toLowerCase().includes(searchTerm) || user.email.toLowerCase().includes(searchTerm);
+                const matchesRole = selectedRole === 'all' || user.role.toLowerCase() === selectedRole;
+                return matchesSearch && matchesRole;
+            });
+
+            renderTable(filtered);
+        }
+
+        // Event Listeners for Filtering
+        searchInput.addEventListener('input', filterUsers);
+        roleFilter.addEventListener('change', filterUsers);
+
+        // Modal Logic
+        const modal = document.getElementById('userModal');
+        const modalContent = document.getElementById('modalContent');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Small timeout for transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+            document.getElementById('addUserForm').reset();
+        }
+
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Add User Form Submit
+        document.getElementById('addUserForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newUser = {
+                id: users.length + 1,
+                name: document.getElementById('newUserName').value,
+                email: document.getElementById('newUserEmail').value,
+                role: document.getElementById('newUserRole').value,
+                status: document.getElementById('newUserStatus').value,
+                joined: new Date().toISOString().split('T')[0]
+            };
+
+            users.unshift(newUser); // Add to top
+            renderTable(users);
+            closeModal();
+            
+            // Optional: Show success toast
+            // alert('User added successfully!');
+        });
+
+        // Delete User
+        window.deleteUser = (id) => {
+            if(confirm('Are you sure you want to delete this user?')) {
+                users = users.filter(u => u.id !== id);
+                filterUsers(); // Re-render with current filters
+            }
+        }
+
+        // Initial Render
+        renderTable(users);
+    </script>
+<div id="toastRoot"></div><div aria-hidden="true" class="modal-overlay" id="logoutOverlay"><div aria-labelledby="logoutTitle" aria-modal="true" class="modal" id="logoutModal" role="dialog"><div class="modal-header"><div style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(220,38,38,.10);color:rgb(204,8,8);font-size:18px;flex:0 0 auto;"><i class="w-5 h-5" data-lucide="right-from-bracket"></i></div><div><h2 class="modal-title" id="logoutTitle">Confirm Logout</h2><p class="modal-text" id="logoutText">Are you sure you want to logout? You will be redirected to the login page.</p></div></div><div class="logout-status" id="logoutStatus"><div class="logout-countdown">Redirecting in <span id="logoutCountdown">3</span>s</div><div aria-hidden="true" class="logout-loader"><div id="logoutBar"></div></div></div><div class="modal-actions" id="logoutActions"><button class="btn-modal btn-cancel" id="cancelLogout" type="button">Cancel</button><button class="btn-modal btn-danger" id="confirmLogout" type="button">Logout</button></div></div></div><script id="ui-enhancements-js">
+(function () {
+  const LOGIN_FALLBACK = "login.html";
+  const SIDEBAR_KEY = "elearn_sidebar_collapsed";
+  const THEME_KEY = "elearn_theme";
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+  // Toast
+  function uiToast(message) {
+    const root = $("#toastRoot");
+    if (!root) return;
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = message;
+    root.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => {
+      t.classList.remove("show");
+      setTimeout(() => t.remove(), 180);
+    }, 2200);
+  }
+  window.uiToast = uiToast;
+
+  function setTheme(mode) {
+    const html = document.documentElement;
+    if (mode === "dark") html.classList.add("dark");
+    else html.classList.remove("dark");
+    localStorage.setItem(THEME_KEY, mode);
+    // swap icon
+    const btn = $("#themeToggleBtn");
+    if (btn) {
+      const icon = btn.querySelector("i[data-lucide]");
+      if (icon) icon.setAttribute("data-lucide", mode === "dark" ? "sun" : "moon");
+    }
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === "dark" || saved === "light") setTheme(saved);
+    else {
+      // default to system preference
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      setTheme(prefersDark ? "dark" : "light");
+    }
+    const btn = $("#themeToggleBtn");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        const isDark = document.documentElement.classList.contains("dark");
+        setTheme(isDark ? "light" : "dark");
+        uiToast(isDark ? "Light mode enabled" : "Dark mode enabled");
+      });
+    }
+  }
+
+  // Sidebar collapse (desktop)
+  function initSidebarCollapse() {
+    const sidebar = $("#sidebar");
+    const btn = $("#sidebarCollapseBtn");
+    if (!sidebar || !btn) return;
+
+    const apply = (collapsed) => {
+      sidebar.classList.toggle("sidebar-collapsed", collapsed);
+      btn.querySelector("i")?.setAttribute("data-lucide", collapsed ? "chevrons-right" : "chevrons-left");
+      localStorage.setItem(SIDEBAR_KEY, collapsed ? "1" : "0");
+      if (window.lucide) window.lucide.createIcons();
+    };
+
+    const saved = localStorage.getItem(SIDEBAR_KEY) === "1";
+    apply(saved);
+
+    btn.addEventListener("click", () => {
+      const collapsed = !sidebar.classList.contains("sidebar-collapsed");
+      apply(collapsed);
+    });
+  }
+
+  // Mobile sidebar drawer
+  function initMobileSidebar() {
+    const sidebar = $("#sidebar");
+    const toggle = $("#mobileMenuToggle");
+    const overlay = $("#mobileOverlay");
+    if (!sidebar || !toggle || !overlay) return;
+
+    const open = () => {
+      overlay.classList.add("show");
+      requestAnimationFrame(() => overlay.classList.add("visible"));
+      sidebar.classList.remove("hidden");
+      sidebar.classList.add("fixed", "inset-y-0", "left-0", "z-50");
+      uiLockScroll(true);
+    };
+
+    const close = () => {
+      overlay.classList.remove("visible");
+      setTimeout(() => overlay.classList.remove("show"), 180);
+      // restore
+      sidebar.classList.add("hidden");
+      sidebar.classList.remove("fixed", "inset-y-0", "left-0", "z-50");
+      uiLockScroll(false);
+    };
+
+    function uiLockScroll(lock) {
+      document.body.style.overflow = lock ? "hidden" : "";
+    }
+
+    toggle.addEventListener("click", open);
+    overlay.addEventListener("click", close);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        // if sidebar opened on mobile
+        if (overlay.classList.contains("show")) close();
+        // if logout modal opened
+        const logoutOverlay = $("#logoutOverlay");
+        if (logoutOverlay?.classList.contains("show")) closeLogoutModal();
+      }
+    });
+
+    // close on resize to desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768 && overlay.classList.contains("show")) close();
+    });
+  }
+
+  // Logout modal
+  let logoutHref = null;
+  let logoutTimer = null;
+
+  function openLogoutModal() {
+    const overlay = $("#logoutOverlay");
+    const modal = $("#logoutModal");
+    const status = $("#logoutStatus");
+    const actions = $("#logoutActions");
+    const countdown = $("#logoutCountdown");
+    const bar = $("#logoutBar");
+    const text = $("#logoutText");
+    const confirm = $("#confirmLogout");
+    const cancel = $("#cancelLogout");
+
+    if (!overlay || !modal) return;
+
+    // reset
+    if (logoutTimer) { clearInterval(logoutTimer); logoutTimer = null; }
+    status.style.display = "none";
+    actions.style.display = "flex";
+    countdown.textContent = "3";
+    bar.style.width = "0%";
+    text.textContent = "Are you sure you want to logout? You will be redirected to the login page.";
+    confirm.disabled = false;
+    cancel.disabled = false;
+
+    overlay.classList.add("show");
+    requestAnimationFrame(() => {
+      overlay.classList.add("visible");
+      modal.classList.add("visible");
+    });
+    overlay.setAttribute("aria-hidden", "false");
+  }
+
+  function closeLogoutModal() {
+    const overlay = $("#logoutOverlay");
+    const modal = $("#logoutModal");
+    if (!overlay || !modal) return;
+
+    if (logoutTimer) { clearInterval(logoutTimer); logoutTimer = null; }
+
+    modal.classList.remove("visible");
+    overlay.classList.remove("visible");
+    overlay.setAttribute("aria-hidden", "true");
+    setTimeout(() => overlay.classList.remove("show"), 200);
+  }
+
+  function initLogoutIntercept() {
+    // find logout anchor by lucide icon
+    const logoutLink = $$('a').find(a => a.querySelector('i[data-lucide="log-out"]') || /logout/i.test(a.textContent));
+    if (!logoutLink) return;
+
+    logoutHref = logoutLink.getAttribute("href") || LOGIN_FALLBACK;
+    logoutLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      openLogoutModal();
+    });
+
+    const overlay = $("#logoutOverlay");
+    const cancel = $("#cancelLogout");
+    const confirm = $("#confirmLogout");
+    const status = $("#logoutStatus");
+    const actions = $("#logoutActions");
+    const countdown = $("#logoutCountdown");
+    const bar = $("#logoutBar");
+    const text = $("#logoutText");
+
+    cancel?.addEventListener("click", closeLogoutModal);
+    overlay?.addEventListener("click", (e) => { if (e.target === overlay) closeLogoutModal(); });
+
+    confirm?.addEventListener("click", () => {
+      confirm.disabled = true;
+      cancel.disabled = true;
+
+      actions.style.display = "none";
+      status.style.display = "flex";
+      text.textContent = "Logging out securely…";
+
+      let seconds = 3;
+      countdown.textContent = String(seconds);
+      setTimeout(() => bar.style.width = "33.33%", 50);
+
+      logoutTimer = setInterval(() => {
+        seconds--;
+        countdown.textContent = String(seconds);
+
+        if (seconds === 2) bar.style.width = "66.66%";
+        if (seconds === 1) bar.style.width = "100%";
+
+        if (seconds <= 0) {
+          clearInterval(logoutTimer);
+          logoutTimer = null;
+          window.location.href = logoutHref || LOGIN_FALLBACK;
+        }
+      }, 1000);
+    });
+  }
+
+  // Wrap some buttons with toasts if present (non-breaking)
+  function initActionToasts() {
+    const map = [
+      { id: "saveChangesBtn", msg: "Changes saved" },
+      { id: "exportBtn", msg: "Export started" },
+      { id: "markAllReadBtn", msg: "All notifications marked as read" },
+      { id: "clearAllBtn", msg: "Cleared" },
+      { id: "sendMessageBtn", msg: "Message sent" },
+    ];
+    map.forEach(({id,msg}) => {
+      const el = document.getElementById(id);
+      if (el && !el.dataset.toastBound) {
+        el.dataset.toastBound = "1";
+        el.addEventListener("click", () => uiToast(msg));
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) window.lucide.createIcons();
+    initTheme();
+    initSidebarCollapse();
+    initMobileSidebar();
+    initLogoutIntercept();
+    initActionToasts();
+  });
+
+  // expose for ESC handler
+  window.closeLogoutModal = closeLogoutModal;
+})();
+</script></body>
+</html>

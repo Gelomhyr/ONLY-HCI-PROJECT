@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Announcements - E+Learn</title>
+<script>tailwind.config = { darkMode: 'class' };</script><script src="https://cdn.tailwindcss.com"></script>
+<link href="css/announcement.css" rel="stylesheet"/>
+<!-- FontAwesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style id="ui-enhancements">
+/* === UI Enhancements: compact + animations + dark mode + modal === */
+:root { color-scheme: light; }
+html.dark { color-scheme: dark; }
+body { transition: background-color .2s ease, color .2s ease; }
+
+/* Dark mode utility overrides (covers common Tailwind classes used in pages) */
+.dark .bg-white { background-color: #242526 !important; }
+.dark .bg-gray-50 { background-color: #18191a !important; }
+.dark .bg-gray-100 { background-color: #1f2023 !important; }
+.dark .text-gray-900 { color: #e4e6eb !important; }
+.dark .text-gray-800, .dark .text-slate-800 { color: #e4e6eb !important; }
+.dark .text-gray-700 { color: #b0b3b8 !important; }
+.dark .text-gray-600, .dark .text-gray-500 { color: #b0b3b8 !important; }
+.dark .border-gray-100, .dark .border-gray-200, .dark .border-gray-300 { border-color: #3a3b3c !important; }
+
+/* Sidebar collapse */
+
+/* Sidebar collapse refinements (centered + larger icons) */
+aside.sidebar.sidebar-collapsed { width: 84px !important; }
+aside.sidebar.sidebar-collapsed .brand-wrap { justify-content:center !important; padding: 18px 0 !important; }
+aside.sidebar.sidebar-collapsed .logo-box { width: 46px !important; height: 46px !important; padding: 0 !important; display:grid !important; place-items:center !important; border-radius: 14px !important; }
+aside.sidebar.sidebar-collapsed .logo-box i { font-size: 1.35rem !important; }
+aside.sidebar.sidebar-collapsed .nav-item { width: 50px !important; height: 46px !important; padding-left: 0 !important; padding-right: 0 !important; border-radius: 14px !important; margin-left:auto !important; margin-right:auto !important; }
+aside.sidebar.sidebar-collapsed .nav-item svg { width: 26px !important; height: 26px !important; }
+aside.sidebar.sidebar-collapsed .sidebar-footer .nav-item { width: 50px !important; }
+aside.sidebar.sidebar-collapsed .user-chip { justify-content:center !important; padding: 14px 0 !important; }
+aside.sidebar.sidebar-collapsed .user-avatar { width: 40px !important; height: 40px !important; font-size: .75rem !important; }
+aside.sidebar.sidebar-collapsed .user-meta { display:none !important; }
+
+aside.sidebar { transition: width .22s ease; }
+aside.sidebar.sidebar-collapsed { width: 84px !important; }
+aside.sidebar.sidebar-collapsed .brand-text,
+aside.sidebar.sidebar-collapsed .nav-label { display:none !important; }
+aside.sidebar.sidebar-collapsed .nav-item { justify-content:center !important; }
+aside.sidebar.sidebar-collapsed .nav-item i { margin: 0 !important; }
+aside.sidebar.sidebar-collapsed .brand-wrap { justify-content:center !important; }
+
+/* Subtle interactive animations */
+a, button { transition: transform .08s ease, background-color .2s ease, color .2s ease, opacity .2s ease; }
+button:active, a:active { transform: scale(.98); }
+.nav-item:hover { transform: translateX(2px); }
+
+/* Mobile overlay for sidebar */
+#mobileOverlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  display:none; opacity:0;
+  transition: opacity .18s ease;
+  z-index: 40;
+}
+#mobileOverlay.show { display:block; }
+#mobileOverlay.visible { opacity:1; }
+
+/* Logout modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  display:none; align-items:center; justify-content:center;
+  padding:16px;
+  opacity:0; transition: opacity .18s ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 60;
+}
+.modal-overlay.show { display:flex; }
+.modal-overlay.visible { opacity:1; }
+.modal {
+  width:100%; max-width:420px;
+  background:#fff;
+  border-radius:16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  padding:18px 18px 16px;
+  transform: translateY(10px) scale(.98);
+  opacity:0; transition: transform .2s ease, opacity .2s ease;
+}
+.dark .modal { background:#0b1220; border:1px solid rgba(148,163,184,.18); }
+.modal.visible { transform: translateY(0) scale(1); opacity:1; }
+.modal-title { font-weight:700; font-size:16px; color:#111827; }
+.dark .modal-title { color:#e5e7eb; }
+.modal-text { margin-top:6px; font-size:13px; color:#6b7280; line-height:1.5; }
+.dark .modal-text { color:#94a3b8; }
+.modal-actions { margin-top:16px; display:flex; gap:10px; justify-content:flex-end; }
+.btn-modal { border:1px solid rgba(229,231,235,1); background:#fff; color:#111827; padding:10px 14px; border-radius:10px; font-weight:600; cursor:pointer; }
+.dark .btn-modal { background:#0b1220; color:#e5e7eb; border-color: rgba(148,163,184,.18); }
+.btn-modal:hover { background: rgba(243,244,246,.7); }
+.dark .btn-modal:hover { background: rgba(148,163,184,.08); }
+.btn-danger { border:none; background: rgb(204,8,8); color:#fff; }
+.btn-danger:hover { background: rgb(173,7,7); }
+.logout-status { margin-top:14px; display:none; align-items:center; justify-content:space-between; gap:12px; }
+.logout-countdown { font-size:13px; color:#374151; font-weight:700; }
+.dark .logout-countdown { color:#cbd5e1; }
+.logout-loader { width:140px; height:6px; background:#e5e7eb; border-radius:999px; overflow:hidden; }
+.dark .logout-loader { background: rgba(148,163,184,.18); }
+.logout-loader > div { width:0%; height:100%; background: rgb(204,8,8); border-radius:999px; transition: width 1000ms linear; }
+
+/* Toast */
+#toastRoot { position: fixed; bottom: 18px; right: 18px; z-index: 80; display:flex; flex-direction:column; gap:10px; }
+.toast {
+  background:#111827; color:#fff;
+  padding:10px 12px; border-radius:12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  font-size:13px; font-weight:600;
+  opacity:0; transform: translateY(8px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.toast.show { opacity:1; transform: translateY(0); }
+.dark .toast { background:#0b1220; border:1px solid rgba(148,163,184,.18); }
+
+.dark .shadow, .dark .shadow-sm, .dark .shadow-md, .dark .shadow-lg { box-shadow: 0 8px 24px rgba(0,0,0,.35) !important; }
+</style></head>
+<body class="bg-gray-50 text-slate-800 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100"><div id="mobileOverlay"></div>
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-[#6384FF] text-white flex-shrink-0 hidden md:flex flex-col transition-all duration-300 sidebar" id="sidebar">
+<div class="p-6 flex items-center gap-3 brand-wrap">
+<div class="bg-white/20 p-2 rounded-lg logo-box">
+<i class="fa-solid fa-book text-xl"></i>
+</div>
+<div class="brand-text">
+<h1 class="font-bold text-lg leading-tight">E+Learn</h1>
+<p class="text-xs text-blue-100">Admin Portal</p>
+</div>
+<button class="ml-auto p-2 rounded-lg hover:bg-white/10 text-white/90 hidden md:inline-flex" id="sidebarCollapseBtn"><i class="w-5 h-5" data-lucide="chevrons-left"></i></button></div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="admin.html" title="Dashboard"><i class="w-5 h-5" data-lucide="layout-dashboard"></i><span class="nav-label"> Dashboard</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="user.html" title="User Management"><i class="w-5 h-5" data-lucide="users"></i><span class="nav-label"> User Management</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="course.html" title="Course Management"><i class="w-5 h-5" data-lucide="book-open"></i><span class="nav-label"> Course Management</span></a>
+<!-- Active State for Announcements -->
+<a class="flex items-center gap-3 px-4 bg-white/10 rounded-lg text-white font-medium nav-item py-2" href="#" title="Announcements"><i class="w-5 h-5" data-lucide="megaphone"></i><span class="nav-label"> Announcements</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="report.html" title="Reports &amp; Analytics"><i class="w-5 h-5" data-lucide="bar-chart-2"></i><span class="nav-label"> Reports &amp; Analytics</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="settings.html" title="System Settings"><i class="w-5 h-5" data-lucide="settings"></i><span class="nav-label"> System Settings</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="notif.html" title="Notifications"><i class="w-5 h-5" data-lucide="bell"></i><span class="nav-label"> Notifications</span></a>
+<a class="flex items-center gap-3 px-4 hover:bg-white/5 rounded-lg text-blue-100 transition-colors nav-item py-2" href="message.html" title="Messaging"><i class="w-5 h-5" data-lucide="message-square"></i><span class="nav-label"> Messaging</span></a>
+</nav>
+<div class="p-4 mt-auto">
+<div class="flex items-center gap-3 px-4 py-3 mb-2" user-chip">
+<div class="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold" user-avatar">AU</div>
+<div class="overflow-hidden" user-meta">
+<p class="text-sm font-medium truncate">Admin User</p>
+<p class="text-xs text-blue-200 truncate">admin@gmail.com</p>
+</div>
+</div>
+<button class="mt-2 flex items-center gap-2 px-4 py-2 rounded-lg text-blue-100 hover:bg-white/5 transition-colors nav-item w-full" id="themeToggleBtn" title="Theme" type="button"><i class="w-4 h-4" data-lucide="moon"></i><span class="nav-label"> Theme</span></button><a class="flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors nav-item" href="../login.html" title="Logout"><i class="w-4 h-4" data-lucide="log-out"></i><span class="nav-label"> Logout</span></a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 h-full overflow-y-auto overflow-x-hidden bg-white md:bg-gray-50">
+<!-- Mobile Header -->
+<div class="md:hidden bg-[#6384FF] text-white p-4 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<i class="fa-solid fa-book text-lg"></i>
+<span class="font-bold">E+Learn</span>
+</div>
+<button class="p-1" id="mobileMenuToggle"><i class="w-6 h-6" data-lucide="menu"></i></button>
+</div>
+<div class="p-6 max-w-5xl mx-auto space-y-6">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="text-2xl font-bold text-gray-900">Announcements</h2>
+<p class="text-gray-500 text-sm mt-1">Post and manage platform announcements</p>
+</div>
+<button class="bg-[#819CFF] hover:bg-[#6384FF] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-sm" onclick="openModal()">
+<i class="w-4 h-4" data-lucide="plus"></i>
+                        New Announcement
+                    </button>
+</div>
+<!-- Announcements List -->
+<div class="space-y-4" id="announcementsList">
+<!-- Items injected via JS -->
+</div>
+</div>
+</main>
+</div>
+<!-- Create Announcement Modal -->
+<div class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="announcementModal">
+<div class="bg-white rounded-xl shadow-2xl w-full max-w-xl mx-4 transform scale-95 transition-transform duration-300" id="modalContent">
+<!-- Header -->
+<div class="flex justify-between items-start p-6">
+<div>
+<h3 class="text-xl font-bold text-gray-900">Create Announcement</h3>
+<p class="text-sm text-gray-500 mt-1">Post a new announcement to the platform</p>
+</div>
+<button class="text-gray-400 hover:text-gray-600 transition-colors" onclick="closeModal()">
+<i class="w-5 h-5" data-lucide="x"></i>
+</button>
+</div>
+<!-- Form -->
+<form class="p-6 pt-2 space-y-5" id="announcementForm">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1.5">Title</label>
+<input class="w-full px-3.5 py-2.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm text-gray-700" id="annTitle" placeholder="Announcement title" required="" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1.5">Content</label>
+<textarea class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm text-gray-700 resize-none" id="annContent" placeholder="Announcement content" required="" rows="4"></textarea>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1.5">Target Group</label>
+<select class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-sm text-gray-700" id="annTarget">
+<option value="All Users">All Users</option>
+<option value="Student">Students</option>
+<option value="Teacher">Teachers</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1.5">Expiration Date</label>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm text-gray-700" id="annDate" required="" type="date"/>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full py-3 bg-[#819CFF] hover:bg-[#6384FF] text-white rounded-lg font-semibold text-sm transition-all shadow-sm hover:shadow-md" type="submit">
+                        Post Announcement
+                    </button>
+</div>
+</form>
+</div>
+</div>
+<script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initial Data
+        let announcements = [
+            {
+                id: 1,
+                title: "Platform Maintenance Scheduled",
+                target: "All Users",
+                posted: "2024-10-10",
+                expires: "2024-10-15",
+                content: "The platform will be under maintenance on Saturday from 2 AM to 6 AM. Please save your work accordingly.",
+                badgeColor: "bg-blue-100 text-blue-700"
+            },
+            {
+                id: 2,
+                title: "New Courses Available",
+                target: "Student",
+                posted: "2024-10-08",
+                expires: "2024-10-22",
+                content: "Check out our latest course offerings in Web Development and Data Science!",
+                badgeColor: "bg-[#FCD34D] text-[#92400E]" // Yellow/Orange match
+            },
+            {
+                id: 3,
+                title: "Teacher Workshop Next Week",
+                target: "Teacher",
+                posted: "2024-10-09",
+                expires: "2024-10-16",
+                content: "Join us for a professional development workshop on innovative teaching methods.",
+                badgeColor: "bg-[#FEF08A] text-[#854D0E]" // Lighter yellow match
+            }
+        ];
+
+        const listContainer = document.getElementById('announcementsList');
+
+        function getBadgeColor(target) {
+            if (target === 'All Users') return 'bg-blue-100 text-blue-700';
+            if (target === 'Student') return 'bg-amber-200 text-amber-800';
+            if (target === 'Teacher') return 'bg-yellow-100 text-yellow-800';
+            return 'bg-gray-100 text-gray-700';
+        }
+
+        function renderAnnouncements() {
+            listContainer.innerHTML = '';
+            announcements.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow";
+                card.innerHTML = `
+                    <div class="flex items-start gap-5">
+                        <!-- Icon Box -->
+                        <div class="flex-shrink-0 w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
+                            <i data-lucide="megaphone" class="w-6 h-6"></i>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">${item.title}</h3>
+                                <div class="flex items-center gap-2">
+                                    <button class="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors" title="Edit">
+                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <button onclick="deleteAnnouncement(${item.id})" class="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors" title="Delete">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+                                <span class="px-2.5 py-0.5 rounded-md font-semibold ${item.badgeColor}">${item.target}</span>
+                                <span class="text-gray-400 flex items-center gap-1">
+                                    <i class="fa-regular fa-calendar"></i> Posted: ${item.posted}
+                                </span>
+                                <span class="text-gray-400 flex items-center gap-1">
+                                    <i class="fa-regular fa-calendar-xmark"></i> Expires: ${item.expires}
+                                </span>
+                            </div>
+                            
+                            <p class="text-gray-600 text-sm leading-relaxed">${item.content}</p>
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('announcementModal');
+        const modalContent = document.getElementById('modalContent');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+            document.getElementById('announcementForm').reset();
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // --- Actions ---
+        window.deleteAnnouncement = (id) => {
+            if (confirm('Are you sure you want to delete this announcement?')) {
+                announcements = announcements.filter(a => a.id !== id);
+                renderAnnouncements();
+            }
+        };
+
+        document.getElementById('announcementForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('annTitle').value;
+            const content = document.getElementById('annContent').value;
+            const target = document.getElementById('annTarget').value;
+            const date = document.getElementById('annDate').value;
+            
+            const today = new Date().toISOString().split('T')[0];
+
+            const newAnn = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                target: target,
+                posted: today,
+                expires: date,
+                badgeColor: getBadgeColor(target)
+            };
+
+            announcements.unshift(newAnn);
+            renderAnnouncements();
+            closeModal();
+        });
+
+        // Initial Render
+        renderAnnouncements();
+
+    </script>
+<div id="toastRoot"></div><div aria-hidden="true" class="modal-overlay" id="logoutOverlay"><div aria-labelledby="logoutTitle" aria-modal="true" class="modal" id="logoutModal" role="dialog"><div class="modal-header"><div style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(220,38,38,.10);color:rgb(204,8,8);font-size:18px;flex:0 0 auto;"><i class="w-5 h-5" data-lucide="right-from-bracket"></i></div><div><h2 class="modal-title" id="logoutTitle">Confirm Logout</h2><p class="modal-text" id="logoutText">Are you sure you want to logout? You will be redirected to the login page.</p></div></div><div class="logout-status" id="logoutStatus"><div class="logout-countdown">Redirecting in <span id="logoutCountdown">3</span>s</div><div aria-hidden="true" class="logout-loader"><div id="logoutBar"></div></div></div><div class="modal-actions" id="logoutActions"><button class="btn-modal btn-cancel" id="cancelLogout" type="button">Cancel</button><button class="btn-modal btn-danger" id="confirmLogout" type="button">Logout</button></div></div></div><script id="ui-enhancements-js">
+(function () {
+  const LOGIN_FALLBACK = "login.html";
+  const SIDEBAR_KEY = "elearn_sidebar_collapsed";
+  const THEME_KEY = "elearn_theme";
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+  // Toast
+  function uiToast(message) {
+    const root = $("#toastRoot");
+    if (!root) return;
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = message;
+    root.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => {
+      t.classList.remove("show");
+      setTimeout(() => t.remove(), 180);
+    }, 2200);
+  }
+  window.uiToast = uiToast;
+
+  function setTheme(mode) {
+    const html = document.documentElement;
+    if (mode === "dark") html.classList.add("dark");
+    else html.classList.remove("dark");
+    localStorage.setItem(THEME_KEY, mode);
+    // swap icon
+    const btn = $("#themeToggleBtn");
+    if (btn) {
+      const icon = btn.querySelector("i[data-lucide]");
+      if (icon) icon.setAttribute("data-lucide", mode === "dark" ? "sun" : "moon");
+    }
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === "dark" || saved === "light") setTheme(saved);
+    else {
+      // default to system preference
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      setTheme(prefersDark ? "dark" : "light");
+    }
+    const btn = $("#themeToggleBtn");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        const isDark = document.documentElement.classList.contains("dark");
+        setTheme(isDark ? "light" : "dark");
+        uiToast(isDark ? "Light mode enabled" : "Dark mode enabled");
+      });
+    }
+  }
+
+  // Sidebar collapse (desktop)
+  function initSidebarCollapse() {
+    const sidebar = $("#sidebar");
+    const btn = $("#sidebarCollapseBtn");
+    if (!sidebar || !btn) return;
+
+    const apply = (collapsed) => {
+      sidebar.classList.toggle("sidebar-collapsed", collapsed);
+      btn.querySelector("i")?.setAttribute("data-lucide", collapsed ? "chevrons-right" : "chevrons-left");
+      localStorage.setItem(SIDEBAR_KEY, collapsed ? "1" : "0");
+      if (window.lucide) window.lucide.createIcons();
+    };
+
+    const saved = localStorage.getItem(SIDEBAR_KEY) === "1";
+    apply(saved);
+
+    btn.addEventListener("click", () => {
+      const collapsed = !sidebar.classList.contains("sidebar-collapsed");
+      apply(collapsed);
+    });
+  }
+
+  // Mobile sidebar drawer
+  function initMobileSidebar() {
+    const sidebar = $("#sidebar");
+    const toggle = $("#mobileMenuToggle");
+    const overlay = $("#mobileOverlay");
+    if (!sidebar || !toggle || !overlay) return;
+
+    const open = () => {
+      overlay.classList.add("show");
+      requestAnimationFrame(() => overlay.classList.add("visible"));
+      sidebar.classList.remove("hidden");
+      sidebar.classList.add("fixed", "inset-y-0", "left-0", "z-50");
+      uiLockScroll(true);
+    };
+
+    const close = () => {
+      overlay.classList.remove("visible");
+      setTimeout(() => overlay.classList.remove("show"), 180);
+      // restore
+      sidebar.classList.add("hidden");
+      sidebar.classList.remove("fixed", "inset-y-0", "left-0", "z-50");
+      uiLockScroll(false);
+    };
+
+    function uiLockScroll(lock) {
+      document.body.style.overflow = lock ? "hidden" : "";
+    }
+
+    toggle.addEventListener("click", open);
+    overlay.addEventListener("click", close);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        // if sidebar opened on mobile
+        if (overlay.classList.contains("show")) close();
+        // if logout modal opened
+        const logoutOverlay = $("#logoutOverlay");
+        if (logoutOverlay?.classList.contains("show")) closeLogoutModal();
+      }
+    });
+
+    // close on resize to desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768 && overlay.classList.contains("show")) close();
+    });
+  }
+
+  // Logout modal
+  let logoutHref = null;
+  let logoutTimer = null;
+
+  function openLogoutModal() {
+    const overlay = $("#logoutOverlay");
+    const modal = $("#logoutModal");
+    const status = $("#logoutStatus");
+    const actions = $("#logoutActions");
+    const countdown = $("#logoutCountdown");
+    const bar = $("#logoutBar");
+    const text = $("#logoutText");
+    const confirm = $("#confirmLogout");
+    const cancel = $("#cancelLogout");
+
+    if (!overlay || !modal) return;
+
+    // reset
+    if (logoutTimer) { clearInterval(logoutTimer); logoutTimer = null; }
+    status.style.display = "none";
+    actions.style.display = "flex";
+    countdown.textContent = "3";
+    bar.style.width = "0%";
+    text.textContent = "Are you sure you want to logout? You will be redirected to the login page.";
+    confirm.disabled = false;
+    cancel.disabled = false;
+
+    overlay.classList.add("show");
+    requestAnimationFrame(() => {
+      overlay.classList.add("visible");
+      modal.classList.add("visible");
+    });
+    overlay.setAttribute("aria-hidden", "false");
+  }
+
+  function closeLogoutModal() {
+    const overlay = $("#logoutOverlay");
+    const modal = $("#logoutModal");
+    if (!overlay || !modal) return;
+
+    if (logoutTimer) { clearInterval(logoutTimer); logoutTimer = null; }
+
+    modal.classList.remove("visible");
+    overlay.classList.remove("visible");
+    overlay.setAttribute("aria-hidden", "true");
+    setTimeout(() => overlay.classList.remove("show"), 200);
+  }
+
+  function initLogoutIntercept() {
+    // find logout anchor by lucide icon
+    const logoutLink = $$('a').find(a => a.querySelector('i[data-lucide="log-out"]') || /logout/i.test(a.textContent));
+    if (!logoutLink) return;
+
+    logoutHref = logoutLink.getAttribute("href") || LOGIN_FALLBACK;
+    logoutLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      openLogoutModal();
+    });
+
+    const overlay = $("#logoutOverlay");
+    const cancel = $("#cancelLogout");
+    const confirm = $("#confirmLogout");
+    const status = $("#logoutStatus");
+    const actions = $("#logoutActions");
+    const countdown = $("#logoutCountdown");
+    const bar = $("#logoutBar");
+    const text = $("#logoutText");
+
+    cancel?.addEventListener("click", closeLogoutModal);
+    overlay?.addEventListener("click", (e) => { if (e.target === overlay) closeLogoutModal(); });
+
+    confirm?.addEventListener("click", () => {
+      confirm.disabled = true;
+      cancel.disabled = true;
+
+      actions.style.display = "none";
+      status.style.display = "flex";
+      text.textContent = "Logging out securely…";
+
+      let seconds = 3;
+      countdown.textContent = String(seconds);
+      setTimeout(() => bar.style.width = "33.33%", 50);
+
+      logoutTimer = setInterval(() => {
+        seconds--;
+        countdown.textContent = String(seconds);
+
+        if (seconds === 2) bar.style.width = "66.66%";
+        if (seconds === 1) bar.style.width = "100%";
+
+        if (seconds <= 0) {
+          clearInterval(logoutTimer);
+          logoutTimer = null;
+          window.location.href = logoutHref || LOGIN_FALLBACK;
+        }
+      }, 1000);
+    });
+  }
+
+  // Wrap some buttons with toasts if present (non-breaking)
+  function initActionToasts() {
+    const map = [
+      { id: "saveChangesBtn", msg: "Changes saved" },
+      { id: "exportBtn", msg: "Export started" },
+      { id: "markAllReadBtn", msg: "All notifications marked as read" },
+      { id: "clearAllBtn", msg: "Cleared" },
+      { id: "sendMessageBtn", msg: "Message sent" },
+    ];
+    map.forEach(({id,msg}) => {
+      const el = document.getElementById(id);
+      if (el && !el.dataset.toastBound) {
+        el.dataset.toastBound = "1";
+        el.addEventListener("click", () => uiToast(msg));
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) window.lucide.createIcons();
+    initTheme();
+    initSidebarCollapse();
+    initMobileSidebar();
+    initLogoutIntercept();
+    initActionToasts();
+  });
+
+  // expose for ESC handler
+  window.closeLogoutModal = closeLogoutModal;
+})();
+</script></body>
+</html>

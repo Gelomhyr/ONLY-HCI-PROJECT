@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learn Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/admin.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+<style id="elearn-ui">
+  /* ===== E+Learn Admin UI (Refined) ===== */
+  :root{
+    --app-bg: #f5f6f7;
+    --surface: #ffffff;
+    --surface-2: #f3f4f6;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+
+    --sidebar-bg: #6384FF;
+    --sidebar-text: #ffffff;
+    --sidebar-muted: rgba(255,255,255,.80);
+    --sidebar-hover: rgba(255,255,255,.14);
+    --sidebar-active: rgba(255,255,255,.20);
+    --sidebar-border: rgba(255,255,255,.18);
+
+    --focus: rgba(99,132,255,.35);
+
+    --modal-overlay: rgba(0,0,0,.45);
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+  }
+
+  html[data-theme="dark"]{
+    --app-bg: #18191A;
+    --surface: #242526;
+    --surface-2: #2f3031;
+    --text: #E4E6EB;
+    --muted: #B0B3B8;
+    --border: #3A3B3C;
+
+    /* sidebar in dark mode should follow app theme */
+    --sidebar-bg: #242526;
+    --sidebar-text: #E4E6EB;
+    --sidebar-muted: #B0B3B8;
+    --sidebar-hover: #2f3031;
+    --sidebar-active: #3A3B3C;
+    --sidebar-border: #3A3B3C;
+
+    --modal-overlay: rgba(0,0,0,.55);
+  }
+
+  /* Smooth theme transitions */
+  body, main, aside, .bg-white, .bg-gray-50, .text-gray-900, .text-gray-500, .text-gray-600, .border-gray-200, .border-gray-100{
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+
+  body{ background: var(--app-bg) !important; color: var(--text) !important; }
+  main{ background: var(--app-bg) !important; }
+
+  /* Fix dark leftovers from external css (admin.css) */
+  html[data-theme="light"] main{ background: var(--app-bg) !important; }
+
+  /* Generic Tailwind overrides for dark mode */
+  html[data-theme="dark"] .bg-white{ background-color: var(--surface) !important; }
+  html[data-theme="dark"] .bg-gray-50{ background-color: var(--app-bg) !important; }
+  html[data-theme="dark"] .text-gray-900{ color: var(--text) !important; }
+  html[data-theme="dark"] .text-gray-500,
+  html[data-theme="dark"] .text-gray-600{ color: var(--muted) !important; }
+  html[data-theme="dark"] .border-gray-100,
+  html[data-theme="dark"] .border-gray-200{ border-color: var(--border) !important; }
+
+  /* Sidebar theming + outline */
+  aside#sidebar{
+    background: var(--sidebar-bg) !important;
+    color: var(--sidebar-text) !important;
+    border-right: 1px solid var(--sidebar-border) !important;
+  }
+  aside#sidebar .sidebar-subtitle{ color: var(--sidebar-muted) !important; }
+  aside#sidebar .sidebar-link{
+    color: var(--sidebar-text) !important;
+    border-radius: 12px;
+  }
+  aside#sidebar .sidebar-link:hover{ background: var(--sidebar-hover) !important; }
+  aside#sidebar .sidebar-link.active{ background: var(--sidebar-active) !important; }
+
+  /* Hover text visibility fix */
+  aside#sidebar .sidebar-link .nav-label{ color: inherit !important; }
+
+  /* Top toggle button (outside sidebar) */
+  .top-toggle-btn{
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  }
+  html[data-theme="dark"] .top-toggle-btn{
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+  .top-toggle-btn:active{ transform: scale(.98); }
+
+  /* Sidebar collapsed (desktop) */
+  body.sidebar-collapsed aside#sidebar{ width: 88px !important; }
+  body.sidebar-collapsed aside#sidebar .nav-label,
+  body.sidebar-collapsed aside#sidebar .user-meta,
+  body.sidebar-collapsed aside#sidebar .sidebar-title-wrap{ display:none !important; }
+
+  body.sidebar-collapsed aside#sidebar .sidebar-header{
+    justify-content: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body.sidebar-collapsed aside#sidebar .sidebar-link{
+    justify-content: center !important;
+    padding: 12px !important;
+    width: 52px;
+    height: 52px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 9999px !important; /* circle, no oblong */
+  }
+  body.sidebar-collapsed aside#sidebar .sidebar-link i,
+  body.sidebar-collapsed aside#sidebar .sidebar-link svg{
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  /* User avatar squircle */
+  .avatar-squircle{
+    border-radius: 14px !important;
+  }
+
+  /* Mobile drawer overlay */
+  #sidebarOverlay{
+    position: fixed;
+    inset: 0;
+    background: var(--modal-overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+    z-index: 40;
+  }
+  #sidebarOverlay.open{
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Logout Modal */
+  #logoutOverlay{
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: var(--modal-overlay);
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+  #logoutOverlay.show{ display:flex; }
+  #logoutOverlay.visible{ opacity:1; }
+
+  #logoutModal{
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    padding: 18px;
+    transform: translateY(10px) scale(.98);
+    opacity: 0;
+    transition: transform 200ms ease, opacity 200ms ease, background-color 180ms ease, border-color 180ms ease;
+  }
+  #logoutModal.visible{
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  #logoutModal .m-title{ color: var(--text); }
+  #logoutModal .m-text{ color: var(--muted); }
+  #logoutModal .btn{
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 700;
+    transition: transform 80ms ease, background-color 180ms ease, border-color 180ms ease;
+  }
+  #logoutModal .btn:hover{ background: var(--surface); }
+  #logoutModal .btn:active{ transform: scale(.98); }
+  #logoutModal .btn-danger{
+    border: none;
+    background: var(--danger);
+    color: #fff;
+  }
+  #logoutModal .btn-danger:hover{ background: var(--danger-hover); }
+
+  #logoutModal .bar{
+    width: 140px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  #logoutModal .bar > div{
+    width: 0%;
+    height: 100%;
+    background: var(--danger);
+    border-radius: 999px;
+    transition: width 1000ms linear;
+  }
+</style>
+
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+    <div id="sidebarOverlay"></div>
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-[#6384FF] text-white flex-shrink-0 hidden md:flex flex-col overflow-y-auto transition-all duration-300">
+            <div class="sidebar-header p-6 flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <i class="fa-solid fa-book text-xl"></i>
+                </div>
+                <div class="sidebar-title-wrap">
+                    <h1 class="font-bold text-lg leading-tight">E+Learn</h1>
+                    <p class="sidebar-subtitle text-xs">Admin Portal</p>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-white font-medium">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span class="nav-label">Dashboard</span></a>
+                <a href="user.html" class="sidebar-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <span class="nav-label">User Management</span></a>
+                <a href="course.html" class="sidebar-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <span class="nav-label">Course Management</span></a>
+                <a href="announcement.html" class="sidebar-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="megaphone" class="w-5 h-5"></i>
+                    <span class="nav-label">Announcements</span></a>
+                <a href="report.html" class="sidebar-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                    <span class="nav-label">Reports & Analytics</span></a>
+                <a href="settings.html" class="sidebar-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span class="nav-label">System Settings</span></a>
+                 <a href="notif.html" class="sidebar-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="nav-label">Notifications</span></a>
+                 <a href="message.html" class="sidebar-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-blue-100 transition-colors">
+                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                    <span class="nav-label">Messaging</span></a>
+            </nav>
+
+            <div class="p-4 mt-auto">
+                <div class="flex items-center gap-3 px-4 py-3 mb-2">
+                    <div class="w-8 h-8 avatar-squircle bg-blue-400 flex items-center justify-center text-xs font-bold">AU</div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-medium truncate">Admin User</p>
+                        <p class="text-xs text-blue-200 truncate">admin@gmail.com</p>
+                    </div>
+                </div>
+                <a href="#" id="themeToggle" class="sidebar-link flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors">
+                    <i data-lucide="moon" class="w-4 h-4"></i>
+                    <span class="nav-label">Theme</span>
+                </a>
+                <a href="../login.html" class="sidebar-link flex items-center gap-2 px-4 py-2 text-sm text-blue-200 hover:text-white transition-colors">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span class="nav-label">Logout</span></a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 h-full overflow-y-auto overflow-x-hidden">
+            <!-- Mobile Header -->
+            <div class="md:hidden bg-[var(--sidebar-bg)] text-[var(--sidebar-text)] p-4 flex items-center">
+                <button id="sidebarToggle" class="top-toggle-btn p-2 rounded-full border border-white/15">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <div class="flex items-center gap-2 mx-auto">
+                    <i class="fa-solid fa-book text-lg"></i>
+                    <span class="font-bold">E+Learn</span>
+                </div>
+                <div style="width:40px"></div>
+            </div>
+
+            <div class="p-6 max-w-7xl mx-auto space-y-6">
+                
+                <!-- Header -->
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
+                    <p class="text-gray-500 text-sm mt-1">Welcome back! Here's what's happening with E+Learn today.</p>
+                </div>
+
+                <!-- Stats Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Students</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">1,284</h3>
+                                <p class="text-xs font-medium text-blue-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-blue-50 px-1.5 py-0.5 rounded">+12%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Teachers</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">87</h3>
+                                <p class="text-xs font-medium text-yellow-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-yellow-50 px-1.5 py-0.5 rounded">+6%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-yellow-50 text-yellow-600 rounded-lg">
+                                <i data-lucide="user-check" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Card 3 -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Courses</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">156</h3>
+                                <p class="text-xs font-medium text-orange-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-orange-50 px-1.5 py-0.5 rounded">+2%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-orange-50 text-orange-600 rounded-lg">
+                                <i data-lucide="book" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Card 4 -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Active Enrollments</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">3,421</h3>
+                                <p class="text-xs font-medium text-blue-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-blue-50 px-1.5 py-0.5 rounded">+15%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <i data-lucide="trending-up" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Card 5 -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Certificates Issued</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">892</h3>
+                                <p class="text-xs font-medium text-yellow-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-yellow-50 px-1.5 py-0.5 rounded">+20%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-yellow-50 text-yellow-600 rounded-lg">
+                                <i data-lucide="award" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Card 6 -->
+                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Announcements</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mt-1">24</h3>
+                                <p class="text-xs font-medium text-orange-500 mt-2 flex items-center gap-1">
+                                    <span class="bg-orange-50 px-1.5 py-0.5 rounded">+3%</span> from last month
+                                </p>
+                            </div>
+                            <div class="p-2 bg-orange-50 text-orange-600 rounded-lg">
+                                <i data-lucide="mic" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Line Chart -->
+                    <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="font-semibold text-gray-800 mb-4">Weekly Active Users</h3>
+                        <div class="h-64 w-full">
+                            <canvas id="usersChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Pie Chart -->
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="font-semibold text-gray-800 mb-4">Student Completion Status</h3>
+                        <div class="h-64 w-full flex justify-center relative">
+                            <canvas id="completionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Performance -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 class="font-semibold text-gray-800 mb-4">Course Performance</h3>
+                    <div class="h-64 w-full">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-gray-50">
+                        <h3 class="font-semibold text-gray-800">Recent Activity</h3>
+                    </div>
+                    <div class="divide-y divide-gray-50">
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">New student registered</p>
+                                <p class="text-xs text-gray-500 mt-0.5">John Smith</p>
+                            </div>
+                            <span class="text-xs text-gray-400">2 minutes ago</span>
+                        </div>
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Course completed</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Sarah Johnson</p>
+                            </div>
+                            <span class="text-xs text-gray-400">15 minutes ago</span>
+                        </div>
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">New teacher enrolled</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Dr. Emily Brown</p>
+                            </div>
+                            <span class="text-xs text-gray-400">1 hour ago</span>
+                        </div>
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Certificate issued</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Michael Chen</p>
+                            </div>
+                            <span class="text-xs text-gray-400">2 hours ago</span>
+                        </div>
+                        <!-- Item -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Announcement posted</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Admin Team</p>
+                            </div>
+                            <span class="text-xs text-gray-400">3 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-6"></div> <!-- Spacer -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- Chart Configurations ---
+
+        // 1. Weekly Active Users (Line Chart)
+        const ctxUsers = document.getElementById('usersChart').getContext('2d');
+        new Chart(ctxUsers, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    {
+                        label: 'Students',
+                        data: [420, 450, 480, 510, 490, 350, 320],
+                        borderColor: '#6384FF',
+                        backgroundColor: 'rgba(99, 132, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3
+                    },
+                    {
+                        label: 'Teachers',
+                        data: [30, 35, 40, 42, 40, 25, 20],
+                        borderColor: '#FBBF24',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        borderDash: [5, 5],
+                        pointRadius: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { usePointStyle: true, boxWidth: 8 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [4, 4], drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    }
+                }
+            }
+        });
+
+        // 2. Student Completion Status (Pie Chart)
+        const ctxCompletion = document.getElementById('completionChart').getContext('2d');
+        new Chart(ctxCompletion, {
+            type: 'pie',
+            data: {
+                labels: ['Completed', 'In Progress', 'Not Started'],
+                datasets: [{
+                    data: [34, 47, 19],
+                    backgroundColor: ['#6384FF', '#FBBF24', '#FED7AA'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { usePointStyle: true, boxWidth: 10, font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // 3. Course Performance (Bar Chart)
+        const ctxPerformance = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctxPerformance, {
+            type: 'bar',
+            data: {
+                labels: ['Web Dev', 'Data Science', 'Design', 'Mobile Dev', 'Cloud'],
+                datasets: [
+                    {
+                        label: 'Completed',
+                        data: [85, 65, 75, 55, 45],
+                        backgroundColor: '#819CFF',
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8
+                    },
+                    {
+                        label: 'In Progress',
+                        data: [120, 95, 110, 80, 70],
+                        backgroundColor: '#FCD34D',
+                        borderRadius: 4,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { usePointStyle: true, boxWidth: 8 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [4, 4], drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { color: '#9CA3AF' }
+                    }
+                }
+            }
+        });
+    </script>
+
+
+<!-- Logout Confirmation Modal -->
+<div id="logoutOverlay" aria-hidden="true">
+  <div id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div style="display:flex; gap:12px; align-items:flex-start;">
+      <div style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(220,38,38,.12);color:var(--danger);flex:0 0 auto;">
+        <i data-lucide="log-out" class="w-5 h-5"></i>
+      </div>
+      <div style="flex:1;">
+        <div class="m-title" id="logoutTitle" style="font-size:16px;font-weight:800;line-height:1.2;">Confirm Logout</div>
+        <div class="m-text" id="logoutText" style="margin-top:6px;font-size:13px;line-height:1.45;">Are you sure you want to logout? You will be redirected to the login page.</div>
+      </div>
+    </div>
+
+    <div id="logoutStatus" style="display:none;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;">
+      <div style="font-size:13px;font-weight:800;color:var(--text);">Redirecting in <span id="logoutCountdown">3</span>s</div>
+      <div class="bar"><div id="logoutBar"></div></div>
+    </div>
+
+    <div id="logoutActions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;">
+      <button class="btn" id="logoutCancel" type="button">Cancel</button>
+      <button class="btn btn-danger" id="logoutConfirm" type="button">Logout</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Ensure lucide icons render
+  if (window.lucide && window.lucide.createIcons) {
+    window.lucide.createIcons();
+  }
+
+  const root = document.documentElement;
+  const body = document.body;
+
+  // Theme
+  const THEME_KEY = "elearn_theme";
+  const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+  root.dataset.theme = savedTheme;
+
+  // Sidebar collapsed state (desktop)
+  const SIDEBAR_KEY = "elearn_sidebar_collapsed";
+  const isCollapsed = localStorage.getItem(SIDEBAR_KEY) === "1";
+  if (isCollapsed) body.classList.add("sidebar-collapsed");
+
+  // Elements
+  const sidebar = document.getElementById("sidebar");
+  const sidebarOverlay = document.getElementById("sidebarOverlay");
+  const toggleBtn = document.getElementById("sidebarToggle");
+  const themeBtn = document.getElementById("themeToggle");
+
+  // Mobile open/close
+  function openMobileSidebar(){
+    if (!sidebar) return;
+    sidebar.classList.add("translate-x-0");
+    sidebar.classList.remove("-translate-x-full");
+    if (sidebarOverlay) sidebarOverlay.classList.add("open");
+  }
+  function closeMobileSidebar(){
+    if (!sidebar) return;
+    sidebar.classList.add("-translate-x-full");
+    sidebar.classList.remove("translate-x-0");
+    if (sidebarOverlay) sidebarOverlay.classList.remove("open");
+  }
+
+  // Toggle behavior:
+  // - On mobile: open/close drawer
+  // - On desktop: collapse/expand
+  function toggleSidebar(){
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    if (isMobile){
+      // if currently hidden, open; else close
+      if (sidebar && sidebar.classList.contains("-translate-x-full")) openMobileSidebar();
+      else closeMobileSidebar();
+      return;
+    }
+    body.classList.toggle("sidebar-collapsed");
+    localStorage.setItem(SIDEBAR_KEY, body.classList.contains("sidebar-collapsed") ? "1" : "0");
+  }
+
+  if (toggleBtn) toggleBtn.addEventListener("click", toggleSidebar);
+  if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeMobileSidebar);
+
+  // Theme toggle
+  if (themeBtn){
+    themeBtn.addEventListener("click", function(e){
+      e.preventDefault();
+      const next = (root.dataset.theme === "dark") ? "light" : "dark";
+      root.dataset.theme = next;
+      localStorage.setItem(THEME_KEY, next);
+    });
+  }
+
+  // Close mobile sidebar on resize to desktop
+  window.addEventListener("resize", function(){
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    if (!isMobile) {
+      if (sidebarOverlay) sidebarOverlay.classList.remove("open");
+      if (sidebar){
+        sidebar.classList.remove("-translate-x-full");
+        sidebar.classList.remove("translate-x-0");
+      }
+    } else {
+      // Ensure sidebar is hidden by default on mobile
+      if (sidebar){
+        sidebar.classList.add("-translate-x-full");
+      }
+    }
+  });
+
+  // ===== Logout Modal Logic =====
+  const logoutOverlay = document.getElementById("logoutOverlay");
+  const logoutModal = document.getElementById("logoutModal");
+  const logoutCancel = document.getElementById("logoutCancel");
+  const logoutConfirm = document.getElementById("logoutConfirm");
+  const logoutStatus = document.getElementById("logoutStatus");
+  const logoutActions = document.getElementById("logoutActions");
+  const logoutCountdown = document.getElementById("logoutCountdown");
+  const logoutBar = document.getElementById("logoutBar");
+  const logoutText = document.getElementById("logoutText");
+
+  // Find logout links (icon or href containing login)
+  const logoutLinks = Array.from(document.querySelectorAll('aside a')).filter(a=>{
+    return a.querySelector('[data-lucide="log-out"]') || /login\.html|index\.html/i.test(a.getAttribute("href")||"");
+  });
+
+  let logoutHref = "login.html";
+  if (logoutLinks.length) logoutHref = logoutLinks[0].getAttribute("href") || logoutHref;
+
+  function openLogout(){
+    if (!logoutOverlay || !logoutModal) return;
+    logoutOverlay.classList.add("show");
+    requestAnimationFrame(()=>{
+      logoutOverlay.classList.add("visible");
+      logoutModal.classList.add("visible");
+    });
+    logoutOverlay.setAttribute("aria-hidden","false");
+
+    // reset UI
+    if (logoutStatus) logoutStatus.style.display = "none";
+    if (logoutActions) logoutActions.style.display = "flex";
+    if (logoutCountdown) logoutCountdown.textContent = "3";
+    if (logoutBar) logoutBar.style.width = "0%";
+    if (logoutText) logoutText.textContent = "Are you sure you want to logout? You will be redirected to the login page.";
+    if (logoutConfirm) logoutConfirm.disabled = false;
+    if (logoutCancel) logoutCancel.disabled = false;
+  }
+
+  function closeLogout(){
+    if (!logoutOverlay || !logoutModal) return;
+    logoutModal.classList.remove("visible");
+    logoutOverlay.classList.remove("visible");
+    logoutOverlay.setAttribute("aria-hidden","true");
+    setTimeout(()=>logoutOverlay.classList.remove("show"), 200);
+  }
+
+  // Intercept clicks
+  logoutLinks.forEach(a=>{
+    a.addEventListener("click", function(e){
+      e.preventDefault();
+      openLogout();
+    });
+  });
+
+  if (logoutCancel) logoutCancel.addEventListener("click", closeLogout);
+  if (logoutOverlay) logoutOverlay.addEventListener("click", (e)=>{ if (e.target === logoutOverlay) closeLogout(); });
+
+  let timer = null;
+  if (logoutConfirm){
+    logoutConfirm.addEventListener("click", function(){
+      logoutConfirm.disabled = true;
+      if (logoutCancel) logoutCancel.disabled = true;
+
+      if (logoutActions) logoutActions.style.display = "none";
+      if (logoutStatus) logoutStatus.style.display = "flex";
+      if (logoutText) logoutText.textContent = "Logging out securely…";
+
+      let seconds = 3;
+      if (logoutCountdown) logoutCountdown.textContent = String(seconds);
+      if (logoutBar) setTimeout(()=>logoutBar.style.width="33.33%", 50);
+
+      timer = setInterval(()=>{
+        seconds--;
+        if (logoutCountdown) logoutCountdown.textContent = String(seconds);
+
+        if (seconds === 2 && logoutBar) logoutBar.style.width = "66.66%";
+        if (seconds === 1 && logoutBar) logoutBar.style.width = "100%";
+
+        if (seconds <= 0){
+          clearInterval(timer);
+          timer = null;
+          window.location.href = logoutHref || "login.html";
+        }
+      }, 1000);
+    });
+  }
+
+  // ESC closes things
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape"){
+      closeMobileSidebar();
+      closeLogout();
+    }
+  });
+
+  // Initial mobile state
+  if (window.matchMedia("(max-width: 767px)").matches && sidebar){
+    sidebar.classList.add("-translate-x-full");
+  }
+})();
+</script>
+</body>
+</html>
